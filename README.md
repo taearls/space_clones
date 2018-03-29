@@ -8,19 +8,29 @@ This will be a two player game, so first the user will be presented with a title
 
 The player will control their ship using the left and right arrows or AD for directions, and either clicking or hitting spacebar to fire their laser. The player will be locked in a horizontal plane at the bottom of the game screen.
 
-The player will begin the game with 3 lives. One hit will result in player death. Once all lives are depleted, the game will be over, and a final score screen will be presented with a newly introduced fire accuracy stat as well.
+The player will begin the game with 3 lives. One hit will result in player death. Once all lives are depleted, the game will be over, and a final score screen will be presented with newly introduced fire accuracy + number of enemies defeated stats as well.
+
+User will be able to see if they have beaten the high score and how many enemies are remaining before the level's mothership while playing.
 
 BASIC WIREFRAME:
 
 Like in Space Invaders, each level will feature an array of descending enemy ships which will move left to right as they descend. Each enemy will disintegrate with one hit. Once all enemies are defeated, a mothership will appear that takes more hits to defeat.
 
-As the player progresses, each level will increase the speed of the enemy ships and the lasers they fire, increasing the difficulty of the game.
+Create a generic Ship class, with inherited Enemy and Mothership classes. Create factories for enemies and for motherships. Instantiate x amount of each enemy per level.
+
+As the player progresses, each level will increase the speed of the enemy ships and the speed of the lasers they fire, increasing the difficulty of the game.
 
 Each defeated enemy ship will increment the player's score by a set value, with the mothership incrementing it by an increased amount.
+
+Display current level number and basic enemies remaining in the level in the player screen.
 
 EXTRA POSSIBILITIES:
 
 Create bonus stages which allow the players to gain extra points, but player will not be able to die during these.
+
+Implement a life bar rather than a one hit death.
+
+Allow player to have x amount of continues upon a game over. Reset score/upgrades for each continue used.
 
 Allow player to upgrade shields/weapons.
 
