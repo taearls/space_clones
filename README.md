@@ -12,6 +12,10 @@ The player will begin the game with 3 lives. One hit will result in player death
 
 User will be able to see if they have beaten the high score and how many enemies are remaining before the level's mothership while playing.
 
+Create sprites for basic enemies, motherships, and the player ship.
+
+Create animations for lasers that get fired.
+
 BASIC WIREFRAME:
 
 Like in Space Invaders, each level will feature an array of descending enemy ships which will move left to right as they descend. Each enemy will disintegrate with one hit. Once all enemies are defeated, a mothership will appear that takes more hits to defeat.
