@@ -187,7 +187,7 @@ const genStars = (numCircles) => {
 		let radius = Math.ceil(Math.random() * 3)
 		ctx.arc(x, y, radius, 0, Math.PI * 2)
 		ctx.fillStyle = "white";
-		stars.push(ctx.fill());
+		ctx.fill();
 		ctx.closePath();
 	}
 }
