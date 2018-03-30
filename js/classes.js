@@ -23,11 +23,7 @@ class Ship {
 class Player extends Ship {
 	constructor() {
 		super(firepower, shield)
-		this.name = input.val();
-		this.playerScore = 0;
-	}
-	score() {
-		// define parameters to increment playerScore
+		this.name = name;
 	}
 	move() {
 		// define keydowns for left and right arrows, control of it

@@ -11,17 +11,15 @@ header {
 	margin-bottom: 0;
 	display: flex;
 	justify-content: space-between;
-}
+/*	border-bottom: 1px dotted white;
+*/}
 header h2 {
 	margin: 0;
 }
-/*footer {
-	position: absolute;
-	top: 90vh;
-}*/
-/*footer h3 {
-	display: inline-block;
-}*/
+
+footer {
+/*	border-top: 1px dotted white;
+*/}
 #lives {
 	position: absolute;
 	top: 93vh;
@@ -43,6 +41,16 @@ canvas {
 
 /*ELEMENTS TO BE ANIMATED*/
 
-
+/*make it fade to 0 opacity
+*/#turn-start {
+	position: absolute;
+	text-align: center;
+	top: 45vh;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+}
 
 /*ANIMATIONS*/
+

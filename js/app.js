@@ -6,8 +6,8 @@ const ctx = canvas[0].getContext("2d");
 canvas.attr("width", $(document).width());
 canvas.attr("height", $(document).height());
 
-const modal = $("#name-modal");
-const openModal = $("#name-player");
+const modal = $(".modal");
+const openModal = $(".modal-content");
 const closeModal = $("#close-button");
 
 
@@ -50,8 +50,8 @@ const game = {
 		this.isPaused = true;
 		// modal pop up
 		// display stats
-		// creative animation
-		// all animations freeze in place
+		// option to quit
+		// all game level animations freeze in place
 		// display controls
 	},
 	genLevel() {
@@ -135,6 +135,21 @@ $("#prologue").on("click", function(event){
 	// allow player to exit early 
 	// without watching whole thing
 });
+$("#how-to-play").on("click", function(event){
+	console.log("hi");
+})
+
+//  ***** MODALS *****
+
+closeModal.on("click", function (event) {
+	modal.removeClass("show-modal");
+});
+
+openModal.on("click", function (event) {
+	if (lightOn && !pet.isDead && pet.isClean && !pet.isPlaying && !pet.isEating) {
+		modal.addClass("show-modal");
+	}
+});
 
 // ***** FUNCTIONS *****
 
@@ -157,4 +172,26 @@ const setDefault = () => {
 	this.isPaused = false;
 } 
 
+
+
 // ***** CANVAS *****
+
+
+// write a function that generates a desired amount of circles
+const genStars = (numCircles) => {
+	for (let i = 0; i < numCircles; i++) {
+		ctx.beginPath();
+
+		let x = Math.floor(Math.random() * 1400);
+		let y = Math.floor(Math.random() * 800);
+		let radius = Math.ceil(Math.random() * 3)
+		ctx.arc(x, y, radius, 0, Math.PI * 2)
+		ctx.fillStyle = "white";
+		stars.push(ctx.fill());
+		ctx.closePath();
+	}
+}
+
+genStars(500);
+
+

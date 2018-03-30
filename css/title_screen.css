@@ -17,6 +17,7 @@ header {
 	font-size: 34px;
 }
 nav a {
+	text-decoration: none;
 	display: block;
 	width: 15vw;
 	text-align: center;
@@ -29,7 +30,9 @@ canvas {
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: -1;
+/*	z-index: -1;
+*/	z-index: 1000;
+	background-color: black;
 }
 #backstory {
 	visibility: hidden;
