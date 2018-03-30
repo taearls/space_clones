@@ -5,13 +5,14 @@ class Ship {
 		this.firepower = firepower;
 		this.shield = shield;
 	}
-	fire() {
-		//
+	fire(target) {
+		// 
 	}
 	move() {
 		// for enemies, increment speed with levels
 	}
 	die() {
+		// animation ends
 		// some sort of explosion graphic overlaying the ship sprite
 		// update enemies remaining
 		// update player lives

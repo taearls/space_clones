@@ -16,27 +16,38 @@
 	<h1 id="game-title">Space Invaders</h1>
 
 	<nav class="start-menu">
-		<a href="index.html">Continue</a>
-		<br/>
-		<a href="index.html">New Game</a>
-		<br/>
-		<a href="index.html">1 Player</a>
-		<br/>
-		<a href="index.html">2 Players</a>
-		<br/>
-		<a href="" id="prologue">Prologue</a>
+		<!-- <a href="index.html">Continue</a>
+		<br/> -->
+		<!-- <a href="index.html">New Game</a>
+		<br/> -->
+		<a id="solo" href="index.html">1 Player</a>
+		<br/><br/>
+		<a id="co-op" href="index.html">2 Players</a>
+		<br/><br/>
+		<a id="prologue" href="#">Prologue</a>
+		<br/><br/>
+		<a id="how-to-play" href="#">Controls</a>
 	</nav>
 
 	<canvas id="title-canvas"></canvas>
 
 	
 
-	<p id="backstory"> Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus </p>
+	<p id="backstory"> 
+		Dr. [name] and Professor [name] are scientists on a mission to save humanity from the artificial life they created. The prototype gained sentience and generated an army of clones hellbent on asserting dominance in the universe.
+	</p>
 
-	<div id="name-modal">
-		<input id="name-player" type="text" placeholder="Name your ship">
-		<button id="submit-name">Submit</button>
+
+	<div class="modal">
+		<div class="modal-content">
+			<h1>How to Play</h1>
+			<h2>Left: &#8592; or A</h2>
+			<h2>Right: &#8594; or D</h2>
+			<button id="close-button">Exit</button>
+		</div>
 	</div>
+
+
 
 	<footer>
 		<h3 id="credit"> &#169;

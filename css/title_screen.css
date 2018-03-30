@@ -13,17 +13,17 @@ header {
 #game-title {
 	font-family: 'Press Start 2P', cursive;
 	text-align: center;
+	margin-bottom: 10vh;
+	font-size: 34px;
 }
 nav a {
 	display: block;
 	width: 15vw;
-	font-size: 24px;
 	text-align: center;
 	margin: auto;
-}
-nav a:hover {
 	color: firebrick;
 	transition: 0.3s;
+	font-size: 26px;
 }
 canvas {
 	position: absolute;
@@ -31,12 +31,61 @@ canvas {
 	left: 0;
 	z-index: -1;
 }
-#backstory{
+#backstory {
 	visibility: hidden;
 }
+
 #name-modal {
-	visbility: hidden;
+	visibility: hidden;
 }
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #8A69D9;
+    padding: 2rem 2rem;
+    width: 26rem;
+    border-radius: 0.5rem;
+}
+.modal button {
+    font-size: 13px;
+}
+.close-button {
+    float: right;
+    width: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: white;
+    margin-bottom: 4px;
+    transition: 0.5s;
+}
+.close-button:hover {
+    background-color: #FF3B31;
+    transition: 0.3s;
+}
+.show-modal {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1000;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
 button {
 	color: black;
 }
@@ -45,14 +94,21 @@ button:hover {
 	background-color: firebrick;
 	transition: 0.3s;
 }
-input:hover{
+input:hover {
 	cursor: text;
 }
 footer {
-	text-align: right;
+	position: absolute;
+	text-align: center;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	top: 95vh;
 	font-size: 12px;
 }
 /*ELEMENTS TO ANIMATE*/
+
 
 
 /*ANIMATIONS*/

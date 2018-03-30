@@ -2,13 +2,43 @@ body {
 	background-color: black;
 	box-sizing: border-box;
 }
-
 body * {
 	font-family: 'Roboto Condensed', sans-serif;
 	color: white;
 }
-#game-title {
-	font-family: 'Press Start 2P', cursive;
+header {
+	margin-top: 1vh;
+	margin-bottom: 0;
+	display: flex;
+	justify-content: space-between;
+}
+header h2 {
+	margin: 0;
+}
+/*footer {
+	position: absolute;
+	top: 90vh;
+}*/
+/*footer h3 {
+	display: inline-block;
+}*/
+#lives {
+	position: absolute;
+	top: 93vh;
+	max-height: 7vh;
+	left: 1vw;
+}
+#level {
+	position: absolute;
+	top: 93vh;
+	max-height: 7vh;
+	right: 1vw;
+}
+canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
 }
 
 /*ELEMENTS TO BE ANIMATED*/
