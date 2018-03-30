@@ -2,7 +2,56 @@ body {
 	background-color: black;
 	box-sizing: border-box;
 }
-
+body * {
+	font-family: 'Roboto Condensed', sans-serif;
+	color: white;
+}
+header {
+	display: flex;
+	justify-content: space-evenly;
+}
+#game-title {
+	font-family: 'Press Start 2P', cursive;
+	text-align: center;
+}
+nav a {
+	display: block;
+	width: 15vw;
+	font-size: 24px;
+	text-align: center;
+	margin: auto;
+}
+nav a:hover {
+	color: firebrick;
+	transition: 0.3s;
+}
+canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
+#backstory{
+	visibility: hidden;
+}
+#name-modal {
+	visbility: hidden;
+}
+button {
+	color: black;
+}
+button:hover {
+	cursor: pointer;
+	background-color: firebrick;
+	transition: 0.3s;
+}
+input:hover{
+	cursor: text;
+}
+footer {
+	text-align: right;
+	font-size: 12px;
+}
 /*ELEMENTS TO ANIMATE*/
 
 

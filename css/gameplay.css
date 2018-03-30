@@ -3,7 +3,13 @@ body {
 	box-sizing: border-box;
 }
 
-
+body * {
+	font-family: 'Roboto Condensed', sans-serif;
+	color: white;
+}
+#game-title {
+	font-family: 'Press Start 2P', cursive;
+}
 
 /*ELEMENTS TO BE ANIMATED*/
 
