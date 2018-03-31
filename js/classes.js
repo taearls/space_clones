@@ -71,7 +71,7 @@ const cloneFactory = {
 		return newClone;
 	},
 	findClone(index) {
-		return this.clones[index]
+		return this.clones[index];
 	}
 }
 
@@ -84,6 +84,6 @@ const mothershipFactory = {
 		return newMothership;
 	},
 	findMothership(index) {
-		return this.Motherships [index]
+		return this.Motherships[index];
 	}
 }
