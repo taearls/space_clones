@@ -149,6 +149,7 @@ openModal.on("click", function (event) {
 
 // ***** FUNCTIONS *****
 
+// switch from game screen to title screen
 const returnToTitle = () => {
 	// switch page to title screen
 	// display a modal with a message
@@ -162,8 +163,10 @@ const setDefault = () => {
 	this.player2Score = 0;
 	this.player1IsDead = false;
 	this.player2IsDead = false;
+	$("#lives").text("Lives: 3")
 	this.player1Lives = 3;
 	this.player2Lives = 3;
+	$("#level").text("Level: 1")
 	this.currentLevel = 1;
 	this.isPaused = false;
 } 
