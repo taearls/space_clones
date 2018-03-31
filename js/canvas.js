@@ -6,56 +6,10 @@ canvas.height = window.innerHeight;
 
 const ctx = canvas.getContext("2d");
 
-// write a function that generates a desired amount of circles
-// stars = [];
-// const genStars = (numStars) => {
-// 	for (let i = 0; i < numStars; i++) {
-// 		ctx.beginPath();
-
-// 		let x = Math.floor(Math.random() * canvas.width);
-// 		let y = Math.floor(Math.random() * canvas.height);
-// 		let radius = Math.ceil(Math.random() * 2)
-// 		if (radius < x < canvas.width && radius < y < canvas.height) {
-// 			ctx.arc(x, y, radius, 0, Math.PI * 2)
-// 			ctx.fillStyle = "white";
-// 			stars.push(ctx.fill());
-// 			ctx.closePath();
-// 		}
-// 	}
-
-// }
-
-// genStars(500);
-
-// let starX = Math.random() * canvas.width;
-// let starY = Math.random() * canvas.height;
-// let starRadius = Math.ceil(Math.random() * 2);
-// let starDY = Math.random() * (-5);
-
-function Star (x, y, dy, radius) {
-	this.x = x;
-	this.y = y;
-	this.dy = dy;
-	this.radius = radius;
-
-	this.draw = function () {
-		ctx.beginPath();
-		ctx.fillStyle = "white";
-		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-		ctx.fill();
-	}
-	this.update = function () {
-		if (this.y + this.radius >= canvas.height) {
-			this.y = this.radius;
-		}
-	}
-	this.move = function() {
-		this.y += this.dy;
-	}
-}
-
+// create star array to store new stars
 const stars = [];
 
+// generate 500 stars, push into star array
 for (i = 0; i < 500; i++) {
 	let x = Math.random() * canvas.width;
 	let y = Math.random() * canvas.height;
@@ -68,8 +22,7 @@ for (i = 0; i < 500; i++) {
 	stars.push(new Star(x, y, dy, radius))
 }
 
-// const star = new Star (100, 100, 5, 3);
-
+// animate the stars in canvas backdrop
 function animateCanvas() {
 	requestAnimationFrame(animateCanvas);
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -79,6 +32,7 @@ function animateCanvas() {
 		stars[i].update();
 	}
 }
+
 animateCanvas();
 // write a function to get the distance between two objects in the canvas
 

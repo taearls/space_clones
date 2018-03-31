@@ -5,7 +5,7 @@ body {
 }
 body * {
 	font-family: 'Roboto Condensed', sans-serif;
-	color: white;
+	color: #0BD919;
 }
 header {
 	display: flex;
@@ -23,8 +23,9 @@ nav a {
 	width: 15vw;
 	text-align: center;
 	margin: auto;
-	color: firebrick;
-	transition: 0.3s;
+	color: violet;
+/*	background-color: #666666;
+*/	transition: 0.3s;
 	font-size: 26px;
 }
 canvas {
