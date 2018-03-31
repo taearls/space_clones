@@ -1,10 +1,6 @@
 // ***** GLOBAL VARIABLES *****
 
-const canvas = $("canvas");
 
-const ctx = canvas[0].getContext("2d");
-canvas.attr("width", $(document).width());
-canvas.attr("height", $(document).height());
 
 const modal = $(".modal");
 const openModal = $(".modal-content");
@@ -174,24 +170,6 @@ const setDefault = () => {
 
 
 
-// ***** CANVAS *****
 
-
-// write a function that generates a desired amount of circles
-const genStars = (numCircles) => {
-	for (let i = 0; i < numCircles; i++) {
-		ctx.beginPath();
-
-		let x = Math.floor(Math.random() * 1400);
-		let y = Math.floor(Math.random() * 800);
-		let radius = Math.ceil(Math.random() * 3)
-		ctx.arc(x, y, radius, 0, Math.PI * 2)
-		ctx.fillStyle = "white";
-		ctx.fill();
-		ctx.closePath();
-	}
-}
-
-genStars(500);
 
 
