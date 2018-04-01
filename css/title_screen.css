@@ -36,6 +36,9 @@ canvas {
 /*	z-index: 1000;
 */	background-color: black;
 }
+#game-canvas {
+	z-index: -1000;
+}
 #backstory {
 	visibility: hidden;
 }

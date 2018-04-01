@@ -12,11 +12,11 @@ let stars = [];
 // generate 500 stars with function, push into star array
 const initStars = () => {
 	stars = [];
-	for (i = 0; i < 100; i++) {
+	for (i = 0; i < 500; i++) {
 		let x = Math.random() * canvas.width;
 		let y = Math.random() * canvas.height;
-		let radius = Math.ceil(Math.random() * 2);
-		let dy = Math.random() * 1;
+		let radius = Math.random() * 2;
+		let dy = Math.random() * 5;
 		ctx.beginPath();
 		ctx.fillStyle = "white";
 		ctx.arc(x, y, radius, 0, Math.PI * 2);
@@ -26,8 +26,8 @@ const initStars = () => {
 }
 initStars();
 // animate the stars in canvas backdrop
-function animateCanvas() {
-	requestAnimationFrame(animateCanvas);
+function animateStars() {
+	requestAnimationFrame(animateStars);
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 	for (let i = 0; i < stars.length; i++) {
 		stars[i].draw();
@@ -36,16 +36,8 @@ function animateCanvas() {
 	}
 }
 
-animateCanvas();
-// write a function to get the distance between two objects in the canvas
+animateStars();
 
-const getDistance = (x1, y1, x2, y2) => {
-	// store dist between x and y coords in a variable
-	let xDistance = x2 - x1;
-	let yDistance = y2 - y1;
-	// use pythagoreon theorum to calc distance
-	return Math.sqrt(xDistance ** 2 + yDistance ** 2);
-}
 // ***** EVENT LISTENERS *****
 
 // for some reason, stars speed up exponentially when window resizes, but they do regenerate as desired
@@ -54,12 +46,16 @@ window.addEventListener("resize", function(event) {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 	initStars();
-	animateCanvas();
+	animateStars();
 })
+
+// ***** GAME CONTROLS *****
 
 // this allows player 1 and player 2 to move horizontally.
 document.addEventListener("keydown", function(event) {
 	const key = event.keyCode;
+	console.log(event.keyCode);
+	// PLAYER MOVEMENT
 	// right using right arrow or D
 	if(key===39 || key===68) {
 		player1Ship.direction = "right";
@@ -72,5 +68,45 @@ document.addEventListener("keydown", function(event) {
 		player1Ship.body.x = player1Ship.body.x - 10;
 		player2Ship.direction = "left";
 		player2Ship.body.x = player1Ship.body.x - 10;
+	} else if (key===32) {
+		// fire player ships
+		player1Ship.fire();
+		player2Ship.fire();
+	} else if (key===13) {
+		// pause the game
+		game.pause();
 	}
 }) 
+
+
+
+
+
+
+// ***GAME CANVAS***
+
+const gameCanvas = document.querySelector("#game-canvas");
+gameCanvas.width = window.innerWidth;
+// height will be distance between header/footer of game
+gameCanvas.height = window.innerHeight;
+
+const ctx2 = gameCanvas.getContext("2d");
+
+
+// draw a rectangle for now.
+// ctx2.rect() params are (x,y);
+// x = x coord of upper left hand corner of rect
+// y = y coord of upper left hand corner of rect
+// for some reason y value increases as the points go vertically downward
+// like the 4th quadrant of the cartesian plane
+
+const genPlayer = (x, y, width, height) => {
+	ctx2.beginPath();
+	ctx2.rect(x, y, width, height);
+	ctx2.fillStyle = "#AAB";
+	ctx2.fill();
+	ctx2.closePath();
+}
+
+genPlayer( (canvas.width / 2 - 50) , 500, 100, 100);
+

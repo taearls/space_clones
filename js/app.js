@@ -171,7 +171,14 @@ const setDefault = () => {
 	this.isPaused = false;
 } 
 
-
+// write a function to get the distance between two objects in the canvas
+const getDistance = (x1, y1, x2, y2) => {
+	// store dist between x and y coords in a variable
+	let xDistance = x2 - x1;
+	let yDistance = y2 - y1;
+	// use pythagoreon theorum to calc distance
+	return Math.sqrt(xDistance ** 2 + yDistance ** 2);
+}
 
 
 
