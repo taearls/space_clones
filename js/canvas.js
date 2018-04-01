@@ -54,7 +54,7 @@ window.addEventListener("resize", function(event) {
 // this allows player 1 and player 2 to move horizontally.
 document.addEventListener("keydown", function(event) {
 	const key = event.keyCode;
-	console.log(event.keyCode);
+	// console.log(event.keyCode);
 	// PLAYER MOVEMENT
 	// right using right arrow or D
 	if(key===39 || key===68) {
@@ -108,5 +108,13 @@ const genPlayer = (x, y, width, height) => {
 	ctx2.closePath();
 }
 
-genPlayer( (canvas.width / 2 - 50) , 500, 100, 100);
+// genPlayer( (canvas.width / 2 - 50) , 500, 100, 100);
 
+// instantiate ships for player 1 and player 2
+player1Ship = new Player(1, 1, 1);
+player2Ship = new Player(1, 1, 1);
+
+player1Ship.draw((canvas.width / 2 - 50) , 500, 100, 100);
+
+
+// call animation next

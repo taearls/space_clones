@@ -1,6 +1,6 @@
 // initialize generic Ship class
 class Ship {
-	constructor() {
+	constructor(firepower, shield, speed) {
 		this.firepower = firepower;
 		this.shield = shield;
 		this.body = {};
@@ -13,9 +13,6 @@ class Ship {
 			r: 0,
 			e: 0
 		};
-	}
-	drawShip() {
-
 	}
 	fire(target) {
 		// 
@@ -33,21 +30,29 @@ class Ship {
 
 // class for player ships
 class Player extends Ship {
-	constructor() {
+	constructor(firepower, shield, speed) {
+		super(firepower, shield);
 		this.name = "Player 1";
-		this.direction = "";
 		this.body = {
-			x: 20,
-			y: 320,
-			r: 12.5,
-			e: 0
+			x: 0,
+			y: 0,
+			width: 0,
+			height: 0
 		}
-		this.shield = 1;
-		this.firepower = 1;
-		this.speed = 1;
 	}
 	move() {
 		// define keydowns for left and right arrows, control of it
+	}
+	draw(x, y, width, height) {
+		this.body.x = x;
+		this.body.y = y;
+		this.body.width = width;
+		this.body.height = height;
+		ctx2.beginPath();
+		ctx2.rect(x, y, width, height);
+		ctx2.fillStyle = "#AAB";
+		ctx2.fill();
+		ctx2.closePath();
 	}
 }
 
