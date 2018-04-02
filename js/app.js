@@ -131,21 +131,9 @@ $("#co-op").on("click", function(event) {
 	game.isSolo = false;
 	game.newGame();
 });
-prologue.on("click", function(event){
-	if ($("#backstory").css("visibility") === "hidden") {
-		$("#backstory").css("visibility", "visible");
-		// make the visibility more presentable.
-	} else if ($("#backstory").css("visibility") === "visible") {
-		$("#backstory").css("visibility", "hidden");
-	}
-	// display prologue
-	// return to title screen
-	// allow player to exit early 
-	// without watching whole thing
-});
+
 controls.on("click", function(event){
 	$(".controls-modal").addClass("show-modal")
-	// $("#controls-modal").css({"visibility": "visible", "z-index": "1000"});
 })
 prologue.on("click", function(event){
 	$(".prologue-modal").addClass("show-modal");
