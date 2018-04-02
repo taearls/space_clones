@@ -46,8 +46,6 @@ window.addEventListener("resize", function(event) {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 	initStars();
-	context=null;
-	animateStars();
 })
 
 // ***** GAME CONTROLS *****
