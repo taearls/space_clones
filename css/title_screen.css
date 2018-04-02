@@ -39,14 +39,8 @@ canvas {
 #game-canvas {
 	z-index: -1000;
 }
-#backstory {
-	visibility: hidden;
-}
 
-#name-modal {
-	visibility: hidden;
-}
-.modal {
+.controls-modal, .prologue-modal {
     position: fixed;
     left: 0;
     top: 0;
@@ -58,7 +52,10 @@ canvas {
     transform: scale(1.1);
     transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
 }
-.modal-content {
+.modal button {
+    font-size: 13px;
+}
+.controls-content, .prologue-content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -68,8 +65,16 @@ canvas {
     width: 26rem;
     border-radius: 0.5rem;
 }
-.modal button {
-    font-size: 13px;
+#close-controls, #close-prologue {
+	float: right;
+    width: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: white;
+    margin-bottom: 4px;
+    transition: 0.5s;
 }
 .close-button {
     float: right;

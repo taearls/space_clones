@@ -79,9 +79,24 @@ class Player extends Ship {
 		let height = this.body.height;
 		ctx2.beginPath();
 		ctx2.rect(x, y, width, height);
-		ctx2.fillStyle = "#AAB";
+		ctx2.fillStyle = "firebrick";
 		ctx2.fill();
 		ctx2.closePath();
+	}
+	fire() {
+		// x of firing laser needs to be in center of the ship
+		let x = this.body.x + (this.body.width / 2);
+		let y = this.body.y;
+		let width = 1;
+		let height = 1;
+		// dy is the velocity of the laser
+		let dy = (-10);
+		ctx2.beginPath();
+		ctx2.rect(x, y, width, height);
+		ctx2.strokeStyle = "firebrick";
+		ctx2.stroke();
+		ctx2.closePath();
+		
 	}
 }
 

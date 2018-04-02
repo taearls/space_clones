@@ -2,11 +2,11 @@
 
 
 
-const modal = $(".modal");
-const openModal = $(".modal-content");
-const closeModal = $("#close-button");
 
-
+const controls = $("#how-to-play");
+const closeControls = $(".close-controls");
+const prologue = $("#prologue");
+const closePrologue = $(".close-prologue");
 
 // instantiate game object
 
@@ -43,7 +43,14 @@ const game = {
 		// display player1 start or player 2 start
 	},
 	pause() {
-		this.isPaused = true;
+		this.isPaused = !this.isPaused;
+		if (this.isPaused) {
+			// stop animation
+			// display modal
+		} else {
+			// close modal
+			// resume animation
+		}
 		// modal pop up
 		// display stats
 		// option to quit
@@ -124,28 +131,37 @@ $("#co-op").on("click", function(event) {
 	game.isSolo = false;
 	game.newGame();
 });
-$("#prologue").on("click", function(event){
-	console.log("hi");
+prologue.on("click", function(event){
+	if ($("#backstory").css("visibility") === "hidden") {
+		$("#backstory").css("visibility", "visible");
+		// make the visibility more presentable.
+	} else if ($("#backstory").css("visibility") === "visible") {
+		$("#backstory").css("visibility", "hidden");
+	}
 	// display prologue
 	// return to title screen
 	// allow player to exit early 
 	// without watching whole thing
 });
-$("#how-to-play").on("click", function(event){
-	console.log("hi");
+controls.on("click", function(event){
+	$(".controls-modal").addClass("show-modal")
+	// $("#controls-modal").css({"visibility": "visible", "z-index": "1000"});
+})
+prologue.on("click", function(event){
+	$(".prologue-modal").addClass("show-modal");
 })
 
 //  ***** MODALS *****
 
-closeModal.on("click", function (event) {
-	modal.removeClass("show-modal");
-});
+closeControls.on("click", function(event) {
+	$(this).parent().parent().toggleClass('show-modal', false)
+	event.stopPropagation();
+})
+closePrologue.on("click", function(event) {
+	$(this).parent().parent().toggleClass('show-modal', false)
+	event.stopPropagation();
+})
 
-openModal.on("click", function (event) {
-	if (lightOn && !pet.isDead && pet.isClean && !pet.isPlaying && !pet.isEating) {
-		modal.addClass("show-modal");
-	}
-});
 
 // ***** FUNCTIONS *****
 

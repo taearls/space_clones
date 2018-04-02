@@ -46,6 +46,7 @@ window.addEventListener("resize", function(event) {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 	initStars();
+	context=null;
 	animateStars();
 })
 
@@ -69,11 +70,15 @@ document.addEventListener("keydown", function(event) {
 		player2Ship.direction = "left";
 		player2Ship.body.x = player1Ship.body.x - 10;
 	} else if (key===32) {
+		// space bar to fire
 		// fire player ships
+		console.log("ship fired laser");
 		player1Ship.fire();
 		player2Ship.fire();
 	} else if (key===13) {
+		// return to pause
 		// pause the game
+		console.log("game paused");
 		game.pause();
 	}
 	ctx2.clearRect(0,0, canvas.width, canvas.height)
@@ -119,8 +124,8 @@ function animatePlayer() {
 	ctx2.clearRect(0, 0, canvas.width, canvas.height)
 	player1Ship.draw();
 	player1Ship.move();
+	player1Ship.fire();
 	requestAnimationFrame(animatePlayer);
-	console.log(player1Ship);
 }
 
 initPlayers();
@@ -128,4 +133,9 @@ player1Ship.initialize();
 player1Ship.draw();
 animatePlayer();
 
-// player1Ship doesn't draw again when the browser refreshes
+function animatePlayerFire() {
+	ctx2.clearRect(0, 0, canvas.width, canvas.height);
+	player1Ship.fire();
+	requestAnimationFrame(animatePlayerFire);
+}
+// animatePlayerFire();
