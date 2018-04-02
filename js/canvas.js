@@ -76,6 +76,8 @@ document.addEventListener("keydown", function(event) {
 		// pause the game
 		game.pause();
 	}
+	ctx2.clearRect(0,0, canvas.width, canvas.height)
+	player1Ship.draw();
 }) 
 
 
@@ -109,12 +111,29 @@ const genPlayer = (x, y, width, height) => {
 }
 
 // genPlayer( (canvas.width / 2 - 50) , 500, 100, 100);
-
+const playerSpeed = 5;
+const playerShield = 1;
+const playerFirepower = 1;
 // instantiate ships for player 1 and player 2
-player1Ship = new Player(1, 1, 1);
-player2Ship = new Player(1, 1, 1);
 
-player1Ship.draw((canvas.width / 2 - 50) , 500, 100, 100);
+const initPlayers = () => {
+	player1Ship = new Player(playerFirepower, playerShield, playerSpeed);
+	player2Ship = new Player(playerFirepower, playerShield, playerSpeed);
+}
 
 
 // call animation next
+
+function animatePlayer() {
+	ctx2.clearRect(0, 0, canvas.width, canvas.height)
+	player1Ship.move();
+	player1Ship.draw();
+	requestAnimationFrame(animatePlayer);
+}
+
+initPlayers();
+player1Ship.initialize();
+player1Ship.draw();
+animatePlayer();
+
+// player1Ship doesn't draw again when the browser refreshes

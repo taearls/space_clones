@@ -34,20 +34,34 @@ class Player extends Ship {
 		super(firepower, shield);
 		this.name = "Player 1";
 		this.body = {
-			x: 0,
-			y: 0,
-			width: 0,
-			height: 0
+			x: (canvas.width / 2 - 50),
+			y: 500,
+			width: 100,
+			height: 100
+		}
+	}
+	initialize() {
+		this.body = {
+			x: (canvas.width / 2 - 50),
+			y: 500,
+			width: 100,
+			height: 100
 		}
 	}
 	move() {
-		// define keydowns for left and right arrows, control of it
+		if (this.direction === "left") {
+			// if the direction changes to left, subtract speed value from x
+			this.body.x -= this.speed;
+		} else if (this.direction === "right") {
+			// if the direction changes to right, add speed value to x
+			this.body.x += this.speed;
+		}
 	}
-	draw(x, y, width, height) {
-		this.body.x = x;
-		this.body.y = y;
-		this.body.width = width;
-		this.body.height = height;
+	draw() {
+		let x = this.body.x;
+		let y = this.body.y;
+		let width = this.body.width;
+		let height = this.body.height;
 		ctx2.beginPath();
 		ctx2.rect(x, y, width, height);
 		ctx2.fillStyle = "#AAB";
@@ -55,10 +69,6 @@ class Player extends Ship {
 		ctx2.closePath();
 	}
 }
-
-// instantiate ships for player 1 and player 2
-// const player1Ship = new Player ();
-// const player2Ship = new Player ();
 
 // class for basic enemies
 class Clone extends Ship {
