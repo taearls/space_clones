@@ -2,13 +2,10 @@ const canvas = document.querySelector("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-
-
 const ctx = canvas.getContext("2d");
 
 // create star array to store new stars
 let stars = [];
-
 // generate 500 stars with function, push into star array
 const initStars = () => {
 	stars = [];
@@ -38,9 +35,6 @@ function animateStars() {
 
 animateStars();
 
-// ***** EVENT LISTENERS *****
-
-// for some reason, stars speed up exponentially when window resizes, but they do regenerate as desired
 window.addEventListener("resize", function(event) {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	canvas.width = window.innerWidth;
@@ -48,9 +42,15 @@ window.addEventListener("resize", function(event) {
 	initStars();
 })
 
-// ***** GAME CONTROLS *****
 
-// this allows player 1 and player 2 to move horizontally.
+
+
+
+
+
+
+
+
 document.addEventListener("keydown", function(event) {
 	const key = event.keyCode;
 	// console.log(event.keyCode);
@@ -69,13 +69,7 @@ document.addEventListener("keydown", function(event) {
 		player2Ship.body.x = player1Ship.body.x - 10;
 	} else if (key===32) {
 		// space bar to fire
-		// fire player ships
-		// player1Ship.drawLaser();
 		player1Ship.initLaser();
-		player1Ship.laser.dy = -10;
-		player1Ship.charge--;
-		animatePlayerFire();
-		// player2Ship.fire();
 	} else if (key===13) {
 		// return to pause
 		// pause the game
@@ -86,20 +80,6 @@ document.addEventListener("keydown", function(event) {
 	player1Ship.draw();
 }) 
 
-// document.addEventListener("keyup", function(event) {
-// 	const key = event.keyCode;
-// 	if (key===32) {
-// 		if (player1Ship.laser.y > 0){
-// 			player1Ship.laser.y += player1Ship.laser.dy;
-// 		}
-// 		// space bar to fire
-// 		// player1Ship.laserFired = false;
-// 	}
-// })
-
-
-
-
 // ***GAME CANVAS***
 
 const gameCanvas = document.querySelector("#game-canvas");
@@ -109,15 +89,6 @@ gameCanvas.height = window.innerHeight;
 
 const ctx2 = gameCanvas.getContext("2d");
 
-
-// draw a rectangle for now.
-// ctx2.rect() params are (x,y);
-// x = x coord of upper left hand corner of rect
-// y = y coord of upper left hand corner of rect
-// for some reason y value increases as the points go vertically downward
-// like the 4th quadrant of the cartesian plane
-
-
 const playerShield = 1;
 const playerFirepower = 1;
 // instantiate ships for player 1 and player 2
@@ -126,9 +97,6 @@ const initPlayers = () => {
 	player1Ship = new Player(playerFirepower, playerShield);
 	player2Ship = new Player(playerFirepower, playerShield);
 }
-
-
-// call animation next
 
 function animatePlayer() {
 	ctx2.clearRect(0, 0, canvas.width, canvas.height)
@@ -142,8 +110,11 @@ player1Ship.initialize();
 player1Ship.draw();
 animatePlayer();
 
+
 function animatePlayerFire() {
-	player1Ship.drawLaser();
-	player1Ship.fire();
+	for (let i = 0; i < player1Ship.shotsFired.length; i++) {
+		player1Ship.shotsFired[i].move();
+	}
 	requestAnimationFrame(animatePlayerFire);
 }
+animatePlayerFire();

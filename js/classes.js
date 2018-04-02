@@ -42,6 +42,7 @@ class Player extends Ship {
 		};
 		// charge == how many lasers player can fire.
 		this.charge = 10;
+		this.shotsFired = [];
 	}
 	initialize() {
 		this.body = {
@@ -52,12 +53,8 @@ class Player extends Ship {
 		}
 	}
 	initLaser() {
-		this.laser = {
-			x: this.body.x + (this.body.width / 2),
-			y: this.body.y,
-			dy: -10,
-			width: 1,
-			height: 1
+		if (this.shotsFired.length < this.charge) {		
+			this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y, 10, 10, -10));
 		}
 	}
 	move() {
@@ -95,37 +92,9 @@ class Player extends Ship {
 		ctx2.fill();
 		ctx2.closePath();
 	}
-	fire() {
-		// this.laser.y = this.body.y;
-		// let y = this.body.y;
-		if (this.charge > 0) {
-			this.laser.y += this.laser.dy;
-			if (this.laser.y === 0) {
-				this.laser.dy = 0;
-			}
-		} else {
-			// console.log("reload!");
-		}
-	}
-	drawLaser() {
-		// function doesn't work when called again
-		// x of firing laser needs to be in center of the ship
-		if (this.charge > 0) {
-			this.laser.x = this.body.x + (this.body.width / 2);
-			let x = this.laser.x;
-			// let dy = this.laser.dy;
-			// this.laser.y = this.body.y;
-			let y = this.laser.y;
-			let width = this.laser.width;
-			let height = this.laser.height;
-			// dy is the velocity of the laser
-			ctx2.beginPath();
-			ctx2.rect(x, y, width, height);
-			ctx2.strokeStyle = "green";
-			ctx2.stroke();
-			ctx2.closePath();
-		}
-	}
+	// fire(laser) {
+		
+	// }
 }
 
 // class for basic enemies
@@ -167,7 +136,25 @@ class Star {
 		this.y += this.dy;
 	}
 }
-
+class Lasers {
+	constructor(x, y, length, width, dy){
+		this.x = x;
+		this.y = y;
+		this.length = length;
+		this.width = width;
+		this.dy = dy;
+	}
+	draw() {
+		ctx2.beginPath();
+		ctx2.fillStyle = "green";
+		ctx2.fillRect(this.x, this.y, this.length, this.width);
+		ctx2.closePath();
+	}
+	move() {
+		this.draw();
+		this.y += this.dy;
+	}
+}
 // ***** FACTORIES *****
 
 // factory to store clones
