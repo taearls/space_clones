@@ -54,7 +54,7 @@ class Player extends Ship {
 		const leftBorder = 0;
 		if (this.direction === "left") {
 			// if the direction changes to left, subtract speed value from x
-			if (this.body.x < leftBorder) {
+			if (this.body.x <= leftBorder) {
 				speed = 0;
 				this.body.x = 0;
 			} else {
@@ -63,9 +63,9 @@ class Player extends Ship {
 			}
 		} else if (this.direction === "right") {
 			// if the direction changes to right, add speed value to x
-			if (this.body.x > rightBorder) {
+			if (this.body.x >= rightBorder - 1) {
 				speed = 0;
-				this.body.x = rightBorder;
+				this.body.x = rightBorder - 1;
 			} else {
 				speed = 5;
 				this.body.x += speed;
