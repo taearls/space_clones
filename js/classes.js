@@ -1,17 +1,17 @@
 // initialize generic Ship class
 class Ship {
-	constructor(firepower, shield, speed) {
+	constructor(firepower, shield) {
 		this.firepower = firepower;
 		this.shield = shield;
 		this.body = {};
-		this.direction = "";
+		this.direction = "down";
 	}
 	initialize() {
 		this.body = {
-			x: 0,
-			y: 0,
-			r: 0,
-			e: 0
+			x: 30,
+			y: 30,
+			width: 30,
+			height: 30
 		};
 	}
 	fire(target) {
@@ -30,11 +30,11 @@ class Ship {
 
 // class for player ships
 class Player extends Ship {
-	constructor(firepower, shield, speed) {
+	constructor(firepower, shield) {
 		super(firepower, shield);
 		this.name = "Player 1";
 		this.body = {
-			x: (canvas.width / 2 - 50),
+			x: 300,
 			y: 500,
 			width: 100,
 			height: 100
@@ -42,19 +42,34 @@ class Player extends Ship {
 	}
 	initialize() {
 		this.body = {
-			x: (canvas.width / 2 - 50),
+			x: 300,
 			y: 500,
 			width: 100,
 			height: 100
 		}
 	}
 	move() {
+		let speed = 5;
+		const rightBorder = canvas.width - this.body.width; // or if circle, this.body.radius
+		const leftBorder = 0;
 		if (this.direction === "left") {
 			// if the direction changes to left, subtract speed value from x
-			this.body.x -= this.speed;
+			if (this.body.x < leftBorder) {
+				speed = 0;
+				this.body.x = 0;
+			} else {
+				speed = 5;
+				this.body.x -= speed;
+			}
 		} else if (this.direction === "right") {
 			// if the direction changes to right, add speed value to x
-			this.body.x += this.speed;
+			if (this.body.x > rightBorder) {
+				speed = 0;
+				this.body.x = rightBorder;
+			} else {
+				speed = 5;
+				this.body.x += speed;
+			}
 		}
 	}
 	draw() {

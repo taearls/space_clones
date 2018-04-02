@@ -102,23 +102,14 @@ const ctx2 = gameCanvas.getContext("2d");
 // for some reason y value increases as the points go vertically downward
 // like the 4th quadrant of the cartesian plane
 
-const genPlayer = (x, y, width, height) => {
-	ctx2.beginPath();
-	ctx2.rect(x, y, width, height);
-	ctx2.fillStyle = "#AAB";
-	ctx2.fill();
-	ctx2.closePath();
-}
 
-// genPlayer( (canvas.width / 2 - 50) , 500, 100, 100);
-const playerSpeed = 5;
 const playerShield = 1;
 const playerFirepower = 1;
 // instantiate ships for player 1 and player 2
 
 const initPlayers = () => {
-	player1Ship = new Player(playerFirepower, playerShield, playerSpeed);
-	player2Ship = new Player(playerFirepower, playerShield, playerSpeed);
+	player1Ship = new Player(playerFirepower, playerShield);
+	player2Ship = new Player(playerFirepower, playerShield);
 }
 
 
@@ -126,9 +117,10 @@ const initPlayers = () => {
 
 function animatePlayer() {
 	ctx2.clearRect(0, 0, canvas.width, canvas.height)
-	player1Ship.move();
 	player1Ship.draw();
+	player1Ship.move();
 	requestAnimationFrame(animatePlayer);
+	console.log(player1Ship);
 }
 
 initPlayers();
