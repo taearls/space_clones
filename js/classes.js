@@ -46,8 +46,8 @@ class Player extends Ship {
 	}
 	initialize() {
 		this.body = {
-			x: 300,
-			y: 500,
+			x: canvas.width / 2 - this.body.width / 2,
+			y: canvas.height - 100,
 			width: 100,
 			height: 100
 		}
