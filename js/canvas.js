@@ -70,9 +70,12 @@ document.addEventListener("keydown", function(event) {
 	} else if (key===32) {
 		// space bar to fire
 		// fire player ships
-		console.log("ship fired laser");
-		player1Ship.fire();
-		player2Ship.fire();
+		// player1Ship.drawLaser();
+		player1Ship.initLaser();
+		player1Ship.laser.dy = -10;
+		player1Ship.charge--;
+		animatePlayerFire();
+		// player2Ship.fire();
 	} else if (key===13) {
 		// return to pause
 		// pause the game
@@ -83,7 +86,16 @@ document.addEventListener("keydown", function(event) {
 	player1Ship.draw();
 }) 
 
-
+// document.addEventListener("keyup", function(event) {
+// 	const key = event.keyCode;
+// 	if (key===32) {
+// 		if (player1Ship.laser.y > 0){
+// 			player1Ship.laser.y += player1Ship.laser.dy;
+// 		}
+// 		// space bar to fire
+// 		// player1Ship.laserFired = false;
+// 	}
+// })
 
 
 
@@ -122,7 +134,6 @@ function animatePlayer() {
 	ctx2.clearRect(0, 0, canvas.width, canvas.height)
 	player1Ship.draw();
 	player1Ship.move();
-	player1Ship.fire();
 	requestAnimationFrame(animatePlayer);
 }
 
@@ -132,8 +143,7 @@ player1Ship.draw();
 animatePlayer();
 
 function animatePlayerFire() {
-	ctx2.clearRect(0, 0, canvas.width, canvas.height);
+	player1Ship.drawLaser();
 	player1Ship.fire();
 	requestAnimationFrame(animatePlayerFire);
 }
-// animatePlayerFire();

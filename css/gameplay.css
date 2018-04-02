@@ -19,7 +19,7 @@ header h2 {
 }
 
 #game-canvas {
-	background: none;
+	background: white;
 	z-index: 1000;
 }
 

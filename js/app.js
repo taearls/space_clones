@@ -132,19 +132,21 @@ $("#co-op").on("click", function(event) {
 	game.newGame();
 });
 
+//  ***** MODALS *****
+
 controls.on("click", function(event){
 	$(".controls-modal").addClass("show-modal")
 })
-prologue.on("click", function(event){
-	$(".prologue-modal").addClass("show-modal");
-})
-
-//  ***** MODALS *****
 
 closeControls.on("click", function(event) {
 	$(this).parent().parent().toggleClass('show-modal', false)
 	event.stopPropagation();
 })
+
+prologue.on("click", function(event){
+	$(".prologue-modal").addClass("show-modal");
+})
+
 closePrologue.on("click", function(event) {
 	$(this).parent().parent().toggleClass('show-modal', false)
 	event.stopPropagation();
