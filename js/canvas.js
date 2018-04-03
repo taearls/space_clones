@@ -116,6 +116,9 @@ player1Ship.initialize();
 player1Ship.draw();
 animatePlayer();
 
+const amountClones = 20;
+cloneFactory.generateClone(new Clone());
+
 
 function animatePlayerFire() {
 	for (let i = 0; i < player1Ship.shotsFired.length; i++) {
@@ -125,4 +128,12 @@ function animatePlayerFire() {
 }
 animatePlayerFire();
 
-
+function animateClone() {
+	for (let i = 0; i < cloneFactory.clones.length; i++) {
+		cloneFactory.clones[i].initialize();
+		cloneFactory.clones[i].draw();
+		cloneFactory.clones[i].move();
+	}
+	requestAnimationFrame(animateClone);
+}
+animateClone();
