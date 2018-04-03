@@ -130,6 +130,7 @@ class Clone extends Ship {
 		this.direction = "left";
 		this.distBetweenShips = 100;
 		this.descent = 30;
+		this.charge = 10;
 	}
 	initialize() {
 		this.body = {
@@ -187,8 +188,14 @@ class Clone extends Ship {
 		// 	this.direction = "right";
 		// }
 	}
+	initLaser() {
+		if (this.shotsFired.length < this.charge) {		
+			this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y + this.body.y, 10, 10, -10));
+		}
+	}
 	fire() {
-
+		this.initLaser();
+		// call this function with a timer, so it will fire every x seconds.
 	}
 	update() {
 
