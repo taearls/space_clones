@@ -186,6 +186,14 @@ const getDistance = (x1, y1, x2, y2) => {
 	return Math.sqrt(xDistance ** 2 + yDistance ** 2);
 }
 
-
-
-
+console.log(getDistance(0,0,3,4));
+// for (let i = 0; i < player1Ship.shotsFired.length; i++) {
+	// for (let j = 0; j < cloneFactory.clones.length; j++) {
+	// 	console.log("hi")
+	// 	let distance = getDistance(player1Ship.shotsFired[player1Ship.shotsFired.length - 1].x, player1Ship.shotsFired[player1Ship.shotsFired.length - 1].y, cloneFactory.clones[j].body.x, cloneFactory.clones[j].body.y);
+	// 	console.log(distance)
+	// 	if (distance <= 0) {
+	// 		console.log("you killed an enemy ship")
+	// 	}
+	// }
+// }

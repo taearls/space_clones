@@ -132,14 +132,47 @@ player1Ship.initialize();
 player1Ship.draw();
 animatePlayer();
 
-const amountClones = 30;
+const amountClones = 10;
 // cloneFactory.generateClone(new Clone());
 
 
 function animatePlayerFire() {
 	for (let i = 0; i < player1Ship.shotsFired.length; i++) {
 		player1Ship.shotsFired[i].move();
+		for (let j = 0; j < cloneFactory.clones.length; j++) {
+			let x1 = player1Ship.shotsFired[i].x;
+			let y1 = player1Ship.shotsFired[i].y;
+			let width1 = player1Ship.shotsFired[i].width;
+			let height1 = player1Ship.shotsFired[i].height;
+			let x2 = cloneFactory.clones[j].body.x;
+			let y2 = cloneFactory.clones[j].body.y;
+
+			let xPlayer1Center = player1Ship.shotsFired[i].x + (player1Ship.shotsFired[i].width / 2);
+			let yPlayer1Center = player1Ship.shotsFired[i].y + (player1Ship.shotsFired[i].height / 2)
+			let xCloneCenter = cloneFactory.clones[j].body.x + (cloneFactory.clones[j].body.width / 2);
+			let yCloneCenter = cloneFactory.clones[j].body.y + (cloneFactory.clones[j].body.height / 2);
+			// let distance = getDistance(x1, y1, x2, y2);
+			let player1TLDistToCenter = getDistance(x1, y1, xCloneCenter, yCloneCenter);
+			let player1TRDistToCenter = getDistance(x1 + width1, y1, xCloneCenter, yCloneCenter);
+			let player1BLDistToCenter = getDistance(x1, y1 + height1, xCloneCenter, yCloneCenter);
+			let player1BRDistToCenter = getDistance(x1 + width1, y1 + height1, xCloneCenter, yCloneCenter);
+			// while using the center point of the alien ships, I only need to measure two distances for comparison:
+			let cloneDist1 = getDistance(x2, y2, xCloneCenter, yCloneCenter);
+			let cloneDist2 = getDistance(x2, y2 + cloneFactory.clones[j].body.height, xCloneCenter, yCloneCenter);
+			
+			if (player1TLDistToCenter <= cloneDist1 || player1TLDistToCenter <= cloneDist2) {
+				console.log("you destroyed an enemy vessel");
+			} else if (player1TRDistToCenter <= cloneDist1 || player1TRDistToCenter <= cloneDist2) {
+				console.log("you destroyed an enemy vessel");
+			} else if (player1BLDistToCenter <= cloneDist1 || player1BLDistToCenter <= cloneDist2) {
+				console.log("you destroyed an enemy vessel");
+			} else if (player1BRDistToCenter <= cloneDist1 || player1BRDistToCenter <= cloneDist2) {
+				console.log("you destroyed an enemy vessel");
+			}
+
+		}
 	}
+
 	requestAnimationFrame(animatePlayerFire);
 }
 animatePlayerFire();
@@ -158,3 +191,5 @@ function animateClone() {
 	requestAnimationFrame(animateClone);
 }
 animateClone();
+
+
