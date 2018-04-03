@@ -86,6 +86,22 @@ document.addEventListener("keydown", function(event) {
 	player1Ship.draw();
 }) 
 
+document.addEventListener("keyup", function(event) {
+	const key = event.keyCode;
+	if(key===39 || key===68) {
+		player1Ship.direction = "";
+		// player1Ship.body.x = player1Ship.body.x + 10;
+		player2Ship.direction = "";
+		// player2Ship.body.x = player1Ship.body.x + 10;
+	// left using left arrow or A
+	} else if(key===37 || key===65) {
+		player1Ship.direction = "";
+		// player1Ship.body.x = player1Ship.body.x - 10;
+		player2Ship.direction = "";
+		// player2Ship.body.x = player1Ship.body.x - 10;
+	}
+})
+
 // ***GAME CANVAS***
 
 const gameCanvas = document.querySelector("#game-canvas");
@@ -117,7 +133,7 @@ player1Ship.draw();
 animatePlayer();
 
 const amountClones = 20;
-cloneFactory.generateClone(new Clone());
+// cloneFactory.generateClone(new Clone());
 
 
 function animatePlayerFire() {
@@ -128,9 +144,14 @@ function animatePlayerFire() {
 }
 animatePlayerFire();
 
+for (let i = 0; i < amountClones; i++) {
+	cloneFactory.generateClone(new Clone());
+	cloneFactory.clones[i].initialize();
+}
+
 function animateClone() {
 	for (let i = 0; i < cloneFactory.clones.length; i++) {
-		cloneFactory.clones[i].initialize();
+		// cloneFactory.clones[i].initialize();
 		cloneFactory.clones[i].draw();
 		cloneFactory.clones[i].move();
 	}

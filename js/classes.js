@@ -63,7 +63,7 @@ class Player extends Ship {
 			height: 100
 		};
 		// charge == how many lasers player can fire.
-		this.charge = 10;
+		this.charge = Infinity;
 		this.shotsFired = [];
 	}
 	initialize() {
@@ -127,21 +127,38 @@ class Clone extends Ship {
 		this.shield = 1;
 		this.speed = 2;
 		this.body = {};
+		this.direction = "left";
+		this.distBetweenShips = 90;
+		this.descent = 30;
 	}
 	initialize() {
 		this.body = {
-			x: 100,
+			x: canvas.width - (this.distBetweenShips * (cloneFactory.clones.length)),
 			y: 100,
 			width: 20,
 			height: 20
 		}
+		// if dist between ships makes x a negative value.
+		// only bug is if I need to start with more than two rows of ships
+		if (this.body.x < 0) {
+			this.body.x = Math.abs(this.body.x);
+			this.body.y += this.descent;
+			this.direction = "right";
+		}
 	}
 	move() {
+		const leftBorder = 0;
+		const rightBorder = canvas.width - this.body.width; // or if circle, this.body.radius
+
 		if (this.direction === "left") {
 			// if the direction changes to left, subtract speed value from x
 			if (this.body.x <= leftBorder) {
 				this.speed = 0;
 				this.body.x = 0;
+				this.direction = "down";
+				this.speed = this.descent;
+				this.body.y += this.speed;
+				this.direction = "right";
 			} else {
 				this.speed = 2;
 				this.body.x -= this.speed;
@@ -151,14 +168,19 @@ class Clone extends Ship {
 			if (this.body.x >= rightBorder - 1) {
 				this.speed = 0;
 				this.body.x = rightBorder - 1;
+				this.direction = "down";
+				this.speed = this.descent;
+				this.body.y += this.speed;
+				this.direction = "left";
 			} else {
 				this.speed = 2;
 				this.body.x += this.speed;
 			}
-		} else if (this.direction === "down") {
-			this.speed = 2;
-			this.body.y += this.speed;
-		}
+		}// } else if (this.direction === "down") {
+		// 	this.speed = 10;
+		// 	this.body.y += this.speed;
+		// 	this.direction = "right";
+		// }
 	}
 	fire() {
 
@@ -167,6 +189,10 @@ class Clone extends Ship {
 
 	}
 	draw() {
+		// if (this.body.x < 0) {
+		// 	this.body.x += gameCanvas.width;
+		// 	this.body.y += this.descent;
+		// }
 		let x = this.body.x;
 		let y = this.body.y;
 		let width = this.body.width;
