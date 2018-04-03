@@ -74,7 +74,7 @@ class Player extends Ship {
 			height: 50
 		}
 	}
-	initLaser() {
+	initLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
 		if (this.shotsFired.length < this.charge) {		
 			this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y, 10, 10, -10));
 		}
@@ -130,7 +130,8 @@ class Clone extends Ship {
 		this.direction = "left";
 		this.distBetweenShips = 100;
 		this.descent = 30;
-		this.charge = 10;
+		this.charge = Infinity;
+		this.shotsFired = [];
 	}
 	initialize() {
 		this.body = {
@@ -188,13 +189,13 @@ class Clone extends Ship {
 		// 	this.direction = "right";
 		// }
 	}
-	initLaser() {
-		if (this.shotsFired.length < this.charge) {		
-			this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y + this.body.y, 10, 10, -10));
-		}
-	}
 	fire() {
-		this.initLaser();
+		this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y + this.body.height, 10, 10, 2))
+		for (let i = 0; i < this.shotsFired.length; i++) {
+			this.shotsFired[i].move();
+		}
+			
+		
 		// call this function with a timer, so it will fire every x seconds.
 	}
 	update() {

@@ -188,12 +188,33 @@ animatePlayerFire();
 for (let i = 0; i < amountClones; i++) {
 	cloneFactory.generateClone(new Clone());
 	cloneFactory.clones[i].initialize();
+	// cloneFactory.clones[i].initLaser();
 }
+
+let frameCount = 0;
 $("#enemies-left").text("Enemies: " + amountClones);
 function animateClone() {
+	// console.log("animateClone")
 	for (let j = 0; j < cloneFactory.clones.length; j++) {
 		cloneFactory.clones[j].draw();
 		cloneFactory.clones[j].move();
+
+		const randomNumber = Math.floor(Math.random() * 100);
+		if(randomNumber == 26) {
+			cloneFactory.clones[j].fire();
+		}		
+
+
+		// if(frameCount % Math.ceil(Math.random() * 120)) {
+		// 	cloneFactory.clones[j].fire();
+
+		// }
+	
+		for(let k = 0; k < cloneFactory.clones[j].shotsFired.length; k++) {
+			cloneFactory.clones[j].shotsFired[k].draw();
+			cloneFactory.clones[j].shotsFired[k].move();
+		}
+
 		let x1 = cloneFactory.clones[j].body.x;
 		let y1 = cloneFactory.clones[j].body.y;
 		let width1 = cloneFactory.clones[j].body.width;
@@ -224,8 +245,8 @@ function animateClone() {
 		} else if (cloneBRDistToCenter <= player1Dist1 || cloneBRDistToCenter <= player1Dist2) {
 			console.log("an enemy vessel collided with your ship");
 		}
-
-	}
+	}// for all clones
+	frameCount++
 	requestAnimationFrame(animateClone);
 }
 animateClone();
