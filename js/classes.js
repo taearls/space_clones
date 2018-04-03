@@ -128,7 +128,7 @@ class Clone extends Ship {
 		this.speed = 2;
 		this.body = {};
 		this.direction = "left";
-		this.distBetweenShips = 90;
+		this.distBetweenShips = 100;
 		this.descent = 30;
 	}
 	initialize() {
@@ -144,7 +144,12 @@ class Clone extends Ship {
 			this.body.x = Math.abs(this.body.x);
 			this.body.y += this.descent;
 			this.direction = "right";
-		}
+			if (this.body.x > canvas.width) {
+				this.body.x -= canvas.width;
+				this.body.y += this.descent;
+				this.direction = "left";
+			}
+		} 
 	}
 	move() {
 		const leftBorder = 0;

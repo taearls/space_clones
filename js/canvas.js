@@ -132,7 +132,7 @@ player1Ship.initialize();
 player1Ship.draw();
 animatePlayer();
 
-const amountClones = 20;
+const amountClones = 30;
 // cloneFactory.generateClone(new Clone());
 
 
