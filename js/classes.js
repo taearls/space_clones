@@ -70,8 +70,8 @@ class Player extends Ship {
 		this.body = {
 			x: (gameCanvas.width / 2) - (this.body.width / 2),
 			y: (gameCanvas.height - this.body.height * 2),
-			width: 100,
-			height: 100
+			width: 50,
+			height: 50
 		}
 	}
 	initLaser() {

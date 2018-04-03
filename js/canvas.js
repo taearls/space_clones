@@ -2,6 +2,14 @@ const canvas = document.querySelector("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+
+const getDistance = (x1, y1, x2, y2) => {
+	// store dist between x and y coords in a variable
+	let xDistance = x2 - x1;
+	let yDistance = y2 - y1;
+	// use pythagoreon theorum to calc distance
+	return Math.sqrt(xDistance ** 2 + yDistance ** 2);
+}
 const ctx = canvas.getContext("2d");
 
 // create star array to store new stars
@@ -137,6 +145,7 @@ const amountClones = 10;
 
 
 function animatePlayerFire() {
+
 	for (let i = 0; i < player1Ship.shotsFired.length; i++) {
 		player1Ship.shotsFired[i].move();
 		for (let j = 0; j < cloneFactory.clones.length; j++) {
@@ -146,11 +155,10 @@ function animatePlayerFire() {
 			let height1 = player1Ship.shotsFired[i].height;
 			let x2 = cloneFactory.clones[j].body.x;
 			let y2 = cloneFactory.clones[j].body.y;
-
-			let xPlayer1Center = player1Ship.shotsFired[i].x + (player1Ship.shotsFired[i].width / 2);
-			let yPlayer1Center = player1Ship.shotsFired[i].y + (player1Ship.shotsFired[i].height / 2)
-			let xCloneCenter = cloneFactory.clones[j].body.x + (cloneFactory.clones[j].body.width / 2);
-			let yCloneCenter = cloneFactory.clones[j].body.y + (cloneFactory.clones[j].body.height / 2);
+			let xPlayer1Center = x1 + (width1 / 2);
+			let yPlayer1Center = y1 + (height1 / 2)
+			let xCloneCenter = x2 + (cloneFactory.clones[j].body.width / 2);
+			let yCloneCenter = y2 + (cloneFactory.clones[j].body.height / 2);
 			// let distance = getDistance(x1, y1, x2, y2);
 			let player1TLDistToCenter = getDistance(x1, y1, xCloneCenter, yCloneCenter);
 			let player1TRDistToCenter = getDistance(x1 + width1, y1, xCloneCenter, yCloneCenter);
@@ -183,10 +191,40 @@ for (let i = 0; i < amountClones; i++) {
 }
 
 function animateClone() {
-	for (let i = 0; i < cloneFactory.clones.length; i++) {
-		// cloneFactory.clones[i].initialize();
-		cloneFactory.clones[i].draw();
-		cloneFactory.clones[i].move();
+	for (let j = 0; j < cloneFactory.clones.length; j++) {
+		cloneFactory.clones[j].draw();
+		cloneFactory.clones[j].move();
+		let x1 = player1Ship.body.x;
+		let y1 = player1Ship.body.y;
+		let width1 = player1Ship.body.width;
+		let height1 = player1Ship.body.height;
+
+		let x2 = cloneFactory.clones[j].body.x;
+		let y2 = cloneFactory.clones[j].body.y;
+		let xPlayer1Center = x1 + (width1 / 2);
+		let yPlayer1Center = y1 + (height1 / 2);
+
+		let xCloneCenter = x2 + (cloneFactory.clones[j].body.width / 2);
+		let yCloneCenter = y2 + (cloneFactory.clones[j].body.height / 2);
+		// let distance = getDistance(x1, y1, x2, y2);
+		let player1TLDistToCenter = getDistance(x1, y1, xCloneCenter, yCloneCenter);
+		let player1TRDistToCenter = getDistance(x1 + width1, y1, xCloneCenter, yCloneCenter);
+		let player1BLDistToCenter = getDistance(x1, y1 + height1, xCloneCenter, yCloneCenter);
+		let player1BRDistToCenter = getDistance(x1 + width1, y1 + height1, xCloneCenter, yCloneCenter);
+		// while using the center point of the alien ships, I only need to measure two distances for comparison:
+		let cloneDist1 = getDistance(x2, y2, xCloneCenter, yCloneCenter);
+		let cloneDist2 = getDistance(x2, y2 + cloneFactory.clones[j].body.height, xCloneCenter, yCloneCenter);
+		
+		if (player1TLDistToCenter <= cloneDist1 || player1TLDistToCenter <= cloneDist2) {
+			console.log("an enemy vessel collided with your ship");
+		} else if (player1TRDistToCenter <= cloneDist1 || player1TRDistToCenter <= cloneDist2) {
+			console.log("an enemy vessel collided with your ship");
+		} else if (player1BLDistToCenter <= cloneDist1 || player1BLDistToCenter <= cloneDist2) {
+			console.log("an enemy vessel collided with your ship");
+		} else if (player1BRDistToCenter <= cloneDist1 || player1BRDistToCenter <= cloneDist2) {
+			console.log("an enemy vessel collided with your ship");
+		}
+
 	}
 	requestAnimationFrame(animateClone);
 }
