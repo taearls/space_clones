@@ -198,7 +198,7 @@ const animateClone = () => {
 		cloneFactory.clones[j].draw();
 		cloneFactory.clones[j].move();
 
-		const randomNumber = Math.floor(Math.random() * 200);
+		const randomNumber = Math.floor(Math.random() * 100);
 		if(randomNumber === 26) {
 			cloneFactory.clones[j].fire();
 		}		

@@ -53,8 +53,8 @@ class Ship {
 }
 const playerImg = new Image();
 playerImg.src = "images/player_ship.png";
-playerImg.width = 80;
-playerImg.height = 80;
+playerImg.width = 60;
+playerImg.height = 60;
 // class for player ships
 class Player extends Ship {
 	constructor(firepower, shield) {
@@ -81,7 +81,7 @@ class Player extends Ship {
 	}
 	initLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
 		if (this.shotsFired.length < this.charge) {		
-			this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2) - 5, this.body.y, 10, 10, -10));
+			this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2) - 5, this.body.y, 10, 10, -6));
 		}
 	}
 	move() {
@@ -114,10 +114,14 @@ class Player extends Ship {
 		let y = this.body.y;
 		let width = this.body.width;
 		let height = this.body.height;
-		ctx2.drawImage(playerImg, this.body.x, this.body.y);
+		ctx2.drawImage(playerImg, x, y);
 	}
 }
 
+const cloneImg = new Image();
+cloneImg.src = "images/clone_ship.png";
+cloneImg.width = 45;
+cloneImg.height = 45;
 // class for basic enemies
 class Clone extends Ship {
 	constructor() {
@@ -128,7 +132,7 @@ class Clone extends Ship {
 		this.body = {};
 		this.direction = "left";
 		this.distBetweenShips = 100;
-		this.descent = 30;
+		this.descent = 55;
 		this.charge = Infinity;
 		this.shotsFired = [];
 	}
@@ -136,8 +140,8 @@ class Clone extends Ship {
 		this.body = {
 			x: canvas.width - (this.distBetweenShips * (cloneFactory.clones.length)),
 			y: 100,
-			width: 20,
-			height: 20
+			width: cloneImg.width,
+			height: cloneImg.height
 		}
 		// if dist between ships makes x a negative value.
 		// only bug is if I need to start with more than two rows of ships
@@ -182,20 +186,13 @@ class Clone extends Ship {
 				this.speed = 2;
 				this.body.x += this.speed;
 			}
-		}// } else if (this.direction === "down") {
-		// 	this.speed = 10;
-		// 	this.body.y += this.speed;
-		// 	this.direction = "right";
-		// }
+		}
 	}
 	fire() {
 		this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y + this.body.height, 10, 10, 2))
 		for (let i = 0; i < this.shotsFired.length; i++) {
 			this.shotsFired[i].move();
 		}
-			
-		
-		// call this function with a timer, so it will fire every x seconds.
 	}
 	update() {
 		const leftBorder = 0;
@@ -218,11 +215,7 @@ class Clone extends Ship {
 		let y = this.body.y;
 		let width = this.body.width;
 		let height = this.body.height;
-		ctx2.beginPath();
-		ctx2.rect(x, y, width, height);
-		ctx2.fillStyle = "#0BD919";
-		ctx2.fill();
-		ctx2.closePath();
+		ctx2.drawImage(cloneImg, x, y);
 	}
 }
 
@@ -244,7 +237,7 @@ class Lasers {
 	}
 	draw() {
 		ctx2.beginPath();
-		ctx2.fillStyle = "#8A69D9";
+		ctx2.fillStyle = "#FF300D";
 		ctx2.fillRect(this.x, this.y, this.width, this.height);
 		ctx2.closePath();
 	}
