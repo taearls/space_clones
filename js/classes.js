@@ -51,16 +51,20 @@ class Ship {
 		// update player lives
 	}
 }
-
+const playerImg = new Image();
+playerImg.src = "images/player_ship.png";
+playerImg.width = 80;
+playerImg.height = 80;
 // class for player ships
 class Player extends Ship {
 	constructor(firepower, shield) {
 		super(firepower, shield);
 		this.body = {
+			// img: playerImg,
 			x: 300,
 			y: 500,
-			width: 100,
-			height: 100
+			width: playerImg.width,
+			height: playerImg.height
 		};
 		// charge == how many lasers player can fire.
 		this.charge = Infinity;
@@ -68,15 +72,16 @@ class Player extends Ship {
 	}
 	initialize() {
 		this.body = {
+			// img: playerImg,
 			x: (gameCanvas.width / 2) - (this.body.width / 2),
 			y: (gameCanvas.height - this.body.height * 2),
-			width: 20,
-			height: 20
+			width: playerImg.width,
+			height: playerImg.height
 		}
 	}
 	initLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
 		if (this.shotsFired.length < this.charge) {		
-			this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y, 10, 10, -10));
+			this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2) - 5, this.body.y, 10, 10, -10));
 		}
 	}
 	move() {
@@ -104,19 +109,13 @@ class Player extends Ship {
 		}
 	}
 	draw() {
+		
 		let x = this.body.x;
 		let y = this.body.y;
 		let width = this.body.width;
 		let height = this.body.height;
-		ctx2.beginPath();
-		ctx2.rect(x, y, width, height);
-		ctx2.fillStyle = "firebrick";
-		ctx2.fill();
-		ctx2.closePath();
+		ctx2.drawImage(playerImg, this.body.x, this.body.y);
 	}
-	// fire(laser) {
-		
-	// }
 }
 
 // class for basic enemies

@@ -2,7 +2,6 @@
 
 
 
-
 const controls = $("#how-to-play");
 const closeControls = $(".close-controls");
 const prologue = $("#prologue");
@@ -228,3 +227,4 @@ const setDefault = () => {
 	this.isPaused = false;
 	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 }
+
