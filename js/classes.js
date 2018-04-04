@@ -51,6 +51,7 @@ class Ship {
 		// update player lives
 	}
 }
+
 const playerImg = new Image();
 playerImg.src = "images/player_ship.png";
 playerImg.width = 60;
@@ -187,6 +188,9 @@ class Clone extends Ship {
 				} 
 			}
 		} 
+		if (this.body.y + this.body.height >= canvas.height - (playerImg.height * 2)) {
+			game.win();
+		}
 		if (this.row % 2 === 1) {
 			this.direction = "left";
 		} else {
@@ -238,7 +242,7 @@ class Clone extends Ship {
 			this.body.y = 100;
 			if (this.body.x >= leftBorder){
 				this.direction = "right";
-			} else if (this.body.x <= rightBorder) {
+			} else if (this.body.x + this.body.width <= rightBorder) {
 				this.direction = "left";
 			}
 		}
@@ -256,11 +260,58 @@ class Clone extends Ship {
 	}
 }
 
+const mothershipImg = new Image();
+mothershipImg.src = "images/mothership.png";
+mothershipImg.width = 240;
+mothershipImg.height = 170;
 // class for end of level enemies
 class Mothership extends Ship {
 	constructor() {
-		super(name, firepower, shield);
-		this.speed = speed;
+		super();
+		this.firepower = 1;
+		this.shield = 10;
+		this.speed = 5;
+		this.body = {};
+		this.direction = "left";
+		this.charge = Infinity;
+		this.shotsFired = [];
+	}
+	initialize() { 
+		this.body = {
+			x: (canvas.width / 2) - (mothershipImg.width / 2),
+			y: mothershipImg.height + 50,
+			width: mothershipImg.width,
+			height: mothershipImg.height
+		}
+	}
+	update() {
+		const leftBorder = 0;
+		const rightBorder = canvas.width - this.body.width;
+		if (this.body.x >= leftBorder){
+			this.direction = "right";
+		} else if (this.body.x + this.body.width <= rightBorder) {
+			this.direction = "left";
+		}
+	}
+	move() {
+		if (this.direction === "left") {
+			this.body.x -= this.speed;
+		} else {
+			this.body.x += this.speed;
+		}
+	}
+	fire() {
+		this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y + this.body.height, 10, 10, 2))
+		for (let i = 0; i < this.shotsFired.length; i++) {
+			this.shotsFired[i].move();
+		}
+	}
+	draw() {
+		let x = this.body.x;
+		let y = this.body.y;
+		let width = this.body.width;
+		let height = this.body.height;
+		ctx2.drawImage(mothershipImg, x, y);
 	}
 }
 

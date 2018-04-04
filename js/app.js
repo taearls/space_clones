@@ -8,6 +8,8 @@ const prologue = $("#prologue");
 const closePrologue = $(".close-prologue");
 const closePause = $(".close-pause");
 const resetGame = $("#reset-game");
+let amountClones = 10;
+
 // instantiate game object
 const game = {
 	highScore: 5000,
@@ -23,10 +25,10 @@ const game = {
 	player2IsDead: false,
 	player2Items: [],
 	// infinite levels? idk
-	amountLevels: 5,
 	enemiesRemaining: amountClones,
 	currentLevel: 1,
 	isPaused: false,
+	accurateShots: 0,
 	newGame() {
 		// load prologue
 		// level 1
@@ -62,7 +64,6 @@ const game = {
 		}
 	},
 	genLevel() {
-		// amountClones = 10;
 		// instantiate new ships and a mothership
 		// for loop to increment amount of ships + enemy stats?
 		amountClones = amountClones + (this.currentLevel * 2);
@@ -117,6 +118,7 @@ const game = {
 		} else {
 			const index = cloneFactory.clones.indexOf(ship);
 			cloneFactory.clones.splice(index, 1);
+			this.accurateShots++;
 			this.enemiesRemaining--;
 			this.score();
 			$("#enemies-left").text("Enemies: " + this.enemiesRemaining);
@@ -230,3 +232,12 @@ const setDefault = () => {
 	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 }
 
+const initClones = (numClones) => {
+	for (let i = 0; i < amountClones; i++) {
+	cloneFactory.generateClone(new Clone());
+	cloneFactory.clones[i].initialize();
+	// cloneFactory.clones[i].initLaser();
+	}
+}
+initClones(amountClones);
+$("#enemies-left").text("Enemies: " + amountClones);

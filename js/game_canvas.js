@@ -182,17 +182,16 @@ const animatePlayerFire = () => {
 }
 animatePlayerFire();
 
-let amountClones = 10;
-const initClones = (numClones) => {
-	for (let i = 0; i < amountClones; i++) {
-	cloneFactory.generateClone(new Clone());
-	cloneFactory.clones[i].initialize();
-	// cloneFactory.clones[i].initLaser();
-	}
-}
-initClones(amountClones);
+// let amountClones = 10;
+// const initClones = (numClones) => {
+// 	for (let i = 0; i < amountClones; i++) {
+// 	cloneFactory.generateClone(new Clone());
+// 	cloneFactory.clones[i].initialize();
+// 	// cloneFactory.clones[i].initLaser();
+// 	}
+// }
+// initClones(amountClones);
 
-$("#enemies-left").text("Enemies: " + amountClones);
 const animateClone = () => {
 	// console.log("animateClone")
 	for (let j = 0; j < cloneFactory.clones.length; j++) {
