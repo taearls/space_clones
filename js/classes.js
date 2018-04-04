@@ -70,8 +70,8 @@ class Player extends Ship {
 		this.body = {
 			x: (gameCanvas.width / 2) - (this.body.width / 2),
 			y: (gameCanvas.height - this.body.height * 2),
-			width: 50,
-			height: 50
+			width: 20,
+			height: 20
 		}
 	}
 	initLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
@@ -236,7 +236,7 @@ class Lasers {
 	}
 	draw() {
 		ctx2.beginPath();
-		ctx2.fillStyle = "green";
+		ctx2.fillStyle = "#8A69D9";
 		ctx2.fillRect(this.x, this.y, this.width, this.height);
 		ctx2.closePath();
 	}

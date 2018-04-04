@@ -87,7 +87,6 @@ document.addEventListener("keydown", function(event) {
 	} else if (key===13) {
 		// return to pause
 		// pause the game
-		console.log("game paused");
 		game.pause();
 	}
 	ctx2.clearRect(0,0, canvas.width, canvas.height)

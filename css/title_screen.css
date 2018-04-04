@@ -36,9 +36,6 @@ canvas {
 /*	z-index: 1000;
 */	background-color: black;
 }
-#game-canvas {
-	z-index: -1000;
-}
 
 .controls-modal, .prologue-modal {
     position: fixed;
@@ -52,8 +49,11 @@ canvas {
     transform: scale(1.1);
     transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
 }
-.modal button {
+.controls-modal button {
     font-size: 13px;
+}
+.prologue-modal button {
+	font-size: 13px;
 }
 .controls-content, .prologue-content {
     position: absolute;

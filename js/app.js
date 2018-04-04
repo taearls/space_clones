@@ -7,7 +7,8 @@ const controls = $("#how-to-play");
 const closeControls = $(".close-controls");
 const prologue = $("#prologue");
 const closePrologue = $(".close-prologue");
-
+const closePause = $(".close-pause");
+const resetGame = $("#reset-game");
 // instantiate game object
 
 const game = {
@@ -45,9 +46,10 @@ const game = {
 	pause() {
 		this.isPaused = !this.isPaused;
 		if (this.isPaused) {
-			// stop animation
-			// display modal
+			$(".pause-modal").addClass("show-modal");
 		} else {
+			$(".pause-modal").toggleClass("show-modal", false)
+			event.stopPropagation();
 			// close modal
 			// resume animation
 		}
@@ -139,7 +141,7 @@ controls.on("click", function(event){
 })
 
 closeControls.on("click", function(event) {
-	$(this).parent().parent().toggleClass('show-modal', false)
+	$(this).parent().parent().toggleClass("show-modal", false)
 	event.stopPropagation();
 })
 
@@ -148,15 +150,25 @@ prologue.on("click", function(event){
 })
 
 closePrologue.on("click", function(event) {
-	$(this).parent().parent().toggleClass('show-modal', false)
+	$(this).parent().parent().toggleClass("show-modal", false)
 	event.stopPropagation();
 })
-
+closePause.on("click", function(event){
+	$(this).parent().parent().toggleClass("show-modal", false)
+	event.stopPropagation();
+})
+resetGame.on("click", function(event) {
+	game.reset();
+})
 
 // ***** FUNCTIONS *****
 
 // switch from game screen to title screen
 const returnToTitle = () => {
+	const initialPage = "title_screen.html";
+	location.replace('file:///Users/tboneearls/turtles/wdi_project_1/space_invaders_game/' + initialPage);
+	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
 	// switch page to title screen
 	// display a modal with a message
 	// with a button that links to title screen?
@@ -175,4 +187,5 @@ const setDefault = () => {
 	$("#level").text("Level: 1")
 	this.currentLevel = 1;
 	this.isPaused = false;
-} 
+	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+}

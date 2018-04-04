@@ -16,6 +16,64 @@ header {
 header h2 {
 	margin: 0;
 }
+.pause-modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.pause-content, button {
+    font-size: 13px;
+}
+.pause-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #8A69D9;
+    padding: 2rem 2rem;
+    width: 26rem;
+    border-radius: 0.5rem;
+}
+#close-pause {
+	float: right;
+    width: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: white;
+    margin-bottom: 4px;
+    transition: 0.5s;
+}
+.close-button {
+    float: right;
+    width: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: white;
+    margin-bottom: 4px;
+    transition: 0.5s;
+}
+.close-button:hover {
+    background-color: #FF3B31;
+    transition: 0.3s;
+}
+.show-modal {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1000;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
 
 #game-canvas {
 	background: none;
@@ -51,7 +109,17 @@ canvas {
 	right: 0;
 	margin-left: auto;
 	margin-right: auto;
+	animation: fadeAndScale 1s ease-in forwards;
 }
 
 /*ANIMATIONS*/
-
+@keyframes fadeAndScale {
+	from {
+		opacity: 1;
+		transform: scale3d(1.5, 1.5, 1);
+	}
+	to {
+		opacity: 0;
+		transform: scale3d(.75, .75, 1);
+	}
+}
