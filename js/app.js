@@ -69,7 +69,7 @@ const game = {
 		// for loop to increment amount of ships + enemy stats?
 		amountClones = amountClones + (this.currentLevel * 2);
 		this.enemiesRemaining = amountClones;
-		$("#enemies-left").text("Enemies: " + this.enemiesRemaining);
+		$("#enemies-left").text("Clones: " + this.enemiesRemaining);
 		initClones(amountClones);
 	},
 	endLevel() {
@@ -139,6 +139,7 @@ const game = {
 		// return to title screen
 		setDefault();
 		returnToTitle();
+		dispHighScore(localStorage.getItem("highscore"));
 	},
 	die(ship) {
 		if (ship === player1Ship || ship === player2Ship) {
@@ -149,7 +150,7 @@ const game = {
 			this.accurateShots++;
 			this.enemiesRemaining--;
 			this.score();
-			$("#enemies-left").text("Enemies: " + this.enemiesRemaining);
+			$("#enemies-left").text("Clones: " + this.enemiesRemaining);
 			if (this.enemiesRemaining === 0) {
 				this.initMothership();
 			}
@@ -238,7 +239,6 @@ const returnToTitle = () => {
 	const initialPage = "title_screen.html";
 	location.replace('file:///Users/tboneearls/turtles/wdi_project_1/space_invaders_game/' + initialPage);
 	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-	$("#high-score").text("High Score: " + localStorage.getItem("highscore"));
 	// switch page to title screen
 	// display a modal with a message
 	// with a button that links to title screen?
@@ -246,7 +246,6 @@ const returnToTitle = () => {
 
 // function to restore all default stats for both players
 const setDefault = () => {
-	$("#high-score").text("High Score: " + localStorage.getItem("highscore"));
 	$("#player-score").text("Player Score: 0");
 	this.player1Score = 0;
 	this.player2Score = 0;

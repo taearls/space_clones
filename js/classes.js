@@ -263,7 +263,7 @@ class Clone extends Ship {
 const mothershipImg = new Image();
 mothershipImg.src = "images/mothership.png";
 mothershipImg.width = 240;
-mothershipImg.height = 170;
+mothershipImg.height = 150;
 // class for end of level enemies
 class Mothership extends Ship {
 	constructor() {

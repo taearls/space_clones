@@ -88,6 +88,8 @@ document.addEventListener("keydown", function(event) {
 		// return to pause
 		// pause the game
 		game.pause();
+	} else if (key===27) {
+		game.reset();
 	}
 	ctx2.clearRect(0,0, canvas.width, canvas.height)
 	player1Ship.draw();
@@ -147,6 +149,7 @@ const animatePlayerFire = () => {
 		player1Ship.shotsFired[i].move();
 		if (cloneFactory.clones.length > 0) {
 			for (let j = 0; j < cloneFactory.clones.length; j++) {
+				let playerLaser = player1Ship.shotsFired[i];
 				let x1 = player1Ship.shotsFired[i].x;
 				let y1 = player1Ship.shotsFired[i].y;
 				let width1 = player1Ship.shotsFired[i].width;
@@ -167,12 +170,16 @@ const animatePlayerFire = () => {
 				let cloneDist2 = getDistance(x2, y2 + cloneFactory.clones[j].body.height, xCloneCenter, yCloneCenter);
 			
 				if (player1TLDistToCenter <= cloneDist1 || player1TLDistToCenter <= cloneDist2) {
+					playerLaser.disappear(player1Ship, playerLaser);
 					game.die(cloneFactory.clones[j]);
 				} else if (player1TRDistToCenter <= cloneDist1 || player1TRDistToCenter <= cloneDist2) {
+					playerLaser.disappear(player1Ship, playerLaser);
 					game.die(cloneFactory.clones[j]);
 				} else if (player1BLDistToCenter <= cloneDist1 || player1BLDistToCenter <= cloneDist2) {
+					playerLaser.disappear(player1Ship, playerLaser);
 					game.die(cloneFactory.clones[j]);
 				} else if (player1BRDistToCenter <= cloneDist1 || player1BRDistToCenter <= cloneDist2) {
+					playerLaser.disappear(player1Ship, playerLaser);
 					game.die(cloneFactory.clones[j]);
 				}
 			}
