@@ -127,11 +127,11 @@ const initPlayers = () => {
 	player2Ship = new Player(playerFirepower, playerShield);
 }
 
-function animatePlayer() {
+const animatePlayer = () => {
 	ctx2.clearRect(0, 0, canvas.width, canvas.height)
 	player1Ship.draw();
 	player1Ship.move();
-	requestAnimationFrame(animatePlayer);
+	cancelMe1 = requestAnimationFrame(animatePlayer);
 }
 
 initPlayers();
@@ -143,7 +143,7 @@ const amountClones = 10;
 // cloneFactory.generateClone(new Clone());
 
 
-function animatePlayerFire() {
+const animatePlayerFire = () => {
 
 	for (let i = 0; i < player1Ship.shotsFired.length; i++) {
 		player1Ship.shotsFired[i].move();
@@ -180,7 +180,7 @@ function animatePlayerFire() {
 		}
 	}
 
-	requestAnimationFrame(animatePlayerFire);
+	cancelMe2 = requestAnimationFrame(animatePlayerFire);
 }
 animatePlayerFire();
 
@@ -191,7 +191,7 @@ for (let i = 0; i < amountClones; i++) {
 }
 
 $("#enemies-left").text("Enemies: " + amountClones);
-function animateClone() {
+const animateClone = () => {
 	// console.log("animateClone")
 	for (let j = 0; j < cloneFactory.clones.length; j++) {
 		cloneFactory.clones[j].update();
@@ -202,12 +202,6 @@ function animateClone() {
 		if(randomNumber === 26) {
 			cloneFactory.clones[j].fire();
 		}		
-
-
-		// if(frameCount % Math.ceil(Math.random() * 120)) {
-		// 	cloneFactory.clones[j].fire();
-
-		// }
 	
 		for(let k = 0; k < cloneFactory.clones[j].shotsFired.length; k++) {
 			let enemyLaser = cloneFactory.clones[j].shotsFired[k];
@@ -276,7 +270,7 @@ function animateClone() {
 		}
 		
 	}// for all clones
-	requestAnimationFrame(animateClone);
+	cancelMe3 = requestAnimationFrame(animateClone);
 }
 animateClone();
 

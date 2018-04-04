@@ -47,8 +47,17 @@ const game = {
 		this.isPaused = !this.isPaused;
 		if (this.isPaused) {
 			$(".pause-modal").addClass("show-modal");
+			cancelAnimationFrame(cancelMe1);
+			cancelAnimationFrame(cancelMe2);
+			cancelAnimationFrame(cancelMe3);
+
+					
 		} else {
 			$(".pause-modal").toggleClass("show-modal", false)
+			this.isPaused = false;
+			requestAnimationFrame(animatePlayer);
+			requestAnimationFrame(animateClone);
+			requestAnimationFrame(animatePlayerFire);
 			event.stopPropagation();
 			
 			// resume animation
@@ -160,6 +169,10 @@ closePrologue.on("click", function(event) {
 })
 closePause.on("click", function(event){
 	$(this).parent().parent().toggleClass("show-modal", false)
+	game.isPaused = false;
+	requestAnimationFrame(animatePlayer);
+	requestAnimationFrame(animateClone);
+	requestAnimationFrame(animatePlayerFire);
 	event.stopPropagation();
 })
 resetGame.on("click", function(event) {
