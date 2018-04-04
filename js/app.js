@@ -50,7 +50,7 @@ const game = {
 			cancelAnimationFrame(cancelMe1);
 			cancelAnimationFrame(cancelMe2);
 			cancelAnimationFrame(cancelMe3);
-
+			cancelAnimationFrame(cancelMe4);
 					
 		} else {
 			$(".pause-modal").toggleClass("show-modal", false)
@@ -58,6 +58,7 @@ const game = {
 			requestAnimationFrame(animatePlayer);
 			requestAnimationFrame(animateClone);
 			requestAnimationFrame(animatePlayerFire);
+			requestAnimationFrame(animateMothership);
 			event.stopPropagation();
 			
 			// resume animation
@@ -78,6 +79,29 @@ const game = {
 		// firing accuracy
 		// end bonus points?
 		this.genLevel();
+	},
+	initMothership() {
+		initMothership(1);
+		animateMothership();
+		$("#enemies-left").text("Shield: 10")
+	},
+	killMothership(mothership) {
+		this.accurateShots++;
+		if (this.isPlayer1Turn) {
+			this.player1Score += 1500;
+			$("#player-score").text("Score: " + this.player1Score);
+		} else {
+			this.player2Score += 1500;
+			$("#player-score").text("Score: " + this.player2Score);
+		}
+
+		if (mothership.shield <= 0) {
+			const index = mothershipFactory.motherships.indexOf(mothership);
+			mothershipFactory.motherships.splice(index, 1);
+			if (mothershipFactory.motherships.length === 0) {
+				this.endLevel();
+			}
+		}
 	},
 	score() {
 		if (this.isPlayer1Turn) {
@@ -123,7 +147,7 @@ const game = {
 			this.score();
 			$("#enemies-left").text("Enemies: " + this.enemiesRemaining);
 			if (this.enemiesRemaining === 0) {
-				this.endLevel();
+				this.initMothership();
 			}
 		}
 	},
@@ -196,7 +220,7 @@ closePause.on("click", function(event){
 	game.isPaused = false;
 	requestAnimationFrame(animatePlayer);
 	requestAnimationFrame(animateClone);
-	requestAnimationFrame(animatePlayerFire);
+	requestAnimationFrame(animateFireAtClone);
 	event.stopPropagation();
 })
 resetGame.on("click", function(event) {
@@ -232,11 +256,16 @@ const setDefault = () => {
 	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 }
 
+const initMothership = (numShips) => {
+	for (let i = 0; i < numShips; i++) {
+		mothershipFactory.generateMothership(new Mothership());		
+		mothershipFactory.motherships[i].initialize();
+	}
+}
 const initClones = (numClones) => {
 	for (let i = 0; i < amountClones; i++) {
 	cloneFactory.generateClone(new Clone());
 	cloneFactory.clones[i].initialize();
-	// cloneFactory.clones[i].initLaser();
 	}
 }
 initClones(amountClones);

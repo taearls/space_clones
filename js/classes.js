@@ -279,17 +279,17 @@ class Mothership extends Ship {
 	initialize() { 
 		this.body = {
 			x: (canvas.width / 2) - (mothershipImg.width / 2),
-			y: mothershipImg.height + 50,
+			y: 100,
 			width: mothershipImg.width,
 			height: mothershipImg.height
 		}
 	}
 	update() {
 		const leftBorder = 0;
-		const rightBorder = canvas.width - this.body.width;
-		if (this.body.x >= leftBorder){
+		const rightBorder = canvas.width;
+		if (this.body.x <= leftBorder){
 			this.direction = "right";
-		} else if (this.body.x + this.body.width <= rightBorder) {
+		} else if (this.body.x + this.body.width >= rightBorder) {
 			this.direction = "left";
 		}
 	}
@@ -301,7 +301,7 @@ class Mothership extends Ship {
 		}
 	}
 	fire() {
-		this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y + this.body.height, 10, 10, 2))
+		this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y + this.body.height, 10, 10, 5))
 		for (let i = 0; i < this.shotsFired.length; i++) {
 			this.shotsFired[i].move();
 		}
@@ -335,11 +335,27 @@ class Lasers {
 	}
 	disappear(firingShip, laser) {
 		// get the index of the ship that fired the laser from the clone factory
-		const indexShip = cloneFactory.clones.indexOf(firingShip);
+		if (firingShip != player1Ship && firingShip != player2Ship) {
+			const indexShip = cloneFactory.clones.indexOf(firingShip);
+			// get the index of the laser from that ship
+			const indexLaser = cloneFactory.clones[indexShip].shotsFired.indexOf(laser);
+			// remove that laser from the ship's array of lasers
+			cloneFactory.clones[indexShip].shotsFired.splice(indexLaser, 1);
+		} else if (firingShip === player1Ship) {
+			const indexLaser = player1Ship.shotsFired.indexOf(laser);
+			player1Ship.shotsFired.splice(indexLaser, 1);
+		} else if (firingShip === player2Ship) {
+			const indexLaser = player2Ship.shotsFired.indexOf(laser);
+			player2Ship.shotsFired.splice(indexLaser, 1);
+		}
+		
+	}
+	disappearMS(mothership, laser) {
+		const indexShip = mothershipFactory.motherships.indexOf(mothership);
 		// get the index of the laser from that ship
-		const indexLaser = cloneFactory.clones[indexShip].shotsFired.indexOf(laser);
+		const indexLaser = mothershipFactory.motherships[indexShip].shotsFired.indexOf(laser);
 		// remove that laser from the ship's array of lasers
-		cloneFactory.clones[indexShip].shotsFired.splice(indexLaser, 1);
+		mothershipFactory.motherships[indexShip].shotsFired.splice(indexLaser, 1);
 	}
 }
 // ***** FACTORIES *****
