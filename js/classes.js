@@ -199,7 +199,16 @@ class Clone extends Ship {
 		// call this function with a timer, so it will fire every x seconds.
 	}
 	update() {
-
+		const leftBorder = 0;
+		const rightBorder = canvas.width - this.body.width;
+		if (this.body.y + this.descent >= gameCanvas.height - 50) {
+			this.body.y = 100;
+			if (this.body.x >= leftBorder){
+				this.direction = "right";
+			} else if (this.body.x <= rightBorder) {
+				this.direction = "left";
+			}
+		}
 	}
 	draw() {
 		// if (this.body.x < 0) {

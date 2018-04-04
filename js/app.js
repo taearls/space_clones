@@ -50,14 +50,9 @@ const game = {
 		} else {
 			$(".pause-modal").toggleClass("show-modal", false)
 			event.stopPropagation();
-			// close modal
+			
 			// resume animation
 		}
-		// modal pop up
-		// display stats
-		// option to quit
-		// all game level animations freeze in place
-		// display controls
 	},
 	genLevel() {
 		// instantiate new ships and a mothership
@@ -83,8 +78,10 @@ const game = {
 		// set high score updating conditions
 		if (this.player1Score > this.player2Score && this.player1Score > this.highScore) {
 			this.highScore = this.player1Score;
+			$("#high-score").text("High Score: " + this.highScore)
 		} else if (his.player2Score > this.player1Score && this.player2Score > this.highScore) {
 			this.highScore = this.player2Score;
+			$("#high-score").text("High Score: " + this.highScore)
 		}
 	},
 	win() {
@@ -98,6 +95,13 @@ const game = {
 		setDefault();
 		returnToTitle();
 	},
+	die(ship) {
+		if (ship === player1Ship || ship === player2Ship) {
+			this.gameOver();
+		} else {
+
+		}
+	},
 	gameOver() {
 		// game end message
 		// return to title screen
@@ -108,10 +112,10 @@ const game = {
 			// game end message
 			// return to title screen
 		} else {
-			if (this.player1Lives === 0) {
+			if (this.player1Lives === 0 && !this.player1IsDead) {
 				this.player1IsDead = true;
 				// game end message
-			} else if (this.player2Lives === 0) {
+			} else if (this.player2Lives === 0 && !this.player2IsDead) {
 				this.player2IsDead = true;
 			} else if (this.player1IsDead && this.player2IsDead) {
 				setDefault();
@@ -120,6 +124,7 @@ const game = {
 			// set conditions for both players
 		}
 	}
+
 }
 
 

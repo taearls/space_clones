@@ -194,6 +194,7 @@ $("#enemies-left").text("Enemies: " + amountClones);
 function animateClone() {
 	// console.log("animateClone")
 	for (let j = 0; j < cloneFactory.clones.length; j++) {
+		cloneFactory.clones[j].update();
 		cloneFactory.clones[j].draw();
 		cloneFactory.clones[j].move();
 
