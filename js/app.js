@@ -78,7 +78,13 @@ const game = {
 		genLevel();
 	},
 	score() {
-		// set player score updating conditions first
+		if (this.isPlayer1Turn) {
+			this.player1Score += 100;
+			$("#player-score").text("Score: " + this.player1Score);
+		} else {
+			this.player2Score += 100;
+			$("#player-score").text("Score: " + this.player2Score);
+		}
 		// for each base enemy, 100 points
 		// mothership, 1000 points
 		// extra life conditions could go here eventually
@@ -87,7 +93,7 @@ const game = {
 		if (this.player1Score > this.player2Score && this.player1Score > this.highScore) {
 			this.highScore = this.player1Score;
 			$("#high-score").text("High Score: " + this.highScore)
-		} else if (his.player2Score > this.player1Score && this.player2Score > this.highScore) {
+		} else if (this.player2Score > this.player1Score && this.player2Score > this.highScore) {
 			this.highScore = this.player2Score;
 			$("#high-score").text("High Score: " + this.highScore)
 		}
@@ -111,6 +117,7 @@ const game = {
 			const index = cloneFactory.clones.indexOf(ship);
 			cloneFactory.clones.splice(index, 1);
 			this.enemiesRemaining--;
+			this.score();
 			$("#enemies-left").text("Enemies: " + this.enemiesRemaining);
 			if (this.enemiesRemaining === 0) {
 				this.win();
