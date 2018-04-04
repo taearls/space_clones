@@ -1,6 +1,6 @@
 // ***** GLOBAL VARIABLES *****
 
-
+myStorage = window.localStorage;
 
 const controls = $("#how-to-play");
 const closeControls = $(".close-controls");
@@ -99,11 +99,13 @@ const game = {
 			const index = mothershipFactory.motherships.indexOf(mothership);
 			mothershipFactory.motherships.splice(index, 1);
 			if (mothershipFactory.motherships.length === 0) {
+				cancelAnimationFrame(cancelMe4);
 				this.endLevel();
 			}
 		}
 	},
 	score() {
+		let highScore;
 		if (this.isPlayer1Turn) {
 			this.player1Score += 100;
 			$("#player-score").text("Score: " + this.player1Score);
@@ -118,10 +120,12 @@ const game = {
 		// set high score updating conditions
 		if (this.player1Score > this.player2Score && this.player1Score > this.highScore) {
 			this.highScore = this.player1Score;
-			$("#high-score").text("High Score: " + this.highScore)
+			localStorage.setItem("highscore", this.highScore.toString());
+			document.getElementById("high-score").innerHTML = ("High Score: " + localStorage.getItem("highscore"));
 		} else if (this.player2Score > this.player1Score && this.player2Score > this.highScore) {
 			this.highScore = this.player2Score;
-			$("#high-score").text("High Score: " + this.highScore)
+			localStorage.setItem("highscore", this.highScore.toString());
+			document.getElementById("high-score").innerHTML = ("High Score: " + localStorage.getItem("highscore"));
 		}
 	},
 	win() {
@@ -234,7 +238,7 @@ const returnToTitle = () => {
 	const initialPage = "title_screen.html";
 	location.replace('file:///Users/tboneearls/turtles/wdi_project_1/space_invaders_game/' + initialPage);
 	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-
+	$("#high-score").text("High Score: " + localStorage.getItem("highscore"));
 	// switch page to title screen
 	// display a modal with a message
 	// with a button that links to title screen?
@@ -242,6 +246,7 @@ const returnToTitle = () => {
 
 // function to restore all default stats for both players
 const setDefault = () => {
+	$("#high-score").text("High Score: " + localStorage.getItem("highscore"));
 	$("#player-score").text("Player Score: 0");
 	this.player1Score = 0;
 	this.player2Score = 0;
