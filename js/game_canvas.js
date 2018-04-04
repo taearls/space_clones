@@ -168,13 +168,13 @@ const animatePlayerFire = () => {
 			let cloneDist2 = getDistance(x2, y2 + cloneFactory.clones[j].body.height, xCloneCenter, yCloneCenter);
 			
 			if (player1TLDistToCenter <= cloneDist1 || player1TLDistToCenter <= cloneDist2) {
-				console.log("you destroyed an enemy vessel");
+				game.die(cloneFactory.clones[j]);
 			} else if (player1TRDistToCenter <= cloneDist1 || player1TRDistToCenter <= cloneDist2) {
-				console.log("you destroyed an enemy vessel");
+				game.die(cloneFactory.clones[j]);
 			} else if (player1BLDistToCenter <= cloneDist1 || player1BLDistToCenter <= cloneDist2) {
-				console.log("you destroyed an enemy vessel");
+				game.die(cloneFactory.clones[j]);
 			} else if (player1BRDistToCenter <= cloneDist1 || player1BRDistToCenter <= cloneDist2) {
-				console.log("you destroyed an enemy vessel");
+				game.die(cloneFactory.clones[j]);
 			}
 
 		}

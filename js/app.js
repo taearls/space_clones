@@ -26,7 +26,7 @@ const game = {
 	player2Items: [],
 	// infinite levels? idk
 	amountLevels: 5,
-	enemiesRemaining: 0,
+	enemiesRemaining: amountClones,
 	currentLevel: 1,
 	isPaused: false,
 	newGame() {
@@ -94,6 +94,7 @@ const game = {
 		}
 	},
 	win() {
+		console.log("you win!")
 		// victory message with concluding story text
 		// animation depicting end
 		// display player score, accuracy
@@ -108,7 +109,14 @@ const game = {
 		if (ship === player1Ship || ship === player2Ship) {
 			this.gameOver();
 		} else {
-
+			const index = cloneFactory.clones.indexOf(ship);
+			// console.log(index);
+			cloneFactory.clones.splice(index, 1);
+			this.enemiesRemaining--;
+			$("#enemies-left").text("Enemies: " + this.enemiesRemaining);
+			if (this.enemiesRemaining === 0) {
+				this.win();
+			}
 		}
 	},
 	gameOver() {
@@ -116,8 +124,11 @@ const game = {
 		// return to title screen
 		// set conditions for one player vs two players
 		if (this.isSolo) {
-			setDefault();
-			returnToTitle();
+			this.player1Lives--;
+			if (this.player1Lives === 0) {
+				setDefault();
+				returnToTitle();
+			}
 			// game end message
 			// return to title screen
 		} else {
@@ -129,6 +140,10 @@ const game = {
 			} else if (this.player1IsDead && this.player2IsDead) {
 				setDefault();
 				returnToTitle();
+			} else if (isPlayer1Turn) {
+				this.player1Lives--;
+			} else if (!isPlayer1Turn) {
+				this.player2Lives--;
 			}
 			// set conditions for both players
 		}
