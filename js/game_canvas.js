@@ -139,8 +139,6 @@ player1Ship.initialize();
 player1Ship.draw();
 animatePlayer();
 
-const amountClones = 10;
-// cloneFactory.generateClone(new Clone());
 
 
 const animatePlayerFire = () => {
@@ -184,11 +182,15 @@ const animatePlayerFire = () => {
 }
 animatePlayerFire();
 
-for (let i = 0; i < amountClones; i++) {
+let amountClones = 10;
+const initClones = (numClones) => {
+	for (let i = 0; i < amountClones; i++) {
 	cloneFactory.generateClone(new Clone());
 	cloneFactory.clones[i].initialize();
 	// cloneFactory.clones[i].initLaser();
+	}
 }
+initClones(amountClones);
 
 $("#enemies-left").text("Enemies: " + amountClones);
 const animateClone = () => {

@@ -135,6 +135,7 @@ class Clone extends Ship {
 		this.descent = 55;
 		this.charge = Infinity;
 		this.shotsFired = [];
+		this.row = 1;
 	}
 	initialize() {
 		this.body = {
@@ -143,23 +144,59 @@ class Clone extends Ship {
 			width: cloneImg.width,
 			height: cloneImg.height
 		}
+		let rowY = this.descent * this.row;
 		// if dist between ships makes x a negative value.
 		// only bug is if I need to start with more than two rows of ships
-		if (this.body.x < 0) {
+		if (this.body.x <= 0) {
+			this.row++;
 			this.body.x = Math.abs(this.body.x);
-			this.body.y += this.descent;
-			this.direction = "right";
-			if (this.body.x > canvas.width) {
+			this.body.y += rowY;
+			if (this.body.x + this.body.width >= canvas.width) {
+				this.row++;
 				this.body.x -= canvas.width;
-				this.body.y += this.descent;
-				this.direction = "left";
+				this.body.y += rowY;
+				if (this.body.x + this.body.width >= canvas.width) {
+					this.row++;
+					this.body.x -= canvas.width;
+					this.body.y += rowY;
+					if (this.body.x + this.body.width >= canvas.width) {
+						this.row++;
+						this.body.x -= canvas.width;
+						this.body.y += rowY;
+						if (this.body.x + this.body.width >= canvas.width) {
+							this.row++;
+							this.body.x -= canvas.width;
+							this.body.y += rowY;
+							if (this.body.x + this.body.width >= canvas.width) {
+								this.row++;
+								this.body.x -= canvas.width;
+								this.body.y += rowY;
+								if (this.body.x + this.body.width >= canvas.width) {
+									this.row++;
+									this.body.x -= canvas.width;
+									this.body.y += rowY;
+									if (this.body.x + this.body.width >= canvas.width) {
+										this.row++;
+										this.body.x -= canvas.width;
+										this.body.y += rowY;
+									}
+								}
+							}
+						}
+					}
+				} 
 			}
 		} 
+		if (this.row % 2 === 1) {
+			this.direction = "left";
+		} else {
+			this.direction = "right";
+		}
 	}
 	move() {
 		const leftBorder = 0;
 		const rightBorder = canvas.width - this.body.width; // or if circle, this.body.radius
-
+		
 		if (this.direction === "left") {
 			// if the direction changes to left, subtract speed value from x
 			if (this.body.x <= leftBorder) {

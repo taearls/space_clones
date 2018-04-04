@@ -10,7 +10,7 @@ const closePause = $(".close-pause");
 const resetGame = $("#reset-game");
 // instantiate game object
 const game = {
-	highScore: 20000,
+	highScore: 5000,
 	// switch to false if 2 player mode selected
 	isSolo: true,
 	isPlayer1Turn: true,
@@ -62,19 +62,21 @@ const game = {
 		}
 	},
 	genLevel() {
+		// amountClones = 10;
 		// instantiate new ships and a mothership
 		// for loop to increment amount of ships + enemy stats?
-		for (let i = 0; i < this.amountLevels; i++) {
-			// this.currentLevel times stats = base enemy stats
-
-		}
+		amountClones = amountClones + (this.currentLevel * 2);
+		this.enemiesRemaining = amountClones;
+		$("#enemies-left").text("Enemies: " + this.enemiesRemaining);
+		initClones(amountClones);
 	},
 	endLevel() {
-		currentLevel++;
+		this.currentLevel++;
+		$("#level").text("Level: " + this.currentLevel);
 		// display message
 		// firing accuracy
 		// end bonus points?
-		genLevel();
+		this.genLevel();
 	},
 	score() {
 		if (this.isPlayer1Turn) {
@@ -119,7 +121,7 @@ const game = {
 			this.score();
 			$("#enemies-left").text("Enemies: " + this.enemiesRemaining);
 			if (this.enemiesRemaining === 0) {
-				this.win();
+				this.endLevel();
 			}
 		}
 	},
