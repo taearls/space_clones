@@ -191,7 +191,6 @@ for (let i = 0; i < amountClones; i++) {
 	// cloneFactory.clones[i].initLaser();
 }
 
-let frameCount = 0;
 $("#enemies-left").text("Enemies: " + amountClones);
 function animateClone() {
 	// console.log("animateClone")
@@ -199,8 +198,8 @@ function animateClone() {
 		cloneFactory.clones[j].draw();
 		cloneFactory.clones[j].move();
 
-		const randomNumber = Math.floor(Math.random() * 100);
-		if(randomNumber == 26) {
+		const randomNumber = Math.floor(Math.random() * 200);
+		if(randomNumber === 26) {
 			cloneFactory.clones[j].fire();
 		}		
 
@@ -211,8 +210,38 @@ function animateClone() {
 		// }
 	
 		for(let k = 0; k < cloneFactory.clones[j].shotsFired.length; k++) {
-			cloneFactory.clones[j].shotsFired[k].draw();
-			cloneFactory.clones[j].shotsFired[k].move();
+			let enemyLaser = cloneFactory.clones[j].shotsFired[k];
+			enemyLaser.draw();
+			enemyLaser.move();
+			let x3 = enemyLaser.x;
+			let y3 = enemyLaser.y;
+			let width3 = enemyLaser.width;
+			let height3 = enemyLaser.height;
+
+			let x2 = player1Ship.body.x;
+			let y2 = player1Ship.body.y;
+			let xLaserCenter = x3 + (width3 / 2);
+			let yLaserCenter = y3 + (height3 / 2);
+
+			let xPlayer1Center = x2 + (player1Ship.body.width / 2);
+			let yPlayer1Center = y2 + (player1Ship.body.height / 2);
+			// let distance = getDistance(x1, y1, x2, y2);
+			let laserTLDistToCenter = getDistance(x3, y3, xPlayer1Center, yPlayer1Center);
+			let laserTRDistToCenter = getDistance(x3 + width3, y3, xPlayer1Center, yPlayer1Center);
+			let laserBLDistToCenter = getDistance(x3, y3 + height3, xPlayer1Center, yPlayer1Center);
+			let laserBRDistToCenter = getDistance(x3 + width3, y3 + height3, xPlayer1Center, yPlayer1Center);
+			// while using the center point of the alien ships, I only need to measure two distances for comparison:
+			let player1Dist1 = getDistance(x2, y2, xPlayer1Center, yPlayer1Center);
+			let player1Dist2 = getDistance(x2, y2 + player1Ship.body.height, xPlayer1Center, yPlayer1Center);
+			if (laserTLDistToCenter <= player1Dist1 || laserTLDistToCenter <= player1Dist2) {
+				console.log("an enemy vessel shot your ship");
+			} else if (laserTRDistToCenter <= player1Dist1 || laserTRDistToCenter <= player1Dist2) {
+				console.log("an enemy vessel shot your ship");
+			} else if (laserBLDistToCenter <= player1Dist1 || laserBLDistToCenter <= player1Dist2) {
+				console.log("an enemy vessel shot your ship");
+			} else if (laserBRDistToCenter <= player1Dist1 || laserBRDistToCenter <= player1Dist2) {
+				console.log("an enemy vessel shot your ship");
+			}
 		}
 
 		let x1 = cloneFactory.clones[j].body.x;
@@ -245,8 +274,8 @@ function animateClone() {
 		} else if (cloneBRDistToCenter <= player1Dist1 || cloneBRDistToCenter <= player1Dist2) {
 			console.log("an enemy vessel collided with your ship");
 		}
+		
 	}// for all clones
-	frameCount++
 	requestAnimationFrame(animateClone);
 }
 animateClone();
