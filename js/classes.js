@@ -236,7 +236,7 @@ class Mothership extends Ship {
 }
 
 class Lasers {
-	constructor(x, y, width, height, dy){
+	constructor(x, y, width, height, dy) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -252,6 +252,14 @@ class Lasers {
 	move() {
 		this.draw();
 		this.y += this.dy;
+	}
+	disappear(firingShip, laser) {
+		// get the index of the ship that fired the laser from the clone factory
+		const indexShip = cloneFactory.clones.indexOf(firingShip);
+		// get the index of the laser from that ship
+		const indexLaser = cloneFactory.clones[indexShip].shotsFired.indexOf(laser);
+		// remove that laser from the ship's array of lasers
+		cloneFactory.clones[indexShip].shotsFired.splice(indexLaser, 1);
 	}
 }
 // ***** FACTORIES *****

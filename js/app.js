@@ -10,7 +10,6 @@ const closePrologue = $(".close-prologue");
 const closePause = $(".close-pause");
 const resetGame = $("#reset-game");
 // instantiate game object
-
 const game = {
 	highScore: 20000,
 	// switch to false if 2 player mode selected
@@ -110,7 +109,6 @@ const game = {
 			this.gameOver();
 		} else {
 			const index = cloneFactory.clones.indexOf(ship);
-			// console.log(index);
 			cloneFactory.clones.splice(index, 1);
 			this.enemiesRemaining--;
 			$("#enemies-left").text("Enemies: " + this.enemiesRemaining);
@@ -125,6 +123,7 @@ const game = {
 		// set conditions for one player vs two players
 		if (this.isSolo) {
 			this.player1Lives--;
+			$("#lives").text("Lives: " + this.player1Lives);
 			if (this.player1Lives === 0) {
 				setDefault();
 				returnToTitle();

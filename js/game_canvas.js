@@ -227,14 +227,20 @@ const animateClone = () => {
 			// while using the center point of the alien ships, I only need to measure two distances for comparison:
 			let player1Dist1 = getDistance(x2, y2, xPlayer1Center, yPlayer1Center);
 			let player1Dist2 = getDistance(x2, y2 + player1Ship.body.height, xPlayer1Center, yPlayer1Center);
+
+			// if alien shoots player
 			if (laserTLDistToCenter <= player1Dist1 || laserTLDistToCenter <= player1Dist2) {
-				console.log("an enemy vessel shot your ship");
+				enemyLaser.disappear(cloneFactory.clones[j], enemyLaser);
+				game.die(player1Ship);
 			} else if (laserTRDistToCenter <= player1Dist1 || laserTRDistToCenter <= player1Dist2) {
-				console.log("an enemy vessel shot your ship");
+				enemyLaser.disappear(cloneFactory.clones[j], enemyLaser);
+				game.die(player1Ship);
 			} else if (laserBLDistToCenter <= player1Dist1 || laserBLDistToCenter <= player1Dist2) {
-				console.log("an enemy vessel shot your ship");
+				enemyLaser.disappear(cloneFactory.clones[j], enemyLaser);
+				game.die(player1Ship);
 			} else if (laserBRDistToCenter <= player1Dist1 || laserBRDistToCenter <= player1Dist2) {
-				console.log("an enemy vessel shot your ship");
+				enemyLaser.disappear(cloneFactory.clones[j], enemyLaser);
+				game.die(player1Ship);
 			}
 		}
 
@@ -259,14 +265,19 @@ const animateClone = () => {
 		let player1Dist1 = getDistance(x2, y2, xPlayer1Center, yPlayer1Center);
 		let player1Dist2 = getDistance(x2, y2 + player1Ship.body.height, xPlayer1Center, yPlayer1Center);
 		
+		// if alien and player crash into each other
 		if (cloneTLDistToCenter <= player1Dist1 || cloneTLDistToCenter <= player1Dist2) {
-			console.log("an enemy vessel collided with your ship");
+			game.die(cloneFactory.clones[j]);
+			game.die(player1Ship);
 		} else if (cloneTRDistToCenter <= player1Dist1 || cloneTRDistToCenter <= player1Dist2) {
-			console.log("an enemy vessel collided with your ship");
+			game.die(cloneFactory.clones[j]);
+			game.die(player1Ship);
 		} else if (cloneBLDistToCenter <= player1Dist1 || cloneBLDistToCenter <= player1Dist2) {
-			console.log("an enemy vessel collided with your ship");
+			game.die(cloneFactory.clones[j]);
+			game.die(player1Ship);
 		} else if (cloneBRDistToCenter <= player1Dist1 || cloneBRDistToCenter <= player1Dist2) {
-			console.log("an enemy vessel collided with your ship");
+			game.die(cloneFactory.clones[j]);
+			game.die(player1Ship);
 		}
 		
 	}// for all clones
