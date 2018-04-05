@@ -8,6 +8,7 @@ const prologue = $("#prologue");
 const closePrologue = $(".close-prologue");
 const closePause = $(".close-pause");
 const resetGame = $("#reset-game");
+const muteButton = $("#mute-button");
 let amountClones = 10;
 
 // instantiate game object
@@ -29,6 +30,7 @@ const game = {
 	currentLevel: 1,
 	isPaused: false,
 	accurateShots: 0,
+	isMuted: false,
 	newGame() {
 		// load prologue
 		// level 1
@@ -67,7 +69,7 @@ const game = {
 	genLevel() {
 		// instantiate new ships and a mothership
 		// for loop to increment amount of ships + enemy stats?
-		amountClones = amountClones + (this.currentLevel * 2);
+		amountClones = amountClones + (this.currentLevel * 1);
 		this.enemiesRemaining = amountClones;
 		$("#enemies-left").text("Clones: " + this.enemiesRemaining);
 		initClones(amountClones);
@@ -75,6 +77,12 @@ const game = {
 	endLevel() {
 		this.currentLevel++;
 		$("#level").text("Level: " + this.currentLevel);
+		for (let i = 0; i < player1Ship.shotsFired.length; i++) {
+			player1Ship.shotsFired[i].disappear(player1Ship, player1Ship.shotsFired[i]);
+		}
+		for (let i = 0; i < player2Ship.shotsFired.length; i++) {
+			player2Ship.shotsFired[i].disappear(player2Ship, player2Ship.shotsFired[i]);
+		}
 		// display message
 		// firing accuracy
 		// end bonus points?
@@ -82,7 +90,6 @@ const game = {
 	},
 	initMothership() {
 		initMothership(1);
-		animateMothership();
 		$("#enemies-left").text("Shield: 10")
 	},
 	killMothership(mothership) {
@@ -99,7 +106,6 @@ const game = {
 			const index = mothershipFactory.motherships.indexOf(mothership);
 			mothershipFactory.motherships.splice(index, 1);
 			if (mothershipFactory.motherships.length === 0) {
-				cancelAnimationFrame(cancelMe4);
 				this.endLevel();
 			}
 		}
@@ -225,13 +231,24 @@ closePause.on("click", function(event){
 	game.isPaused = false;
 	requestAnimationFrame(animatePlayer);
 	requestAnimationFrame(animateClone);
-	requestAnimationFrame(animateFireAtClone);
+	requestAnimationFrame(animatePlayerFire)	
 	event.stopPropagation();
 })
 resetGame.on("click", function(event) {
 	game.reset();
 })
+muteButton.on("click", function(){
+	game.isMuted = !game.isMuted;
+	if (game.isMuted) {
+		$("#mute-button").text("Unmute");
+		laserSound.pause();
+	} else {
+		$("#mute-button").text("Mute");
+		laserSound.play();
+	}
 
+
+});
 // ***** FUNCTIONS *****
 
 // switch from game screen to title screen

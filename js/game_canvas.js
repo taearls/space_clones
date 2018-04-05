@@ -63,7 +63,7 @@ window.addEventListener("resize", function(event) {
 
 
 
-
+const laserSound = new Audio("audio/laser.wav")
 
 document.addEventListener("keydown", function(event) {
 	const key = event.keyCode;
@@ -84,13 +84,18 @@ document.addEventListener("keydown", function(event) {
 	} else if (key===32) {
 		// space bar to fire
 		player1Ship.initLaser();
+		if (!game.isMuted) {
+			laserSound.play();
+   		} else {
+    		laserSound.pause();
+    	}
 	} else if (key===13) {
 		// return to pause
 		// pause the game
 		game.pause();
 	} else if (key===27) {
 		game.reset();
-	}
+	} 
 	ctx2.clearRect(0,0, canvas.width, canvas.height)
 	player1Ship.draw();
 }) 
@@ -144,14 +149,13 @@ animatePlayer();
 
 
 const animatePlayerFire = () => {
-
 	for (let i = 0; i < player1Ship.shotsFired.length; i++) {
 		player1Ship.shotsFired[i].move();
-		if (cloneFactory.clones.length > 0) {
+		if (cloneFactory.clones.length > 0 && player1Ship.shotsFired.length > 0) {
 			for (let j = 0; j < cloneFactory.clones.length; j++) {
 				let playerLaser = player1Ship.shotsFired[i];
-				let x1 = player1Ship.shotsFired[i].x;
-				let y1 = player1Ship.shotsFired[i].y;
+				let x1 = playerLaser.x;
+				let y1 = playerLaser.y;
 				let width1 = player1Ship.shotsFired[i].width;
 				let height1 = player1Ship.shotsFired[i].height;
 				let x2 = cloneFactory.clones[j].body.x;
@@ -399,3 +403,4 @@ const animateMothership = () => {
 	cancelMe4 = requestAnimationFrame(animateMothership);
 }
 
+requestAnimationFrame(animateMothership);

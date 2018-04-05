@@ -82,7 +82,7 @@ class Player extends Ship {
 	}
 	initLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
 		if (this.shotsFired.length < this.charge) {		
-			this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2) - 5, this.body.y, 10, 10, -6));
+			this.shotsFired.push(new Lasers((this.body.x + 8), (this.body.y - this.body.height), (-6)));
 		}
 	}
 	move() {
@@ -230,7 +230,7 @@ class Clone extends Ship {
 		}
 	}
 	fire() {
-		this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y + this.body.height, 10, 10, 2))
+		this.shotsFired.push(new Lasers(this.body.x + 20, this.body.y + this.body.height, 2))
 		for (let i = 0; i < this.shotsFired.length; i++) {
 			this.shotsFired[i].move();
 		}
@@ -301,7 +301,7 @@ class Mothership extends Ship {
 		}
 	}
 	fire() {
-		this.shotsFired.push(new Lasers(this.body.x + (this.body.width / 2), this.body.y + this.body.height, 10, 10, 5))
+		this.shotsFired.push(new Lasers(this.body.x + 110, this.body.y + this.body.height, 5))
 		for (let i = 0; i < this.shotsFired.length; i++) {
 			this.shotsFired[i].move();
 		}
@@ -315,23 +315,65 @@ class Mothership extends Ship {
 	}
 }
 
+const laserImg = new Image();
+laserImg.src = "images/laser.png";
+laserImg.width = 60;
+laserImg.height = 100;
 class Lasers {
-	constructor(x, y, width, height, dy) {
+	constructor(x, y, dy) {
 		this.x = x;
 		this.y = y;
-		this.width = width;
-		this.height = height;
+		this.width = laserImg.width;
+		this.height = laserImg.height;
 		this.dy = dy;
 	}
 	draw() {
-		ctx2.beginPath();
-		ctx2.fillStyle = "#FF300D";
-		ctx2.fillRect(this.x, this.y, this.width, this.height);
-		ctx2.closePath();
+		let x = this.x;
+		let y = this.y;
+		ctx2.drawImage(laserImg, x, y);
 	}
 	move() {
 		this.draw();
 		this.y += this.dy;
+		// set conditions for lasers to disappear off screen so cpu doesn't get unhappy
+		// for (let i = 0; i < player1Ship.shotsFired.length; i++) {
+		// 	let player1Laser = player1Ship.shotsFired[i]; 
+		// 	if (player1Laser.y < 0) {
+		// 		player1Laser.disappear(player1Ship, player1Laser);
+		// 	} else if (this.y > gameCanvas.height) {
+		// 		player1Laser.disappear(player1Ship, player1Laser);
+		// 	}
+		// }
+		// for (let i = 0; i < player2Ship.shotsFired.length; i++) {
+		// 	let player2Laser = player2Ship.shotsFired[i]; 
+		// 	if (this.y + this.height < 0) {
+		// 		player2Laser.disappear(player2Ship, player2Laser);
+		// 	} else if (this.y > gameCanvas.height) {
+		// 		player2Laser.disappear(player2Ship, player2Laser);
+		// 	}
+		// }
+		// for (let i = 0; i < cloneFactory.clones.length; i++) {
+		// 	let clone = cloneFactory.clones[i];
+		// 	for (let j = 0; j < cloneFactory.clones[i].shotsFired.length; j++) {
+		// 		let cloneLaser = cloneFactory.clones[i].shotsFired[j];
+		// 		if (this.y + this.height < 0) {
+		// 			cloneLaser.disappear(clone, cloneLaser);
+		// 		} else if (this.y > gameCanvas.height) {
+		// 			cloneLaser.disappear(clone, cloneLaser);
+		// 		}
+		// 	}
+		// }
+		// if (mothershipFactory.motherships.length > 0) {
+		// 	for (let i = 0; i < mothershipFactory.motherships[0].shotsFired; i++) {
+		// 		let mothership = mothershipFactory.motherships[0];
+		// 		let mothershipLaser = mothershipFactory.motherships[0].shotsFired[i];
+		// 		if (this.y + this.height < 0) {
+		// 			mothershipLaser.disappearMS(mothership, mothershipLaser);
+		// 		} else if (this.y > gameCanvas.height) {
+		// 			mothershipLaser.disappearMS(mothership, mothershipLaser);
+		// 		}
+		// 	}
+		// }
 	}
 	disappear(firingShip, laser) {
 		// get the index of the ship that fired the laser from the clone factory
