@@ -328,13 +328,15 @@ class Lasers {
 		this.dy = dy;
 	}
 	draw() {
-		let x = this.x;
-		let y = this.y;
-		ctx2.drawImage(laserImg, x, y);
+		ctx2.drawImage(laserImg, this.x, this.y);
 	}
 	move() {
 		this.draw();
 		this.y += this.dy;
+		if (this.y + this.height < 0) {
+			this.disappear(player1Ship, this)
+			this.disappear(player2Ship, this)
+		}
 	}
 	disappear(firingShip, laser) {
 		// get the index of the ship that fired the laser from the clone factory

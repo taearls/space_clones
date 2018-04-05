@@ -150,18 +150,21 @@ animatePlayer();
 
 const animatePlayerFire = () => {
 	for (let i = 0; i < player1Ship.shotsFired.length; i++) {
+
 		player1Ship.shotsFired[i].move();
-		if (cloneFactory.clones.length > 0 && player1Ship.shotsFired.length > 0) {
+		let playerLaser = player1Ship.shotsFired[i];
+		if (playerLaser != undefined) {
+
+		let x1 = playerLaser.x;
+		let y1 = playerLaser.y;
+		let width1 = player1Ship.shotsFired[i].width;
+		let height1 = player1Ship.shotsFired[i].height;
+		let xPlayer1Center = x1 + (width1 / 2);
+		let yPlayer1Center = y1 + (height1 / 2)
+		if (cloneFactory.clones.length > 0) {
 			for (let j = 0; j < cloneFactory.clones.length; j++) {
-				let playerLaser = player1Ship.shotsFired[i];
-				let x1 = playerLaser.x;
-				let y1 = playerLaser.y;
-				let width1 = player1Ship.shotsFired[i].width;
-				let height1 = player1Ship.shotsFired[i].height;
 				let x2 = cloneFactory.clones[j].body.x;
 				let y2 = cloneFactory.clones[j].body.y;
-				let xPlayer1Center = x1 + (width1 / 2);
-				let yPlayer1Center = y1 + (height1 / 2)
 				let xCloneCenter = x2 + (cloneFactory.clones[j].body.width / 2);
 				let yCloneCenter = y2 + (cloneFactory.clones[j].body.height / 2);
 				// let distance = getDistance(x1, y1, x2, y2);
@@ -174,30 +177,30 @@ const animatePlayerFire = () => {
 				let cloneDist2 = getDistance(x2, y2 + cloneFactory.clones[j].body.height, xCloneCenter, yCloneCenter);
 			
 				if (player1TLDistToCenter <= cloneDist1 || player1TLDistToCenter <= cloneDist2) {
-					playerLaser.disappear(player1Ship, playerLaser);
 					game.die(cloneFactory.clones[j]);
+					playerLaser.disappear(player1Ship, playerLaser);
 				} else if (player1TRDistToCenter <= cloneDist1 || player1TRDistToCenter <= cloneDist2) {
-					playerLaser.disappear(player1Ship, playerLaser);
 					game.die(cloneFactory.clones[j]);
+					playerLaser.disappear(player1Ship, playerLaser);
 				} else if (player1BLDistToCenter <= cloneDist1 || player1BLDistToCenter <= cloneDist2) {
-					playerLaser.disappear(player1Ship, playerLaser);
 					game.die(cloneFactory.clones[j]);
+					playerLaser.disappear(player1Ship, playerLaser);
 				} else if (player1BRDistToCenter <= cloneDist1 || player1BRDistToCenter <= cloneDist2) {
-					playerLaser.disappear(player1Ship, playerLaser);
 					game.die(cloneFactory.clones[j]);
+					playerLaser.disappear(player1Ship, playerLaser);
 				}
 			}
 		} else {
 			for (let k = 0; k < mothershipFactory.motherships.length; k++) {
-				let playerLaser = player1Ship.shotsFired[i];
-				let x1 = player1Ship.shotsFired[i].x;
-				let y1 = player1Ship.shotsFired[i].y;
-				let width1 = player1Ship.shotsFired[i].width;
-				let height1 = player1Ship.shotsFired[i].height;
+				// let playerLaser = player1Ship.shotsFired[i];
+				// let x1 = player1Ship.shotsFired[i].x;
+				// let y1 = player1Ship.shotsFired[i].y;
+				// let width1 = player1Ship.shotsFired[i].width;
+				// let height1 = player1Ship.shotsFired[i].height;
 				let x2 = mothershipFactory.motherships[k].body.x;
 				let y2 = mothershipFactory.motherships[k].body.y;
-				let xPlayer1Center = x1 + (width1 / 2);
-				let yPlayer1Center = y1 + (height1 / 2)
+				// let xPlayer1Center = x1 + (width1 / 2);
+				// let yPlayer1Center = y1 + (height1 / 2)
 				let xMothershipCenter = x2 + (mothershipFactory.motherships[k].body.width / 2);
 				let yMothershipCenter = y2 + (mothershipFactory.motherships[k].body.height / 2);
 				// let distance = getDistance(x1, y1, x2, y2);
@@ -241,6 +244,7 @@ const animatePlayerFire = () => {
 			}
 		}
 	}
+}
 	cancelMe2 = requestAnimationFrame(animatePlayerFire);
 }
 animatePlayerFire();
