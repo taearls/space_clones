@@ -52,8 +52,14 @@ window.addEventListener("resize", function(event) {
 	gameCanvas.height = window.innerHeight;
 	initStars();
 	initPlayers();
-	player1Ship.initialize();
-	player1Ship.draw();
+	if (game.isPlayer1Turn) {
+		player1Ship.initialize();
+		player1Ship.draw();
+	} else {
+		player2Ship.initialize();
+		player2Ship.draw();
+	}
+	
 })
 
 
@@ -71,16 +77,22 @@ document.addEventListener("keydown", function(event) {
 	// PLAYER MOVEMENT
 	// right using right arrow or D
 	if(key===39 || key===68) {
-		player1Ship.direction = "right";
-		player1Ship.body.x = player1Ship.body.x + 10;
-		player2Ship.direction = "right";
-		player2Ship.body.x = player1Ship.body.x + 10;
+		if (game.isPlayer1Turn) {
+			player1Ship.direction = "right";
+			player1Ship.body.x = player1Ship.body.x + 10;
+		} else {
+			player2Ship.direction = "right";
+			player2Ship.body.x = player2Ship.body.x + 10;
+		}
 	// left using left arrow or A
 	} else if(key===37 || key===65) {
-		player1Ship.direction = "left";
-		player1Ship.body.x = player1Ship.body.x - 10;
-		player2Ship.direction = "left";
-		player2Ship.body.x = player1Ship.body.x - 10;
+		if (game.isPlayer1Turn) {
+			player1Ship.direction = "left";
+			player1Ship.body.x = player1Ship.body.x - 10;
+		} else {
+			player2Ship.direction = "left";
+			player2Ship.body.x = player2Ship.body.x - 10;
+		}
 	} else if (key===32) {
 		// space bar to fire
 		if (game.isPlayer1Turn) {
@@ -92,7 +104,6 @@ document.addEventListener("keydown", function(event) {
 			game.totalShotsLevelPlayer2++;
 			localStorage.setItem("player2totalshots", game.totalShotsLevelPlayer2++);
 		}
-		
 		if (!game.isMuted) {
 			laserSound.play();
    		} else {
@@ -113,12 +124,18 @@ document.addEventListener("keydown", function(event) {
 document.addEventListener("keyup", function(event) {
 	const key = event.keyCode;
 	if(key===39 || key===68) {
-		player1Ship.direction = "";
-		player2Ship.direction = "";
+		if (game.isPlayer1Turn) {
+			player1Ship.direction = "";
+		} else {
+			player2Ship.direction = "";
+		}
 	// left using left arrow or A
 	} else if(key===37 || key===65) {
-		player1Ship.direction = "";
-		player2Ship.direction = "";
+		if (game.isPlayer1Turn) {
+			player1Ship.direction = "";
+		} else {
+			player2Ship.direction = "";
+		}
 	}
 })
 
@@ -135,36 +152,43 @@ const playerShield = 1;
 const playerFirepower = 1;
 // instantiate ships for player 1 and player 2
 
-const initPlayers = () => {
+const initPlayer1 = () => {
 	player1Ship = new Player(playerFirepower, playerShield);
-	player2Ship = new Player(playerFirepower, playerShield);
 }
 
+
+const initPlayer2 = () => {
+	player2Ship = new Player(playerFirepower, playerShield);
+}
 const animatePlayer = () => {
 	ctx2.clearRect(0, 0, canvas.width, canvas.height)
-	if (game.isPlayer1Turn) {
-		let playerShip = player1Ship;
+	let playerShip;
+	if (game.isPlayer1Turn === true) {
+		playerShip = player1Ship;
 	} else {
-		let playerShip = player2Ship;
+		playerShip = player2Ship;
 	}
 	playerShip.draw();
 	playerShip.move();
 	cancelMe1 = requestAnimationFrame(animatePlayer);
 }
 
-initPlayers();
+initPlayer1();
 player1Ship.initialize();
 player1Ship.draw();
-animatePlayer();
 
+initPlayer2();
+player2Ship.initialize();
+player2Ship.initialize();
 
 
 const animatePlayerFire = () => {
 	// check if player 1 turn or player 2 turn
-	if (game.isPlayer1Turn) {
-		let playerShip = player1Ship;
+	let playerShip;
+	if (game.isPlayer1Turn === true) {
+		playerShip = player1Ship;
 	} else {
-		let playerShip = player2Ship;
+		playerShip = player2Ship;
 	}
 	for (let i = 0; i < playerShip.shotsFired.length; i++) {
 
@@ -248,24 +272,14 @@ const animatePlayerFire = () => {
 	}
 	cancelMe2 = requestAnimationFrame(animatePlayerFire);
 }
-animatePlayerFire();
-
-// let amountClones = 10;
-// const initClones = (numClones) => {
-// 	for (let i = 0; i < amountClones; i++) {
-// 	cloneFactory.generateClone(new Clone());
-// 	cloneFactory.clones[i].initialize();
-// 	// cloneFactory.clones[i].initLaser();
-// 	}
-// }
-// initClones(amountClones);
 
 const animateClone = () => {
 	// check if player 1 or player 2 turn
+	let playerShip;
 	if (game.isPlayer1Turn) {
-		let playerShip = player1Ship;
+		playerShip = player1Ship;
 	} else {
-		let playerShip = player2Ship;
+		playerShip = player2Ship;
 	}
 	for (let j = 0; j < cloneFactory.clones.length; j++) {
 		cloneFactory.clones[j].update();
@@ -357,13 +371,13 @@ const animateClone = () => {
 	}// for all clones
 	cancelMe3 = requestAnimationFrame(animateClone);
 }
-animateClone();
 
 const animateMothership = () => {
+	let playerShip;
 	if (game.isPlayer1Turn) {
-		let playerShip = player1Ship;
+		playerShip = player1Ship;
 	} else {
-		let playerShip = player2Ship;
+		playerShip = player2Ship;
 	}
 	for (let j = 0; j < mothershipFactory.motherships.length; j++) {
 		mothershipFactory.motherships[j].update();
@@ -419,4 +433,3 @@ const animateMothership = () => {
 	cancelMe4 = requestAnimationFrame(animateMothership);
 }
 
-requestAnimationFrame(animateMothership);
