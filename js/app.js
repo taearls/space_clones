@@ -129,6 +129,11 @@ const game = {
 		if (this.isPlayer1Turn) {
 			this.accurateShots++;
 			this.player1Score += 100;
+			if (this.player1Score === 10000 || this.player1Score === 20000 || this.player1Score === 30000) {
+				this.player1Lives++;
+				$("#lives").text("Lives: " + this.player1Lives);
+				$("#extra-life").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
+			}
 			$("#player-score").text("Score: " + this.player1Score);
 		} else {
 			this.player2Score += 100;

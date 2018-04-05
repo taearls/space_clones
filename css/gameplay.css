@@ -119,7 +119,16 @@ canvas {
 	margin-right: auto;
 	animation: fadeAndScale 1s ease-in forwards;
 }
-
+#extra-life {
+    visibility: hidden;
+    position: absolute;
+    text-align: center;
+    top: 45vh;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
 /*ANIMATIONS*/
 @keyframes fadeAndScale {
 	from {
@@ -130,4 +139,16 @@ canvas {
 		opacity: 0;
 		transform: scale3d(.75, .75, 1);
 	}
+}
+@keyframes fadeAndScale2Hidden {
+    from {
+        opacity: 1;
+        transform: scale3d(1.5, 1.5, 1);
+        visibility: visible;
+    }
+    to {
+        opacity: 0;
+        transform: scale3d(.75, .75, 1);
+        visibility: hidden;
+    }
 }
