@@ -14,6 +14,8 @@ const endLevelMessage = $("#end-level-message");
 const playerAccuracy = $("#player-accuracy");
 const nextLevel = $(".next-level");
 const endLevelScore = $("#end-level-score");
+const endLevelMute = $("#end-level-mute");
+const endLevelReset = $("#end-level-reset");
 let amountClones = 10;
 
 // instantiate game object
@@ -251,13 +253,30 @@ closePause.on("click", function(event){
 resetGame.on("click", function(event) {
 	game.reset();
 })
+endLevelReset.on("click", function(event){
+	game.reset();
+})
 muteButton.on("click", function(){
 	game.isMuted = !game.isMuted;
 	if (game.isMuted) {
-		$("#mute-button").text("Unmute");
+		muteButton.text("Unmute");
+		endLevelMute.text("Unmute");
 		laserSound.pause();
 	} else {
-		$("#mute-button").text("Mute");
+		muteButton.text("Mute");
+		endLevelMute.text("Mute");
+		laserSound.play();
+	}
+});
+endLevelMute.on("click", function(){
+	game.isMuted = !game.isMuted;
+	if (game.isMuted) {
+		muteButton.text("Unmute");
+		endLevelMute.text("Unmute");
+		laserSound.pause();
+	} else {
+		muteButton.text("Mute");
+		endLevelMute.text("Mute");
 		laserSound.play();
 	}
 });
@@ -273,7 +292,7 @@ nextLevel.on("click", function(){
 // switch from game screen to title screen
 const returnToTitle = () => {
 	const initialPage = "title_screen.html";
-	location.replace('file:///Users/tboneearls/turtles/wdi_project_1/space_invaders_game/' + initialPage);
+	location.replace('file:///Users/tboneearls/turtles/wdi_project_1/space_clones/' + initialPage);
 	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 	// switch page to title screen
 	// display a modal with a message
