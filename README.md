@@ -1,6 +1,6 @@
-# space_invaders_game
+# space_clones
 
-Browser game inspired by the classic arcade game Space Invaders. Original name to be determined.
+Original browser game inspired largely by the classic arcade game Space Invaders.
 
 USER STORY MVP:
 
