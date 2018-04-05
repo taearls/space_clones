@@ -84,6 +84,7 @@ document.addEventListener("keydown", function(event) {
 	} else if (key===32) {
 		// space bar to fire
 		player1Ship.initLaser();
+		game.totalShotsLevel++;
 		if (!game.isMuted) {
 			laserSound.play();
    		} else {

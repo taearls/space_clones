@@ -9,6 +9,11 @@ const closePrologue = $(".close-prologue");
 const closePause = $(".close-pause");
 const resetGame = $("#reset-game");
 const muteButton = $("#mute-button");
+const endLevelModal = $(".end-level-modal");
+const endLevelMessage = $("#end-level-message");
+const playerAccuracy = $("#player-accuracy");
+const nextLevel = $(".next-level");
+const endLevelScore = $("#end-level-score");
 let amountClones = 10;
 
 // instantiate game object
@@ -30,6 +35,7 @@ const game = {
 	currentLevel: 1,
 	isPaused: false,
 	accurateShots: 0,
+	totalShotsLevel: 0,
 	isMuted: false,
 	newGame() {
 		// load prologue
@@ -86,7 +92,13 @@ const game = {
 		// display message
 		// firing accuracy
 		// end bonus points?
-		this.genLevel();
+		endLevelModal.addClass("show-modal");
+		endLevelMessage.text("You beat Level " + `${this.currentLevel - 1}` + "!");
+		endLevelScore.text("Score: " + this.player1Score);
+		let accPercent = (this.accurateShots / this.totalShotsLevel) * 100;
+		let roundedAcc = round(accPercent, 1);
+		playerAccuracy.text("Firing Accuracy: " + roundedAcc + "%");
+		nextLevel.text("Begin Level " + this.currentLevel);
 	},
 	initMothership() {
 		initMothership(1);
@@ -113,6 +125,7 @@ const game = {
 	score() {
 		let highScore;
 		if (this.isPlayer1Turn) {
+			this.accurateShots++;
 			this.player1Score += 100;
 			$("#player-score").text("Score: " + this.player1Score);
 		} else {
@@ -247,9 +260,14 @@ muteButton.on("click", function(){
 		$("#mute-button").text("Mute");
 		laserSound.play();
 	}
-
-
 });
+nextLevel.on("click", function(){
+	$(this).parent().parent().toggleClass("show-modal", false)
+	event.stopPropagation();
+	game.accurateShots = 0;
+	game.totalShotsLevel = 0;
+	game.genLevel();
+})
 // ***** FUNCTIONS *****
 
 // switch from game screen to title screen
@@ -289,6 +307,10 @@ const initClones = (numClones) => {
 	cloneFactory.generateClone(new Clone());
 	cloneFactory.clones[i].initialize();
 	}
+}
+const round = (value, precision) => {
+	const multiplier = Math.pow(10, precision || 0);
+	return Math.round(value * multiplier) / multiplier;
 }
 initClones(amountClones);
 $("#enemies-left").text("Enemies: " + amountClones);
