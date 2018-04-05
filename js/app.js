@@ -62,7 +62,7 @@ const game = {
 		// display player 1 start or player 2 start
 		// switch all stats displayed // affected
 		if (this.isPlayer1Turn) {
-			$("#level").text(localStorage.getItem("player1level"));
+			$("#level").text("Level: " + localStorage.getItem("player1level"));
 			this.currentLevel = localStorage.getItem("player1level");
 			$("#player-score").text("Player 1 Score: " + localStorage.getItem("player1score"));
 			this.player1Score = localStorage.getItem("player1score");
@@ -83,7 +83,7 @@ const game = {
 			this.currentLevel = localStorage.getItem("player2level");
 			this.player2Score = localStorage.getItem("player2score");
 			this.player2Lives = localStorage.getItem("player2lives");
-			$("#level").text(localStorage.getItem("player2level"));
+			$("#level").text("Level: " + localStorage.getItem("player2level"));
 			$("#player-score").text("Player 2 Score: " + localStorage.getItem("player2score"));
 			$("#lives").text("Player 2 Lives: " + localStorage.getItem("player2lives"));
 
@@ -122,12 +122,18 @@ const game = {
 		}
 	},
 	genLevel() {
-		// instantiate new ships and a mothership
-		// for loop to increment amount of ships + enemy stats?
-		amountClones = amountClones + (this.currentLevel * 1);
-		this.enemiesRemaining = amountClones;
-		$("#enemies-left").text("Clones: " + this.enemiesRemaining);
-		initClones(amountClones);
+		if (this.isPlayer1Turn) {
+			amountClones = `${Number(amountClones) + Number(localStorage.getItem("player1level")) * 1}`;
+			localStorage.setItem("enemiesplayer1", amountClones.toString());
+			$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer1"));
+			initClones(amountClones);
+		} else {
+			amountClones = `${Number(amountClones) + Number(localStorage.getItem("player2level")) * 1}`;
+			localStorage.setItem("enemiesplayer2", amountClones.toString());
+			$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer2"));
+			initClones(amountClones);
+		}
+		
 	},
 	endLevel() {
 		this.currentLevel++;
@@ -147,13 +153,13 @@ const game = {
 		if (this.isPlayer1Turn) {
 			localStorage.setItem("player1level", this.currentLevel);
 			endLevelScore.text("Player 1 Score: " + localStorage.getItem("player1score"));
-			let accPercentPlayer1 = Number(localStorage.getItem("player1accshots")) / ((Number(localStorage.getItem("player1totalshots") + 1)) / 2) * 100;
+			let accPercentPlayer1 = Number(localStorage.getItem("player1accshots")) / ((Number(localStorage.getItem("player1totalshots")) + 1) / 2) * 100;
 			let roundedAccPlayer1 = round(accPercentPlayer1, 1);
 			playerAccuracy.text("Firing Accuracy: " + roundedAccPlayer1 + "%");
 		} else {
 			localStorage.setItem("player2level", this.currentLevel);
 			endLevelScore.text("Player 2 Score: " + localStorage.getItem("player2score"));
-			let accPercentPlayer2 = Number(localStorage.getItem("player2accshots")) / ((Number(localStorage.getItem("player2totalshots") + 1)) / 2) * 100;
+			let accPercentPlayer2 = Number(localStorage.getItem("player2accshots")) / ((Number(localStorage.getItem("player2totalshots")) + 1) / 2) * 100;
 			let roundedAccPlayer2 = round(accPercentPlayer2, 1);
 			playerAccuracy.text("Firing Accuracy: " + roundedAccPlayer2 + "%");
 		}
@@ -268,8 +274,7 @@ const game = {
 			if (this.isPlayer1Turn) {
 				const index = cloneFactory.clones.indexOf(ship);
 				cloneFactory.clones.splice(index, 1);
-				this.enemiesRemaining--;
-				localStorage.setItem("enemiesplayer1", this.enemiesRemaining.toString());
+				localStorage.setItem("enemiesplayer1", `${Number(localStorage.getItem("enemiesplayer1")) - 1}`);
 				this.score();
 				$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer1"));
 				if (localStorage.getItem("enemiesplayer1") === "0") {
@@ -279,7 +284,7 @@ const game = {
 				const index = cloneFactory.clones.indexOf(ship);
 				cloneFactory.clones.splice(index, 1);
 				this.enemiesRemaining--;
-				localStorage.setItem("enemiesplayer2", this.enemiesRemaining.toString());
+				localStorage.setItem("enemiesplayer2", `${Number(localStorage.getItem("enemiesplayer2")) - 1}`);
 				this.score();
 				$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer2"));
 				if (localStorage.getItem("enemiesplayer2") === "0") {
