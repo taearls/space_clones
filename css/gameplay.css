@@ -129,7 +129,9 @@ canvas {
     margin-left: auto;
     margin-right: auto;
 }
+
 /*ANIMATIONS*/
+
 @keyframes fadeAndScale {
 	from {
 		opacity: 1;
