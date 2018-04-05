@@ -231,7 +231,8 @@ closePause.on("click", function(event){
 	game.isPaused = false;
 	requestAnimationFrame(animatePlayer);
 	requestAnimationFrame(animateClone);
-	requestAnimationFrame(animatePlayerFire)	
+	requestAnimationFrame(animatePlayerFire);
+	requestAnimationFrame(animateMothership);
 	event.stopPropagation();
 })
 resetGame.on("click", function(event) {
