@@ -16,6 +16,14 @@ header {
 header h2 {
 	margin: 0;
 }
+button {
+    color: black;
+}
+button:hover {
+    cursor: pointer;
+    background-color: #FF3B31;
+    transition: 0.3s;
+}
 .pause-modal {
     position: fixed;
     left: 0;

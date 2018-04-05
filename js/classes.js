@@ -335,45 +335,6 @@ class Lasers {
 	move() {
 		this.draw();
 		this.y += this.dy;
-		// set conditions for lasers to disappear off screen so cpu doesn't get unhappy
-		// for (let i = 0; i < player1Ship.shotsFired.length; i++) {
-		// 	let player1Laser = player1Ship.shotsFired[i]; 
-		// 	if (player1Laser.y < 0) {
-		// 		player1Laser.disappear(player1Ship, player1Laser);
-		// 	} else if (this.y > gameCanvas.height) {
-		// 		player1Laser.disappear(player1Ship, player1Laser);
-		// 	}
-		// }
-		// for (let i = 0; i < player2Ship.shotsFired.length; i++) {
-		// 	let player2Laser = player2Ship.shotsFired[i]; 
-		// 	if (this.y + this.height < 0) {
-		// 		player2Laser.disappear(player2Ship, player2Laser);
-		// 	} else if (this.y > gameCanvas.height) {
-		// 		player2Laser.disappear(player2Ship, player2Laser);
-		// 	}
-		// }
-		// for (let i = 0; i < cloneFactory.clones.length; i++) {
-		// 	let clone = cloneFactory.clones[i];
-		// 	for (let j = 0; j < cloneFactory.clones[i].shotsFired.length; j++) {
-		// 		let cloneLaser = cloneFactory.clones[i].shotsFired[j];
-		// 		if (this.y + this.height < 0) {
-		// 			cloneLaser.disappear(clone, cloneLaser);
-		// 		} else if (this.y > gameCanvas.height) {
-		// 			cloneLaser.disappear(clone, cloneLaser);
-		// 		}
-		// 	}
-		// }
-		// if (mothershipFactory.motherships.length > 0) {
-		// 	for (let i = 0; i < mothershipFactory.motherships[0].shotsFired; i++) {
-		// 		let mothership = mothershipFactory.motherships[0];
-		// 		let mothershipLaser = mothershipFactory.motherships[0].shotsFired[i];
-		// 		if (this.y + this.height < 0) {
-		// 			mothershipLaser.disappearMS(mothership, mothershipLaser);
-		// 		} else if (this.y > gameCanvas.height) {
-		// 			mothershipLaser.disappearMS(mothership, mothershipLaser);
-		// 		}
-		// 	}
-		// }
 	}
 	disappear(firingShip, laser) {
 		// get the index of the ship that fired the laser from the clone factory
