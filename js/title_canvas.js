@@ -24,7 +24,7 @@ const initStars = () => {
 initStars();
 // animate the stars in canvas backdrop
 function animateStars() {
-	requestAnimationFrame(animateStars);
+	cancelMe = requestAnimationFrame(animateStars);
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 	for (let i = 0; i < stars.length; i++) {
 		stars[i].draw();
@@ -37,13 +37,9 @@ animateStars();
 
 window.addEventListener("resize", function(event) {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx2.clearRect(0, 0, canvas.width, canvas.height);
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
-	gameCanvas.width = window.innerWidth;
-	gameCanvas.height = window.innerHeight;
 	initStars();
-	initPlayers();
-	player1Ship.initialize();
-	player1Ship.draw();
+	cancelAnimationFrame(cancelMe);
+	requestAnimationFrame(animateStars);
 })
