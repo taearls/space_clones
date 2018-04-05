@@ -36,8 +36,10 @@ const game = {
 	enemiesRemaining: amountClones,
 	currentLevel: 1,
 	isPaused: false,
-	accurateShots: 0,
-	totalShotsLevel: 0,
+	accurateShotsPlayer1: 0,
+	totalShotsLevelPlayer1: 0,
+	accurateShotsPlayer2: 0,
+	totalShotsLevelPlayer2: 0,
 	isMuted: false,
 	newGame() {
 		// load prologue
@@ -96,18 +98,24 @@ const game = {
 		// end bonus points?
 		endLevelModal.addClass("show-modal");
 		endLevelMessage.text("You beat Level " + `${this.currentLevel - 1}` + "!");
-		endLevelScore.text("Score: " + this.player1Score);
-		let accPercent = (this.accurateShots / this.totalShotsLevel) * 100;
-		let roundedAcc = round(accPercent, 1);
-		playerAccuracy.text("Firing Accuracy: " + roundedAcc + "%");
 		nextLevel.text("Begin Level " + this.currentLevel);
+		if (this.isPlayer1Turn) {
+			endLevelScore.text("Score: " + this.player1Score);
+			let accPercentPlayer1 = (this.accurateShotsPlayer1 / this.totalShotsLevelPlayer1) * 100;
+			let roundedAccPlayer1 = round(accPercentPlayer1, 1);
+			playerAccuracy.text("Firing Accuracy: " + roundedAcc + "%");
+		} else {
+			endLevelScore.text("Score: " + this.player2Score);
+			let accPercentPlayer2 = (this.accurateShotsPlayer2 / this.totalShotsLevelPlayer2) * 100;
+			let roundedAccPlayer2 = round(accPercentPlayer2, 1);
+			playerAccuracy.text("Firing Accuracy: " + roundedAcc + "%");
+		}
 	},
 	initMothership() {
 		initMothership(1);
 		$("#enemies-left").text("Shield: 10")
 	},
 	killMothership(mothership) {
-		this.accurateShots++;
 		if (this.isPlayer1Turn) {
 			this.player1Score += 1500;
 			$("#player-score").text("Score: " + this.player1Score);
@@ -127,7 +135,7 @@ const game = {
 	score() {
 		let highScore;
 		if (this.isPlayer1Turn) {
-			this.accurateShots++;
+			this.accurateShotsPlayer1++;
 			this.player1Score += 100;
 			if (this.player1Score === 10000 || this.player1Score === 20000 || this.player1Score === 30000) {
 				this.player1Lives++;
@@ -136,12 +144,15 @@ const game = {
 			}
 			$("#player-score").text("Score: " + this.player1Score);
 		} else {
+			this.accurateShotsPlayer2++;
 			this.player2Score += 100;
+			if (this.player2Score === 10000 || this.player2Score === 20000 || this.player2Score === 30000) {
+				this.player2Lives++;
+				$("#lives").text("Lives: " + this.player2Lives);
+				$("#extra-life").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
+			}
 			$("#player-score").text("Score: " + this.player2Score);
 		}
-		// for each base enemy, 100 points
-		// mothership, 1000 points
-		// extra life conditions could go here eventually
 		
 		// set high score updating conditions
 		if (this.player1Score > this.player2Score && this.player1Score > this.highScore) {
@@ -308,15 +319,22 @@ const returnToTitle = () => {
 const setDefault = () => {
 	$("#player-score").text("Player Score: 0");
 	this.player1Score = 0;
-	this.player2Score = 0;
 	this.player1IsDead = false;
-	this.player2IsDead = false;
-	$("#lives").text("Lives: 3")
+	this.accurateShotsPlayer1 = 0;
+	this.totalShotsLevelPlayer1 = 0;
 	this.player1Lives = 3;
+
+	this.player2Score = 0;
+	this.player2IsDead = false;
+	this.accurateShotsPlayer2 = 0;
+	this.totalShotsLevelPlayer2 = 0;
 	this.player2Lives = 3;
+
+	$("#lives").text("Lives: 3")
 	$("#level").text("Level: 1")
 	this.currentLevel = 1;
 	this.isPaused = false;
+	this.isMuted = false;
 	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 }
 
