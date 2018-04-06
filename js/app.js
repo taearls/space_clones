@@ -515,8 +515,8 @@ startTurn.on("click", function(event) {
 
 // switch from game screen to title screen
 const returnToTitle = () => {
-	const initialPage = "title_screen.html";
-	location.replace('file:///Users/tboneearls/turtles/wdi_project_1/space_clones/' + initialPage);
+	const initialPage = "index.html";
+	location.replace('https://tboneearls.github.io/space_clones/' + initialPage);
 	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 	// switch page to title screen
 	// display a modal with a message
