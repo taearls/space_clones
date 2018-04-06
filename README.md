@@ -1,8 +1,16 @@
 # space_clones
 
-Original browser game inspired largely by the classic arcade game Space Invaders.
+Original browser game inspired largely by the classic arcade game Space Invaders. Control a ship as you fight a brigade of alien ships.
 
-USER STORY MVP:
+## TECH USED
+
+-- To make this game, I used HTML, CSS, Javascript, jQuery, along with audio and images borrowed from opengameart.org.
+
+## PROBLEM I OVERCAME
+
+-- The biggest issue I had by far was implementing a 2 Player mode. Setting up the basic logic wasn't terribly hard once I already had the logic written for 1 Player, but there were a lot of bugs that came out of it that I didn't expect. It took me quite a while to isolate the problems in my code and correct them.
+
+## USER STORY
 
 -- This will be a two player game, so first the user will be presented with a title screen displaying a high score at the top, with the option to play in a 1 player mode or 2 player mode. The 2 player mode will have the two players taking turns.
 
@@ -12,21 +20,13 @@ USER STORY MVP:
 
 -- User will be able to see if they have beaten the high score and how many enemies are remaining before the level's mothership while playing.
 
--- Create sprites for basic enemies, motherships, and the player ship.
-
--- Create animations for lasers that get fired.
-
 -- Like in Space Invaders, each level will feature an array of descending enemy ships which will move left to right as they descend. Each enemy will disintegrate with one hit. Once all enemies are defeated, a mothership will appear that takes more hits to defeat.
 
--- Create a generic Ship class, with inherited Enemy and Mothership classes. Create factories for enemies and for motherships. Instantiate x amount of each enemy per level.
-
--- As the player progresses, each level will increase the speed of the enemy ships and the speed of the lasers they fire, increasing the difficulty of the game.
+-- As the player progresses, each level will increase the speed of the enemy ships, increasing the difficulty of the game.
 
 -- Each defeated enemy ship will increment the player's score by a set value, with the mothership incrementing it by an increased amount.
 
--- Display current level number and basic enemies remaining in the level in the player screen.
-
-EXTRA POSSIBILITIES:
+## FUTURE POSSIBILITIES
 
 -- Create bonus stages which allow the players to gain extra points, but player will not be able to die during these.
 
@@ -36,15 +36,9 @@ EXTRA POSSIBILITIES:
 
 -- Allow player to upgrade shields/weapons.
 
--- Allow player to gain extra lives at certain score intervals.
-
 -- Allow player to customize the color of their ship.
 
 -- Allow player to name their character.
-
--- Display a sprite out of the game field that represents the character's avatar as they're playing.
-
--- Introduce a prologue to set up a context for the game. Star Wars opening credit style text.
 
 -- Add a game demo if player leaves start menu open after a set interval of time.
 
@@ -54,4 +48,10 @@ EXTRA POSSIBILITIES:
 
 -- Create a final boss character that will result in a win for the player once defeated. The conflict between the final boss and the player is what drives the basic "plot" of the game.
 
--- Set up local storage so user can load/save game progress.
+## WIREFRAME
+
+[title screen wireframe]: images/title_screen_wireframe.jpg
+[gameplay wireframe]: images/gameplay_wireframe.jpg
+
+
+
