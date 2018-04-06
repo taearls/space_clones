@@ -54,6 +54,7 @@ const game = {
 	accurateShotsPlayer2: 0,
 	totalShotsLevelPlayer2: 0,
 	isMuted: false,
+	animation1: false,
 	playerSwitch() {
 		let player;
 		let otherPlayer;
@@ -71,7 +72,7 @@ const game = {
 		
 		
 		if (this.betweenTurns) {
-			playerTurn.text(player + " has died. It is " + otherPlayer + "'s turn.");
+			playerTurn.text(player + " has died. It is " + otherPlayer + "'s turn. (Do not hit Pause.)");
 			$(".turn-switch-modal").addClass("show-modal");
 			function stopAnimatons () {
 				cloneFactory.clones = [];
@@ -90,6 +91,9 @@ const game = {
 	startTurn() {
 		// display player 1 start or player 2 start
 		// switch all stats displayed // affected
+		// animation 1 = fadeandscale
+		// animation 2 = fadeandscale2hidden
+		this.animation1 != this.animation1;
 		if (this.isPlayer1Turn) {
 			$("#level").text("Level: " + localStorage.getItem("player1level"));
 			this.currentLevel = localStorage.getItem("player1level");
@@ -98,7 +102,13 @@ const game = {
 			$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
 			this.player1lives = localStorage.getItem("player1Lives");
 			$("#turn-start").text("Player 1 Start");
-			$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
+			if (this.animation1) {
+				$("#turn-start").css("animation", "none");
+				$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
+			} else {
+				$("#turn-start").css("animation", "none");
+				$("#turn-start").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
+			}
 			// if no clones remaining, display mothership shield instead
 			if (localStorage.getItem("enemiesplayer1") === "0") {
 				mothershipFactory.motherships = [];
@@ -123,7 +133,13 @@ const game = {
 			$("#lives").text("Player 2 Lives: " + localStorage.getItem("player2lives"));
 
 			$("#turn-start").text("Player 2 Start");
-			$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
+			if (this.animation1) {
+				$("#turn-start").css("animation", "none");
+				$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
+			} else {
+				$("#turn-start").css("animation", "none");
+				$("#turn-start").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
+			}
 			if (localStorage.getItem("enemiesplayer2") === "0") {
 				mothershipFactory.motherships = [];
 				initMothership(1);
@@ -272,7 +288,14 @@ const game = {
 				this.player1Lives++;
 				localStorage.setItem("player1lives", this.player1Lives.toString());
 				$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
-				$("#extra-life").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
+				this.animation1 != this.animation1;
+				if (this.animation1) {
+					$("#extra-life").css("animation", "none");
+					$("#extra-life").css("animation", "fadeAndScale 1s ease-in forwards");
+				} else {
+					$("#extra-life").css("animation", "none");
+					$("#extra-life").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
+				}
 			}
 			$("#player-score").text("Player 1 Score: " + localStorage.getItem("player1score"));
 
@@ -289,7 +312,13 @@ const game = {
 				this.player2Lives++;
 				localStorage.setItem("player2lives", this.player2Lives.toString());
 				$("#lives").text("Player 2 Lives: " + localStorage.getItem("player2lives"));
-				$("#extra-life").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
+				if (this.animation1) {
+					$("#extra-life").css("animation", "none");
+					$("#extra-life").css("animation", "fadeAndScale 1s ease-in forwards");
+				} else {
+					$("#extra-life").css("animation", "none");
+					$("#extra-life").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
+				}
 			}
 			$("#player-score").text("Player 2 Score: " + localStorage.getItem("player2score"));
 		}
