@@ -22,6 +22,8 @@ const nextLevel = $(".next-level");
 const endLevelScore = $("#end-level-score");
 const endLevelMute = $("#end-level-mute");
 const endLevelReset = $("#end-level-reset");
+const playerTurn = $("#player-turn");
+const startTurn = $(".start-turn");
 // const onePlayerGame = $("#solo");
 // const twoPlayerGame = $("#two");
 let initialClones = 10;
@@ -46,19 +48,44 @@ const game = {
 	player2Clones: 10,
 	currentLevel: 1,
 	isPaused: false,
+	betweenTurns: false,
 	accurateShotsPlayer1: 0,
 	totalShotsLevelPlayer1: 0,
 	accurateShotsPlayer2: 0,
 	totalShotsLevelPlayer2: 0,
 	isMuted: false,
 	playerSwitch() {
-		cloneFactory.clones = [];
-		mothershipFactory.motherships = [];
-		// cancelAnimationFrame(cancelMe2);
-		// cancelAnimationFrame(cancelMe4);
-		ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+		let player;
+		let otherPlayer;
+		console.clear();
+		console.log("VVVV See this error right here? VVVV Don't worry about it.");
+		if (this.isPlayer1Turn) {
+			player = "Player 1";
+			otherPlayer = "Player 2";
+		} else {
+			player = "Player 2";
+			otherPlayer = "Player 1";
+		}
 		this.isPlayer1Turn = !this.isPlayer1Turn;
-		this.startTurn();
+		this.betweenTurns = !this.betweenTurns;
+		
+		
+		if (this.betweenTurns) {
+			playerTurn.text(player + " has died. It is " + otherPlayer + "'s turn.");
+			$(".turn-switch-modal").addClass("show-modal");
+			function stopAnimatons () {
+				cloneFactory.clones = [];
+				mothershipFactory.motherships = [];
+				cancelAnimationFrame(cancelMe1);
+				cancelAnimationFrame(cancelMe2);
+				cancelAnimationFrame(cancelMe3);
+				cancelAnimationFrame(cancelMe4);
+			}
+			stopAnimatons();
+		}
+		
+			// stop animations
+
 	},
 	startTurn() {
 		// display player 1 start or player 2 start
@@ -74,7 +101,9 @@ const game = {
 			$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
 			// if no clones remaining, display mothership shield instead
 			if (localStorage.getItem("enemiesplayer1") === "0") {
+				mothershipFactory.motherships = [];
 				initMothership(1);
+				// requestAnimationFrame(animateMothership);
 				mothershipFactory.motherships[0].shield = (Number(localStorage.getItem("player1mothership")));
 				$("#enemies-left").text("Shield: " + localStorage.getItem("player1mothership"));
 			} else {
@@ -96,7 +125,10 @@ const game = {
 			$("#turn-start").text("Player 2 Start");
 			$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
 			if (localStorage.getItem("enemiesplayer2") === "0") {
+				mothershipFactory.motherships = [];
 				initMothership(1);
+				// cancelAnimationFrame(cancelMe4)
+				// requestAnimationFrame(animateMothership);
 				mothershipFactory.motherships[0].shield = (Number(localStorage.getItem("player2mothership")));
 				$("#enemies-left").text("Shield: " + localStorage.getItem("player2mothership"));
 			} else {
@@ -104,9 +136,9 @@ const game = {
 				$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer2"));
 				cloneFactory.clones = [];
 				// cancelAnimationFrame(cancelMe3);
-				initClones(Number(localStorage.getItem("enemiesplayer2")));
-				// cancelAnimationFrame(cancelMe3);
 				// requestAnimationFrame(animateClone);
+				initClones(Number(localStorage.getItem("enemiesplayer2")));
+				
 			}
 		}
 		// reboot level where progress was made
@@ -122,6 +154,7 @@ const game = {
 			cancelAnimationFrame(cancelMe4);
 					
 		} else {
+			// this makes it so I can press enter and toggle if it's paused
 			$(".pause-modal").toggleClass("show-modal", false)
 			this.isPaused = false;
 			// resume animations
@@ -137,19 +170,18 @@ const game = {
 			this.player1Clones = `${Number(initialClones) + Number(localStorage.getItem("player1level")) * 1}`;
 			localStorage.setItem("enemiesplayer1", this.player1Clones.toString());
 			$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer1"));
+			
+			initClones(this.player1Clones);
 			// cancelAnimationFrame(cancelMe3);
 			// requestAnimationFrame(animateClone);
-			initClones(this.player1Clones);
-			cancelAnimationFrame(cancelMe3);
-			requestAnimationFrame(animateClone);
 		} else {
 			this.player2Clones = `${Number(initialClones) + Number(localStorage.getItem("player2level")) * 1}`;
 			localStorage.setItem("enemiesplayer2", this.player2Clones.toString());
 			$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer2"));
 		
 			initClones(this.player2Clones);
-			cancelAnimationFrame(cancelMe3);
-			requestAnimationFrame(animateClone);
+			// cancelAnimationFrame(cancelMe3);
+			// requestAnimationFrame(animateClone);
 		}
 		
 	},
@@ -184,8 +216,8 @@ const game = {
 	},
 	initMothership() {
 		initMothership(1);
-		cancelAnimationFrame(cancelMe4)
-		requestAnimationFrame(animateMothership);
+		// cancelAnimationFrame(cancelMe4)
+		// requestAnimationFrame(animateMothership);
 		$("#enemies-left").text("Shield: 10")
 	},
 	hitMothership(mothership) {
@@ -438,7 +470,16 @@ nextLevel.on("click", function(event){
 	game.totalShotsLevel = 0;
 	game.genLevel();
 })
-
+startTurn.on("click", function(event) {
+	$(this).parent().parent().toggleClass("show-modal", false)
+	game.betweenTurns = !game.betweenTurns;
+	requestAnimationFrame(animatePlayer);
+	requestAnimationFrame(animateClone);
+	requestAnimationFrame(animatePlayerFire);
+	requestAnimationFrame(animateMothership);
+	event.stopPropagation();
+	game.startTurn();
+})
 // ***** FUNCTIONS *****
 
 

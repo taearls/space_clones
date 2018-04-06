@@ -51,8 +51,8 @@ window.addEventListener("resize", function(event) {
 	gameCanvas.width = window.innerWidth;
 	gameCanvas.height = window.innerHeight;
 	initStars();
-	initPlayer1();
-	initPlayer2();
+	// initPlayer1();
+	// initPlayer2();
 	if (game.isPlayer1Turn) {
 		player1Ship.initialize();
 		player1Ship.draw();
@@ -389,7 +389,7 @@ const animateMothership = () => {
 		if(randomNumber === 26) {
 			mothershipFactory.motherships[j].fire();
 		}		
-		if (mothershipFactory.motherships.length > 0) {
+		if (mothershipFactory.motherships[0].shotsFired.length > 0) {
 			for(let k = 0; k < mothershipFactory.motherships[j].shotsFired.length; k++) {
 				let enemyLaser = mothershipFactory.motherships[j].shotsFired[k];
 				enemyLaser.draw();
@@ -418,15 +418,19 @@ const animateMothership = () => {
 				// if mothership shoots player
 				if (laserTLDistToCenter <= playerDist1 || laserTLDistToCenter <= playerDist2) {
 					enemyLaser.disappearMS(mothershipFactory.motherships[j], enemyLaser);
+					mothershipFactory.motherships[j].shotsFired = [];
 					game.die(playerShip);
 				} else if (laserTRDistToCenter <= playerDist1 || laserTRDistToCenter <= playerDist2) {
 					enemyLaser.disappearMS(mothershipFactory.motherships[j], enemyLaser);
+					mothershipFactory.motherships[j].shotsFired = [];
 					game.die(playerShip);
 				} else if (laserBLDistToCenter <= playerDist1 || laserBLDistToCenter <= playerDist2) {
 					enemyLaser.disappearMS(mothershipFactory.motherships[j], enemyLaser);
+					mothershipFactory.motherships[j].shotsFired = [];
 					game.die(playerShip);
 				} else if (laserBRDistToCenter <= playerDist1 || laserBRDistToCenter <= playerDist2) {
 					enemyLaser.disappearMS(mothershipFactory.motherships[j], enemyLaser);
+					mothershipFactory.motherships[j].shotsFired = []; 
 					game.die(playerShip);
 				}
 			}
