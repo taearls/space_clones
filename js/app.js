@@ -324,11 +324,11 @@ const game = {
 		}
 		
 		// set high score updating conditions
-		if (Number(localStorage.getItem("player1score")) > Number(localStorage.getItem("player2score")) && Number(localStorage.getItem("player1score")) > Number(this.highScore)) {
+		if (Number(localStorage.getItem("player1score")) > Number(localStorage.getItem("player2score")) && Number(localStorage.getItem("player1score")) > Number(localStorage.getItem("highscore"))) {
 			this.highScore = this.player1Score;
 			localStorage.setItem("highscore", this.highScore.toString());
 			document.getElementById("high-score").innerHTML = ("High Score: " + localStorage.getItem("highscore"));
-		} else if (Number(localStorage.getItem("player2score")) > Number(localStorage.getItem("player1score")) && Number(localStorage.getItem("player2score")) > Number(this.highScore)) {
+		} else if (Number(localStorage.getItem("player2score")) > Number(localStorage.getItem("player1score")) && Number(localStorage.getItem("player2score")) > Number(localStorage.getItem("highscore"))) {
 			this.highScore = this.player2Score;
 			localStorage.setItem("highscore", this.highScore.toString());
 			document.getElementById("high-score").innerHTML = ("High Score: " + localStorage.getItem("highscore"));
