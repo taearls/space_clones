@@ -1,4 +1,4 @@
-# space_clones
+# Space Clones
 
 Original browser game inspired largely by the classic arcade game Space Invaders. Control a ship as you fight a brigade of alien ships.
 
