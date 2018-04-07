@@ -72,6 +72,7 @@ const game = {
 	accurateShotsPlayer2: 0,
 	totalShotsLevelPlayer2: 0,
 	isMuted: false,
+	animation1: true,
 	playerSwitch() {
 		let player;
 		let otherPlayer;
@@ -136,21 +137,6 @@ const game = {
 			this.player1lives = localStorage.getItem("player1Lives");
 			$("#turn-start").text("Player 1 Start");
 			$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
-
-			// can't get this to reset animation.
-
-			 	// event.preventDefault;
-			const element = $("h1")[0];
-
-			// remove run animation class
-  			element.classList.remove("run-animation");
-  
-  			// trigger reflow
-			void element.offsetWidth;
-  
-			// re-add the run animation class
-			element.classList.add("run-animation");
-
 
 			// if no clones remaining, display mothership shield instead
 			if (localStorage.getItem("enemiesplayer1") === "0") {
@@ -311,11 +297,17 @@ const game = {
 			this.player1Score = `${Number(this.player1Score) + 100}`;
 			localStorage.setItem("player1score", this.player1Score.toString());
 
-			if (this.player1Score === "5000" || this.player1Score === "15000" || this.player1Score === "25000") {
+			if (this.player1Score === "9000" || this.player1Score === "15000" || this.player1Score === "22000") {
 				this.player1Lives++;
 				localStorage.setItem("player1lives", this.player1Lives.toString());
 				$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
-				$("#extra-life").css("animation", "extraLives 1s ease-in forwards");
+				if (this.animation1) {
+					$("#extra-life").css("animation", "extraLives 1s ease-in forwards");
+					this.animation1 = false;
+				} else {
+					$("#extra-life").css("animation", "extraLives2 1s ease-in forwards");
+					this.animation1 = true;
+				}
 			}
 			$("#player-score").text("Player 1 Score: " + localStorage.getItem("player1score"));
 
@@ -328,11 +320,17 @@ const game = {
 			this.player2Score = `${Number(this.player2Score) + 100}`;
 			localStorage.setItem("player2score", this.player2Score.toString());
 
-			if (this.player2Score === "5000" || this.player2Score === "15000" || this.player2Score === "25000") {
+			if (this.player2Score === "9000" || this.player2Score === "15000" || this.player2Score === "22000") {
 				this.player2Lives++;
 				localStorage.setItem("player2lives", this.player2Lives.toString());
 				$("#lives").text("Player 2 Lives: " + localStorage.getItem("player2lives"));
-				$("#extra-life").css("animation", "extraLives2 1s ease-in forwards");
+				if (this.animation1) {
+					$("#extra-life").css("animation", "extraLives 1s ease-in forwards");
+					this.animation1 = false;
+				} else {
+					$("#extra-life").css("animation", "extraLives2 1s ease-in forwards");
+					this.animation1 = true;
+				}
 			}
 			$("#player-score").text("Player 2 Score: " + localStorage.getItem("player2score"));
 		}
@@ -598,19 +596,6 @@ const round = (value, precision) => {
 initClones(initialClones);
 $("#enemies-left").text("Clones: " + initialClones);
 
-"use strict";
-const restartAnimation = () => {
-	const element = $("h1")[0];
-
-	// remove run animation class
-  	element.classList.remove("run-animation");
-  
-  	// trigger reflow
-	void element.offsetWidth;
-  
-	// re-add the run animation class
-	element.classList.add("run-animation");
-}
 // window.onbeforeunload = function (event) {
 
 // 	game.reset();
