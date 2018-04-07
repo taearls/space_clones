@@ -1,12 +1,30 @@
 // ***** GLOBAL VARIABLES *****
 
-myStorage = window.localStorage;
+const myStorage = window.localStorage;
+
 const url = window.location.href;
 const getQuery = url.split('?')[1];
 const isSolo = (getQuery === "players=1"? true : false)
 // use .split type thing to get the player=2 part of the URL
 // then use split type thing again to get the string after the =
 
+// TITLE SCREEN DISPLAY
+$("#player1-score").text("Player 1 Score: " + localStorage.getItem("player1score"));
+if ($("#player1-score").text() === "Player 1 Score: null") {
+	$("#player1-score").text("Player 1 Score: 0");
+};
+
+$("#player2-score").text("Player 2 Score: " + localStorage.getItem("player2score"));
+if ($("#player2-score").text() === "Player 2 Score: null") {
+	$("#player2-score").text("Player 2 Score: 0");
+};
+
+$("#high-score").text("High Score: " + localStorage.getItem("highscore"));
+if ($("#high-score").text() === "High Score: null") {
+	$("#high-score").text("High Score: 0");
+};
+
+// EVENT LISTENER VARIABLES
 
 const controls = $("#how-to-play");
 const closeControls = $(".close-controls");
@@ -24,8 +42,9 @@ const endLevelMute = $("#end-level-mute");
 const endLevelReset = $("#end-level-reset");
 const playerTurn = $("#player-turn");
 const startTurn = $(".start-turn");
-// const onePlayerGame = $("#solo");
-// const twoPlayerGame = $("#two");
+
+
+
 let initialClones = 10;
 
 
