@@ -135,6 +135,7 @@ const game = {
 			$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
 			this.player1lives = localStorage.getItem("player1Lives");
 			$("#turn-start").text("Player 1 Start");
+			$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
 
 			// can't get this to reset animation.
 
