@@ -24,13 +24,10 @@ nav a {
 	text-align: center;
 	margin: auto;
 	color: violet;
-/*    transition: 0.3s;
-*/	font-size: 26px;
-    cursor: url(../images/cursor.png), default;
+	font-size: 26px;
+/*    cursor not available in IE until I make a .cur file as the second option below
+*/    cursor: url(../images/cursor.png), default;
 }
-/*nav a:hover {
-    cursor: url("images/player_ship.png");
-}*/
 canvas {
 	position: absolute;
 	top: 0;

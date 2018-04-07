@@ -72,11 +72,10 @@ const game = {
 	accurateShotsPlayer2: 0,
 	totalShotsLevelPlayer2: 0,
 	isMuted: false,
-	animation1: false,
 	playerSwitch() {
 		let player;
 		let otherPlayer;
-		console.clear();
+		// console.clear();
 		console.log("VVVV See this error right here? VVVV Don't worry about it.");
 		if (this.isPlayer1Turn) {
 			player = "Player 1";
@@ -109,9 +108,6 @@ const game = {
 	startTurn() {
 		// display player 1 start or player 2 start
 		// switch all stats displayed // affected
-		// animation 1 = fadeandscale
-		// animation 2 = fadeandscale2hidden
-		this.animation1 != this.animation1;
 
 		// readjusts player 1 and player 2 image while still instantiating from same Player class
 		if (this.isPlayer1Turn) {
@@ -139,18 +135,26 @@ const game = {
 			$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
 			this.player1lives = localStorage.getItem("player1Lives");
 			$("#turn-start").text("Player 1 Start");
-			if (this.animation1) {
-				$("#turn-start").css("animation", "none");
-				$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
-			} else {
-				$("#turn-start").css("animation", "none");
-				$("#turn-start").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
-			}
+
+			// can't get this to reset animation.
+
+			 	// event.preventDefault;
+			const element = $("h1")[0];
+
+			// remove run animation class
+  			element.classList.remove("run-animation");
+  
+  			// trigger reflow
+			void element.offsetWidth;
+  
+			// re-add the run animation class
+			element.classList.add("run-animation");
+
+
 			// if no clones remaining, display mothership shield instead
 			if (localStorage.getItem("enemiesplayer1") === "0") {
 				mothershipFactory.motherships = [];
 				initMothership(1);
-				// requestAnimationFrame(animateMothership);
 				mothershipFactory.motherships[0].shield = (Number(localStorage.getItem("player1mothership")));
 				$("#enemies-left").text("Shield: " + localStorage.getItem("player1mothership"));
 			} else {
@@ -158,8 +162,6 @@ const game = {
 				$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer1"));
 				cloneFactory.clones = [];
 				initClones(Number(localStorage.getItem("enemiesplayer1")));
-				// cancelAnimationFrame(cancelMe3);
-				// requestAnimationFrame(animateClone);
 			}
 		} else {
 			this.currentLevel = localStorage.getItem("player2level");
@@ -170,26 +172,16 @@ const game = {
 			$("#lives").text("Player 2 Lives: " + localStorage.getItem("player2lives"));
 
 			$("#turn-start").text("Player 2 Start");
-			if (this.animation1) {
-				$("#turn-start").css("animation", "none");
-				$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
-			} else {
-				$("#turn-start").css("animation", "none");
-				$("#turn-start").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
-			}
+			$("#turn-start").css("animation", "fadeAndScale2 1s ease-in forwards");
 			if (localStorage.getItem("enemiesplayer2") === "0") {
 				mothershipFactory.motherships = [];
 				initMothership(1);
-				// cancelAnimationFrame(cancelMe4)
-				// requestAnimationFrame(animateMothership);
 				mothershipFactory.motherships[0].shield = (Number(localStorage.getItem("player2mothership")));
 				$("#enemies-left").text("Shield: " + localStorage.getItem("player2mothership"));
 			} else {
 				mothershipFactory.motherships = [];
 				$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer2"));
 				cloneFactory.clones = [];
-				// cancelAnimationFrame(cancelMe3);
-				// requestAnimationFrame(animateClone);
 				initClones(Number(localStorage.getItem("enemiesplayer2")));
 				
 			}
@@ -225,16 +217,12 @@ const game = {
 			$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer1"));
 			
 			initClones(this.player1Clones);
-			// cancelAnimationFrame(cancelMe3);
-			// requestAnimationFrame(animateClone);
 		} else {
 			this.player2Clones = `${Number(initialClones) + Number(localStorage.getItem("player2level")) * 1}`;
 			localStorage.setItem("enemiesplayer2", this.player2Clones.toString());
 			$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer2"));
 		
 			initClones(this.player2Clones);
-			// cancelAnimationFrame(cancelMe3);
-			// requestAnimationFrame(animateClone);
 		}
 		
 	},
@@ -325,14 +313,7 @@ const game = {
 				this.player1Lives++;
 				localStorage.setItem("player1lives", this.player1Lives.toString());
 				$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
-				this.animation1 != this.animation1;
-				if (this.animation1) {
-					$("#extra-life").css("animation", "none");
-					$("#extra-life").css("animation", "fadeAndScale 1s ease-in forwards");
-				} else {
-					$("#extra-life").css("animation", "none");
-					$("#extra-life").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
-				}
+				$("#extra-life").css("animation", "extraLives 1s ease-in forwards");
 			}
 			$("#player-score").text("Player 1 Score: " + localStorage.getItem("player1score"));
 
@@ -349,13 +330,7 @@ const game = {
 				this.player2Lives++;
 				localStorage.setItem("player2lives", this.player2Lives.toString());
 				$("#lives").text("Player 2 Lives: " + localStorage.getItem("player2lives"));
-				if (this.animation1) {
-					$("#extra-life").css("animation", "none");
-					$("#extra-life").css("animation", "fadeAndScale 1s ease-in forwards");
-				} else {
-					$("#extra-life").css("animation", "none");
-					$("#extra-life").css("animation", "fadeAndScale2Hidden 1s ease-in forwards");
-				}
+				$("#extra-life").css("animation", "extraLives2 1s ease-in forwards");
 			}
 			$("#player-score").text("Player 2 Score: " + localStorage.getItem("player2score"));
 		}
@@ -544,6 +519,7 @@ startTurn.on("click", function(event) {
 	requestAnimationFrame(animatePlayerFire);
 	requestAnimationFrame(animateMothership);
 	event.stopPropagation();
+
 	game.startTurn();
 })
 // ***** FUNCTIONS *****
@@ -620,6 +596,19 @@ const round = (value, precision) => {
 initClones(initialClones);
 $("#enemies-left").text("Clones: " + initialClones);
 
+"use strict";
+const restartAnimation = () => {
+	const element = $("h1")[0];
+
+	// remove run animation class
+  	element.classList.remove("run-animation");
+  
+  	// trigger reflow
+	void element.offsetWidth;
+  
+	// re-add the run animation class
+	element.classList.add("run-animation");
+}
 // window.onbeforeunload = function (event) {
 
 // 	game.reset();

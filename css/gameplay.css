@@ -117,7 +117,7 @@ canvas {
 	right: 0;
 	margin-left: auto;
 	margin-right: auto;
-	animation: fadeAndScale2Hidden 1s ease-in forwards;
+	animation: fadeAndScale 1s ease-in forwards;
 }
 #extra-life {
     visibility: hidden;
@@ -142,15 +142,42 @@ canvas {
 		transform: scale3d(.75, .75, 1);
 	}
 }
-@keyframes fadeAndScale2Hidden {
+@keyframes fadeAndScale2 {
     from {
         opacity: 1;
         transform: scale3d(1.5, 1.5, 1);
-        visibility: visible;
     }
     to {
         opacity: 0;
         transform: scale3d(.75, .75, 1);
-        visibility: hidden;
     }
+}
+@keyframes extraLives {
+    from {
+        visibility: visible;
+        opacity: 1;
+        transform: scale3d(1.5, 1.5, 1);
+    }
+    to {
+        visibility: hidden;
+        opacity: 0;
+        transform: scale3d(.75, .75, 1);
+    }
+}
+@keyframes extraLives2 {
+   from {
+        visibility: visible;
+        opacity: 1;
+        transform: scale3d(1.5, 1.5, 1);
+    }
+    to {
+        visibility: hidden;
+        opacity: 0;
+        transform: scale3d(.75, .75, 1);
+    }
+}
+
+.run-animation {
+    position: relative;
+    animation: fadeAndScale 1s ease-in forwards;
 }
