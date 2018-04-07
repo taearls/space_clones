@@ -128,6 +128,7 @@ const game = {
 				ctx2.drawImage(player2Img, x, y);
 			}
 		}
+
 		if (this.isPlayer1Turn) {
 			$("#level").text("Level: " + localStorage.getItem("player1level"));
 			this.currentLevel = localStorage.getItem("player1level");
@@ -138,10 +139,6 @@ const game = {
 			$("#turn-start").text("Player 1 Start");
 			$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
 
-			// can't get this to reset animation.
-
-			 	// event.preventDefault;
-			// restartAnimation();
 
 
 			// if no clones remaining, display mothership shield instead
@@ -157,6 +154,19 @@ const game = {
 				initClones(Number(localStorage.getItem("enemiesplayer1")));
 			}
 		} else {
+
+			// check if 2nd player local storage is empty
+			// need to set default local storage for 2nd player the first time
+			if (localStorage.getItem("player2level") === null) {
+				localStorage.setItem("player2lives", "3");
+				localStorage.setItem("player2score", "0");
+				localStorage.setItem("player2accshots", "0");
+				localStorage.setItem("player2totalshots", "0");
+				localStorage.setItem("enemiesplayer2", "10");
+				localStorage.setItem("player2mothership", "10");
+				localStorage.setItem("player2level", "1")
+			}
+
 			this.currentLevel = localStorage.getItem("player2level");
 			this.player2Score = localStorage.getItem("player2score");
 			this.player2Lives = localStorage.getItem("player2lives");
