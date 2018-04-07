@@ -311,7 +311,7 @@ const game = {
 			this.player1Score = `${Number(this.player1Score) + 100}`;
 			localStorage.setItem("player1score", this.player1Score.toString());
 
-			if (this.player1Score === "10000" || this.player1Score === "25000" || this.player1Score === "40000") {
+			if (this.player1Score === "5000" || this.player1Score === "15000" || this.player1Score === "25000") {
 				this.player1Lives++;
 				localStorage.setItem("player1lives", this.player1Lives.toString());
 				$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
@@ -328,7 +328,7 @@ const game = {
 			this.player2Score = `${Number(this.player2Score) + 100}`;
 			localStorage.setItem("player2score", this.player2Score.toString());
 
-			if (this.player2Score === "10000" || this.player2Score === "25000" || this.player2Score === "40000") {
+			if (this.player2Score === "5000" || this.player2Score === "15000" || this.player2Score === "25000") {
 				this.player2Lives++;
 				localStorage.setItem("player2lives", this.player2Lives.toString());
 				$("#lives").text("Player 2 Lives: " + localStorage.getItem("player2lives"));
