@@ -138,6 +138,12 @@ const game = {
 			$("#turn-start").text("Player 1 Start");
 			$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
 
+			// can't get this to reset animation.
+
+			 	// event.preventDefault;
+			// restartAnimation();
+
+
 			// if no clones remaining, display mothership shield instead
 			if (localStorage.getItem("enemiesplayer1") === "0") {
 				mothershipFactory.motherships = [];
@@ -596,6 +602,18 @@ const round = (value, precision) => {
 initClones(initialClones);
 $("#enemies-left").text("Clones: " + initialClones);
 
+const restartAnimation = () => {
+	const element = $("h1")[0];
+
+	// remove run animation class
+  	element.classList.remove("run-animation");
+  
+  	// trigger reflow
+	void element.offsetWidth;
+  
+	// re-add the run animation class
+	element.classList.add("run-animation");
+}
 // window.onbeforeunload = function (event) {
 
 // 	game.reset();

@@ -176,3 +176,8 @@ canvas {
         transform: scale3d(.75, .75, 1);
     }
 }
+
+.run-animation {
+    position: relative;
+    animation: fadeAndScale 1s ease-in forwards;
+}
