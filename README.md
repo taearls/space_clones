@@ -51,10 +51,10 @@ Original browser game inspired largely by the classic arcade game Space Invaders
 ## WIREFRAME
 
 ### Title Screen Wireframe
-![Title Screen Wireframe](images/title_screen_wireframe.jpg)
+![Title Screen Wireframe](images/wireframes/title_screen_wireframe.jpg)
 
 ### Gameplay Wireframe
-![Gameplay Wireframe](images/gameplay_wireframe.jpg)
+![Gameplay Wireframe](images/wireframes/gameplay_wireframe.jpg)
 
 
 

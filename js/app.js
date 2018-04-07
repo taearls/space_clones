@@ -44,7 +44,6 @@ const playerTurn = $("#player-turn");
 const startTurn = $(".start-turn");
 
 
-
 let initialClones = 10;
 
 
@@ -113,6 +112,25 @@ const game = {
 		// animation 1 = fadeandscale
 		// animation 2 = fadeandscale2hidden
 		this.animation1 != this.animation1;
+
+		// readjusts player 1 and player 2 image while still instantiating from same Player class
+		if (this.isPlayer1Turn) {
+			player1Ship.__proto__.draw = function() {		
+				let x = this.body.x;
+				let y = this.body.y;
+				let width = this.body.width;
+				let height = this.body.height;
+				ctx2.drawImage(playerImg, x, y);
+			}
+		} else {
+			player2Ship.__proto__.draw = function() {		
+				let x = this.body.x;
+				let y = this.body.y;
+				let width = this.body.width;
+				let height = this.body.height;
+				ctx2.drawImage(player2Img, x, y);
+			}
+		}
 		if (this.isPlayer1Turn) {
 			$("#level").text("Level: " + localStorage.getItem("player1level"));
 			this.currentLevel = localStorage.getItem("player1level");

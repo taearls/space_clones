@@ -51,6 +51,10 @@ class Ship {
 		// update player lives
 	}
 }
+const player2Img = new Image();
+player2Img.src = "images/player2_ship.png";
+player2Img.width = 60;
+player2Img.height = 60;
 
 const playerImg = new Image();
 playerImg.src = "images/player_ship.png";
