@@ -172,6 +172,7 @@ const game = {
 			$("#lives").text("Player 2 Lives: " + localStorage.getItem("player2lives"));
 
 			$("#turn-start").text("Player 2 Start");
+			$("#turn-start").css("animation", "");
 			$("#turn-start").css("animation", "fadeAndScale2 1s ease-in forwards");
 			if (localStorage.getItem("enemiesplayer2") === "0") {
 				mothershipFactory.motherships = [];
