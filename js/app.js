@@ -559,7 +559,6 @@ const returnToTitle = () => {
 
 // function to restore all default stats for both players
 const setDefault = () => {
-	$("#player-score").text("Player Score: 0");
 	this.player1Score = 0;
 	this.player1IsDead = false;
 	this.accurateShotsPlayer1 = 0;
@@ -572,8 +571,6 @@ const setDefault = () => {
 	this.totalShotsLevelPlayer2 = 0;
 	this.player2Lives = 3;
 
-	$("#lives").text("Lives: 3")
-	$("#level").text("Level: 1")
 	this.currentLevel = 1;
 	this.isPaused = false;
 	this.isMuted = false;
