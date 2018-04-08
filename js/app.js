@@ -42,7 +42,8 @@ const endLevelMute = $("#end-level-mute");
 const endLevelReset = $("#end-level-reset");
 const playerTurn = $("#player-turn");
 const startTurn = $(".start-turn");
-
+const gameOverModal = $(".game-over-modal");
+const endGameOver = $("#game-over-button");
 
 let initialClones = 10;
 
@@ -90,16 +91,10 @@ const game = {
 		
 		
 		if (this.betweenTurns) {
-			playerTurn.text(player + " has died. It is " + otherPlayer + "'s turn. (Do not hit Pause.)");
+			playerTurn.text(player + " has died. (Do not hit Pause.)");
+			playerTurn.html(playerTurn.html().replace("(Do not hit Pause.)", "<br />(Do not hit Pause.)"));
+			startTurn.text(otherPlayer + " Start Turn")
 			$(".turn-switch-modal").addClass("show-modal");
-			function stopAnimatons () {
-				cloneFactory.clones = [];
-				mothershipFactory.motherships = [];
-				cancelAnimationFrame(cancelMe1);
-				cancelAnimationFrame(cancelMe2);
-				cancelAnimationFrame(cancelMe3);
-				cancelAnimationFrame(cancelMe4);
-			}
 			stopAnimatons();
 		}
 		
@@ -378,9 +373,9 @@ const game = {
 	die(ship) {
 		// if player dies
 		if (ship === player1Ship) {
-			this.gameOver();
+			this.checkGameEnd();
 		} else if (ship === player2Ship) {
-			this.gameOver();
+			this.checkGameEnd();
 		} else {
 			// if a clone dies
 			if (this.isPlayer1Turn) {
@@ -404,17 +399,19 @@ const game = {
 			}
 		}
 	},
-	gameOver() {
+	checkGameEnd() {
 		// game end message
 		// return to title screen
 		// set conditions for one player vs two players
 		if (this.isSolo) {
 			this.player1Lives--;
 			localStorage.setItem("player1lives", this.player1Lives.toString());
-			$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
+			if (!this.player1IsDead) {
+				// so lives don't keep going down
+				$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
+			}
 			if (localStorage.getItem("player1lives")=== "0") {
-				setDefault();
-				returnToTitle();
+				this.gameOver();
 			}
 			// game end message
 			// return to title screen
@@ -423,40 +420,45 @@ const game = {
 			if (this.isPlayer1Turn) {
 				this.player1Lives--;
 				localStorage.setItem("player1lives", this.player1Lives.toString());
-				$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
-				
+				if (!this.player1IsDead) {
+					$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
+				}
 				if (localStorage.getItem("player1lives") === "0" && !this.player1IsDead) {
 					this.player1IsDead = true;
 					if (this.player1IsDead && this.player2IsDead) {
-						setDefault();
-						returnToTitle();
+						this.gameOver();
 					} else if (this.player2IsDead === false) {
 						this.playerSwitch();
 					}
-				} else {
+				} else if (!this.player2IsDead) {
 					this.playerSwitch();
 				}
 			} else if (!this.isPlayer1Turn) {
 				this.player2Lives--;
 				localStorage.setItem("player2lives", this.player2Lives.toString());
-				$("#lives").text("Player 2 Lives: " + localStorage.getItem("player2lives"));
+				if (!this.player2IsDead) {
+					$("#lives").text("Player 2 Lives: " + localStorage.getItem("player2lives"));
+				}
 
-				if (localStorage.getItem("player1lives") === "0" && !this.player2IsDead) {
+				if (localStorage.getItem("player2lives") === "0" && !this.player2IsDead) {
 					this.player2IsDead = true;
 					if (this.player2IsDead && this.player1IsDead) {
-						setDefault();
-						returnToTitle();
+						this.gameOver();
 					} else if (this.player1IsDead === false) {
 						this.playerSwitch();
 					}
-				} else {
+				} else if (!this.player1IsDead) {
 					this.playerSwitch();
 				}
 			}
 			// set conditions for both players
 		}
+	},
+	gameOver() {
+		$("#game-over-message").css("font-size", "40px");
+		gameOverModal.addClass("show-modal");
+		stopAnimatons();
 	}
-
 }
 
 
@@ -535,8 +537,10 @@ startTurn.on("click", function(event) {
 	requestAnimationFrame(animatePlayerFire);
 	requestAnimationFrame(animateMothership);
 	event.stopPropagation();
-
 	game.startTurn();
+})
+endGameOver.on("click", function(event) {
+	game.reset();
 })
 // ***** FUNCTIONS *****
 
@@ -624,10 +628,18 @@ const restartAnimation = () => {
 	// re-add the run animation class
 	element.classList.add("run-animation");
 }
-// window.onbeforeunload = function (event) {
 
-// 	game.reset();
-// }
+const removeKeys = () => {
+	document.removeEventListener("keydown", addKeys());
+}
+const stopAnimatons = () => {
+	cloneFactory.clones = [];
+	mothershipFactory.motherships = [];
+	cancelAnimationFrame(cancelMe1);
+	cancelAnimationFrame(cancelMe2);
+	cancelAnimationFrame(cancelMe3);
+	cancelAnimationFrame(cancelMe4);
+}
 
 animatePlayer();
 animatePlayerFire();

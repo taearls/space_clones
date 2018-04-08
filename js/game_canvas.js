@@ -71,8 +71,8 @@ window.addEventListener("resize", function(event) {
 
 
 const laserSound = new Audio("audio/laser.wav")
-
-document.addEventListener("keydown", function(event) {
+function addKeys (){
+document.addEventListener("keydown", function addKeys(event) {
 	const key = event.keyCode;
 	// console.log(event.keyCode);
 	// PLAYER MOVEMENT
@@ -120,7 +120,8 @@ document.addEventListener("keydown", function(event) {
 	ctx2.clearRect(0,0, canvas.width, canvas.height)
 	player1Ship.draw();
 }) 
-
+}
+addKeys();
 // player will stop when arrow isn't pressed
 document.addEventListener("keyup", function(event) {
 	const key = event.keyCode;

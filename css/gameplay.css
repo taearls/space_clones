@@ -24,7 +24,7 @@ button:hover {
     background-color: #FF3B31;
     transition: 0.3s;
 }
-.pause-modal, .end-level-modal, .turn-switch-modal {
+.pause-modal, .end-level-modal, .turn-switch-modal, .game-over-modal {
     position: fixed;
     left: 0;
     top: 0;
@@ -39,7 +39,7 @@ button:hover {
 .pause-content, button {
     font-size: 13px;
 }
-.pause-content, .end-level-content, .turn-switch-content {
+.pause-content, .end-level-content, .turn-switch-content, .game-over-content {
     position: absolute;
     top: 50%;
     left: 50%;
