@@ -409,9 +409,10 @@ const game = {
 			if (!this.player1IsDead) {
 				// so lives don't keep going down
 				$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
-			}
-			if (localStorage.getItem("player1lives")=== "0") {
-				this.gameOver();
+				if (localStorage.getItem("player1lives")=== "0") {
+					this.player1IsDead = true;
+					this.gameOver();
+				}
 			}
 			// game end message
 			// return to title screen
