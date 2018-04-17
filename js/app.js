@@ -78,7 +78,8 @@ const game = {
 		let player;
 		let otherPlayer;
 		// console.clear();
-		console.log("VVVV See this error right here? VVVV Don't worry about it.");
+		console.log("The animation frame closes AFTER I remove the game objects, which throws an error.");
+		console.log("VVVV See this right here? VVVV Don't worry about it.");
 		if (this.isPlayer1Turn) {
 			player = "Player 1";
 			otherPlayer = "Player 2";
@@ -192,20 +193,14 @@ const game = {
 		if (this.isPaused) {
 			$(".pause-modal").addClass("show-modal");
 			// stop animations
-			cancelAnimationFrame(cancelMe1);
-			cancelAnimationFrame(cancelMe2);
-			cancelAnimationFrame(cancelMe3);
-			cancelAnimationFrame(cancelMe4);
+			cancelAnimationFrame(cancelMe);
 					
 		} else {
 			// this makes it so I can press enter and toggle if it's paused
 			$(".pause-modal").toggleClass("show-modal", false)
 			this.isPaused = false;
 			// resume animations
-			requestAnimationFrame(animatePlayer);
-			requestAnimationFrame(animateClone);
-			requestAnimationFrame(animatePlayerFire);
-			requestAnimationFrame(animateMothership);
+			requestAnimationFrame(animateGame);
 			event.stopPropagation();
 		}
 	},
@@ -487,10 +482,7 @@ closePrologue.on("click", function(event) {
 closePause.on("click", function(event){
 	$(this).parent().parent().toggleClass("show-modal", false)
 	game.isPaused = false;
-	requestAnimationFrame(animatePlayer);
-	requestAnimationFrame(animateClone);
-	requestAnimationFrame(animatePlayerFire);
-	requestAnimationFrame(animateMothership);
+	requestAnimationFrame(animateGame);
 	event.stopPropagation();
 })
 resetGame.on("click", function(event) {
@@ -533,10 +525,7 @@ nextLevel.on("click", function(event){
 startTurn.on("click", function(event) {
 	$(this).parent().parent().toggleClass("show-modal", false)
 	game.betweenTurns = !game.betweenTurns;
-	requestAnimationFrame(animatePlayer);
-	requestAnimationFrame(animateClone);
-	requestAnimationFrame(animatePlayerFire);
-	requestAnimationFrame(animateMothership);
+	requestAnimationFrame(animateGame);
 	event.stopPropagation();
 	game.startTurn();
 })
@@ -633,14 +622,8 @@ const removeKeys = () => {
 const stopAnimatons = () => {
 	cloneFactory.clones = [];
 	mothershipFactory.motherships = [];
-	cancelAnimationFrame(cancelMe1);
-	cancelAnimationFrame(cancelMe2);
-	cancelAnimationFrame(cancelMe3);
-	cancelAnimationFrame(cancelMe4);
+	cancelAnimationFrame(cancelMe);
 }
 
-animatePlayer();
-animatePlayerFire();
-animateClone();
-animateMothership();
+animateGame();
 

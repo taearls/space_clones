@@ -45,7 +45,7 @@ animateStars();
 
 window.addEventListener("resize", function(event) {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx2.clearRect(0, 0, canvas.width, canvas.height);
+	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 	gameCanvas.width = window.innerWidth;
@@ -62,13 +62,6 @@ window.addEventListener("resize", function(event) {
 	}
 	
 })
-
-
-
-
-
-
-
 
 const laserSound = new Audio("audio/laser.wav")
 function addKeys (){
@@ -117,11 +110,11 @@ document.addEventListener("keydown", function addKeys(event) {
 	} else if (key===27) {
 		game.reset();
 	} 
-	ctx2.clearRect(0,0, canvas.width, canvas.height)
-	player1Ship.draw();
+	ctx2.clearRect(0,0, gameCanvas.width, gameCanvas.height)
 }) 
 }
-addKeys();
+
+
 // player will stop when arrow isn't pressed
 document.addEventListener("keyup", function(event) {
 	const key = event.keyCode;
@@ -141,302 +134,255 @@ document.addEventListener("keyup", function(event) {
 	}
 })
 
+addKeys();
 // ***GAME CANVAS***
 
 const gameCanvas = document.querySelector("#game-canvas");
 gameCanvas.width = window.innerWidth;
 // height will be distance between header/footer of game
 gameCanvas.height = window.innerHeight;
-
 const ctx2 = gameCanvas.getContext("2d");
 
 const playerShield = 1;
 const playerFirepower = 1;
 // instantiate ships for player 1 and player 2
-
 const initPlayer1 = () => {
 	player1Ship = new Player(playerFirepower, playerShield);
 }
-
-
 const initPlayer2 = () => {
 	player2Ship = new Player(playerFirepower, playerShield);
 }
-const animatePlayer = () => {
-	ctx2.clearRect(0, 0, canvas.width, canvas.height)
-	let playerShip;
-	if (game.isPlayer1Turn === true) {
-		playerShip = player1Ship;
-	} else {
-		playerShip = player2Ship;
-	}
-	playerShip.draw();
-	playerShip.move();
-	cancelMe1 = requestAnimationFrame(animatePlayer);
-}
-
 initPlayer1();
 player1Ship.initialize();
-player1Ship.draw();
-
 initPlayer2();
 player2Ship.initialize();
-player2Ship.initialize();
 
-
-const animatePlayerFire = () => {
-	// check if player 1 turn or player 2 turn
+const animateGame = () => {
+	ctx2.clearRect(0, 0, canvas.width, canvas.height)
+	// player animation
 	let playerShip;
 	if (game.isPlayer1Turn === true) {
 		playerShip = player1Ship;
 	} else {
 		playerShip = player2Ship;
 	}
-	for (let i = 0; i < playerShip.shotsFired.length; i++) {
 
+	playerShip.draw();
+	playerShip.move();
+
+	let xPlayer = playerShip.body.x;
+	let yPlayer = playerShip.body.y;
+	let widthPlayer = playerShip.body.width;
+	let heightPlayer = playerShip.body.height;
+	let xPlayerCenter = xPlayer + (widthPlayer / 2);
+	let yPlayerCenter = yPlayer + (heightPlayer / 2);
+
+	let playerDist1 = getDistance(xPlayer, yPlayer, xPlayerCenter, yPlayerCenter);
+	let playerDist2 = getDistance(xPlayer, yPlayer + heightPlayer, xPlayerCenter, yPlayerCenter);
+
+	for (let i = 0; i < playerShip.shotsFired.length; i++) {
 		playerShip.shotsFired[i].move();
 		let playerLaser = playerShip.shotsFired[i];
 		if (playerLaser != undefined) {
+		let xPlayerLaser = playerLaser.x;
+		let yPlayerLaser = playerLaser.y;
+		let widthPlayerLaser = playerLaser.width;
+		let heightPlayerLaser = playerLaser.height;
+		 // if player shoots clone
+		 	for (let j = 0; j < cloneFactory.clones.length; j++) {
+		 		let xClone = cloneFactory.clones[j].body.x;
+				let yClone = cloneFactory.clones[j].body.y;
+				let widthClone = cloneFactory.clones[j].body.width;
+				let heightClone = cloneFactory.clones[j].body.height;
 
-			let x1 = playerLaser.x;
-			let y1 = playerLaser.y;
-			let width1 = playerShip.shotsFired[i].width;
-			let height1 = playerShip.shotsFired[i].height;
-			let xPlayerCenter = x1 + (width1 / 2);
-			let yPlayerCenter = y1 + (height1 / 2)
-			if (cloneFactory.clones.length > 0) {
-				for (let j = 0; j < cloneFactory.clones.length; j++) {
-					let x2 = cloneFactory.clones[j].body.x;
-					let y2 = cloneFactory.clones[j].body.y;
-					let xCloneCenter = x2 + (cloneFactory.clones[j].body.width / 2);
-					let yCloneCenter = y2 + (cloneFactory.clones[j].body.height / 2);
-					// let distance = getDistance(x1, y1, x2, y2);
-					let playerTLDistToCenter = getDistance(x1, y1, xCloneCenter, yCloneCenter);
-					let playerTRDistToCenter = getDistance(x1 + width1, y1, xCloneCenter, yCloneCenter);
-					let playerBLDistToCenter = getDistance(x1, y1 + height1, xCloneCenter, yCloneCenter);
-					let playerBRDistToCenter = getDistance(x1 + width1, y1 + height1, xCloneCenter, yCloneCenter);
-					// while using the center point of the alien ships, I only need to measure two distances for comparison:
-					let cloneDist1 = getDistance(x2, y2, xCloneCenter, yCloneCenter);
-					let cloneDist2 = getDistance(x2, y2 + cloneFactory.clones[j].body.height, xCloneCenter, yCloneCenter);
-			
-					if (playerTLDistToCenter <= cloneDist1 || playerTLDistToCenter <= cloneDist2) {
-						game.die(cloneFactory.clones[j]);
-						playerLaser.disappear(playerShip, playerLaser);
-					} else if (playerTRDistToCenter <= cloneDist1 || playerTRDistToCenter <= cloneDist2) {
-						game.die(cloneFactory.clones[j]);
-						playerLaser.disappear(playerShip, playerLaser);
-					} else if (playerBLDistToCenter <= cloneDist1 || playerBLDistToCenter <= cloneDist2) {
-						game.die(cloneFactory.clones[j]);
-						playerLaser.disappear(playerShip, playerLaser);
-					} else if (playerBRDistToCenter <= cloneDist1 || playerBRDistToCenter <= cloneDist2) {
-						game.die(cloneFactory.clones[j]);
-						playerLaser.disappear(playerShip, playerLaser);
-					}
+				let xCloneCenter = xClone + (widthClone / 2);
+				let yCloneCenter = yClone + (heightClone / 2);
+				let pLaserTLDistToCCenter = getDistance(xPlayerLaser, yPlayerLaser, xCloneCenter, yCloneCenter);
+				let pLaserTRDistToCCenter = getDistance(xPlayerLaser + widthPlayerLaser, yPlayerLaser, xCloneCenter, yCloneCenter);
+				let pLaserBLDistToCCenter = getDistance(xPlayerLaser, yPlayerLaser + heightPlayerLaser, xCloneCenter, yCloneCenter);
+				let pLaserBRDistToCCenter = getDistance(xPlayerLaser + widthPlayerLaser, yPlayerLaser + heightPlayerLaser, xCloneCenter, yCloneCenter);
+						
+				// while using the center point of the alien ships, I only need to measure two distances for comparison:
+				let cloneDist1 = getDistance(xClone, yClone, xCloneCenter, yCloneCenter);
+				let cloneDist2 = getDistance(xClone, yClone + heightClone, xCloneCenter, yCloneCenter);
+				if (pLaserTLDistToCCenter <= cloneDist1 || pLaserTLDistToCCenter <= cloneDist2) {
+					playerLaser.disappear(playerShip, playerLaser);
+					game.die(cloneFactory.clones[j]);
+				} else if (pLaserTRDistToCCenter <= cloneDist1 || pLaserTRDistToCCenter <= cloneDist2) {
+					playerLaser.disappear(playerShip, playerLaser);
+					game.die(cloneFactory.clones[j]);
+				} else if (pLaserBLDistToCCenter <= cloneDist1 || pLaserBLDistToCCenter <= cloneDist2) {
+					playerLaser.disappear(playerShip, playerLaser);
+					game.die(cloneFactory.clones[j]);
+				} else if (pLaserBRDistToCCenter <= cloneDist1 || pLaserBRDistToCCenter <= cloneDist2) {
+					playerLaser.disappear(playerShip, playerLaser);
+					game.die(cloneFactory.clones[j]);
 				}
-			} else {
-				for (let k = 0; k < mothershipFactory.motherships.length; k++) {
-					// let playerLaser = player1Ship.shotsFired[i];
-					// let x1 = player1Ship.shotsFired[i].x;
-					// let y1 = player1Ship.shotsFired[i].y;
-					// let width1 = player1Ship.shotsFired[i].width;
-					// let height1 = player1Ship.shotsFired[i].height;
-					let x2 = mothershipFactory.motherships[k].body.x;
-					let y2 = mothershipFactory.motherships[k].body.y;
-					// let xPlayer1Center = x1 + (width1 / 2);
-					// let yPlayer1Center = y1 + (height1 / 2)
-					let xMothershipCenter = x2 + (mothershipFactory.motherships[k].body.width / 2);
-					let yMothershipCenter = y2 + (mothershipFactory.motherships[k].body.height / 2);
-					// let distance = getDistance(x1, y1, x2, y2);
-					let playerTLDistToCenter = getDistance(x1, y1, xMothershipCenter, yMothershipCenter);
-					let playerTRDistToCenter = getDistance(x1 + width1, y1, xMothershipCenter, yMothershipCenter);
-					let playerBLDistToCenter = getDistance(x1, y1 + height1, xMothershipCenter, yMothershipCenter);
-					let playerBRDistToCenter = getDistance(x1 + width1, y1 + height1, xMothershipCenter, yMothershipCenter);
-					// while using the center point of the alien ships, I only need to measure two distances for comparison:
-					let mothershipDist1 = getDistance(x2, y2, xMothershipCenter, yMothershipCenter);
-					let mothershipDist2 = getDistance(x2, y2 + mothershipFactory.motherships[k].body.height, xMothershipCenter, yMothershipCenter);
+			}
+
+			for (let k = 0; k < mothershipFactory.motherships.length; k++) {
+
+						let xMShip = mothershipFactory.motherships[k].body.x;
+						let yMShip = mothershipFactory.motherships[k].body.y;
+						let xMShipCenter = xMShip + (mothershipFactory.motherships[k].body.width / 2);
+						let yMShipCenter = yMShip + (mothershipFactory.motherships[k].body.height / 2);
+
+						let pLaserTLDistToMSCenter = getDistance(xPlayerLaser, yPlayerLaser, xMShipCenter, yMShipCenter);
+						let pLaserTRDistToMSCenter = getDistance(xPlayerLaser + widthPlayerLaser, yPlayerLaser, xMShipCenter, yMShipCenter);
+						let pLaserBLDistToMSCenter = getDistance(xPlayerLaser, yPlayerLaser + heightPlayerLaser, xMShipCenter, yMShipCenter);
+						let pLaserBRDistToMSCenter = getDistance(xPlayerLaser + widthPlayerLaser, yPlayerLaser + heightPlayerLaser, xMShipCenter, yMShipCenter);
+						
+						// while using the center point of the alien ships, I only need to measure two distances for comparison:
+						let mothershipDist1 = getDistance(xMShip, yMShip, xMShipCenter, yMShipCenter);
+						let mothershipDist2 = getDistance(xMShip, yMShip + mothershipFactory.motherships[k].body.height, xMShipCenter, yMShipCenter);
+						
+						if (pLaserTLDistToMSCenter <= mothershipDist1 || pLaserTLDistToMSCenter <= mothershipDist2) {
+							playerLaser.disappear(playerShip, playerLaser);
+							game.hitMothership(mothershipFactory.motherships[k])
+						} else if (pLaserTRDistToMSCenter <= mothershipDist1 || pLaserTRDistToMSCenter <= mothershipDist2) {
+							playerLaser.disappear(playerShip, playerLaser);
+							game.hitMothership(mothershipFactory.motherships[k])		
+						} else if (pLaserBLDistToMSCenter <= mothershipDist1 || pLaserBLDistToMSCenter <= mothershipDist2) {
+							playerLaser.disappear(playerShip, playerLaser);
+							game.hitMothership(mothershipFactory.motherships[k]);
+						} else if (pLaserBRDistToMSCenter <= mothershipDist1 || pLaserBRDistToMSCenter <= mothershipDist2) {
+							playerLaser.disappear(playerShip, playerLaser);
+							game.hitMothership(mothershipFactory.motherships[k]);
+						}
+			}
+		}
+	}
+
+
+
+
+
+
+		// mothership animation
+		for (let j = 0; j < mothershipFactory.motherships.length; j++) {
+			mothershipFactory.motherships[j].update();
+			mothershipFactory.motherships[j].draw();
+			mothershipFactory.motherships[j].move();
+
+			const msNumber = Math.floor(Math.random() * 30);
+			if(msNumber === 26) {
+				mothershipFactory.motherships[j].fire();
+			}		
+			if (mothershipFactory.motherships[0].shotsFired.length > 0) {
+				for(let k = 0; k < mothershipFactory.motherships[j].shotsFired.length; k++) {
+					let mothershipLaser = mothershipFactory.motherships[j].shotsFired[k];
+					mothershipLaser.draw();
+					mothershipLaser.move();
+					let xMLaser = mothershipLaser.x;
+					let yMLaser = mothershipLaser.y;
+					let widthMLaser = mothershipLaser.width;
+					let heightMLaser = mothershipLaser.height;
+
+					let mlaserTLDistToCenter = getDistance(xMLaser, yMLaser, xPlayerCenter, yPlayerCenter);
+					let mlaserTRDistToCenter = getDistance(xMLaser + widthMLaser, yMLaser, xPlayerCenter, yPlayerCenter);
+					let mlaserBLDistToCenter = getDistance(xMLaser, yMLaser + heightMLaser, xPlayerCenter, yPlayerCenter);
+					let mlaserBRDistToCenter = getDistance(xMLaser + widthMLaser, yMLaser + heightMLaser, xPlayerCenter, yPlayerCenter);
 					
-					if (playerTLDistToCenter <= mothershipDist1 || playerTLDistToCenter <= mothershipDist2) {
-						playerLaser.disappear(playerShip, playerLaser);
-						game.hitMothership(mothershipFactory.motherships[k])
-					} else if (playerTRDistToCenter <= mothershipDist1 || playerTRDistToCenter <= mothershipDist2) {
-						playerLaser.disappear(playerShip, playerLaser);
-						game.hitMothership(mothershipFactory.motherships[k])		
-					} else if (playerBLDistToCenter <= mothershipDist1 || playerBLDistToCenter <= mothershipDist2) {
-						playerLaser.disappear(playerShip, playerLaser);
-						game.hitMothership(mothershipFactory.motherships[k]);
-					} else if (playerBRDistToCenter <= mothershipDist1 || playerBRDistToCenter <= mothershipDist2) {
-						playerLaser.disappear(playerShip, playerLaser);
-						game.hitMothership(mothershipFactory.motherships[k]);
+					// if mothership shoots player
+					if (mlaserTLDistToCenter <= playerDist1 || mlaserTLDistToCenter <= playerDist2) {
+						mothershipLaser.disappearMS(mothershipFactory.motherships[j], mothershipLaser);
+						mothershipFactory.motherships[j].shotsFired = [];
+						game.die(playerShip);
+					} else if (mlaserTRDistToCenter <= playerDist1 || mlaserTRDistToCenter <= playerDist2) {
+						mothershipLaser.disappearMS(mothershipFactory.motherships[j], mothershipLaser);
+						mothershipFactory.motherships[j].shotsFired = [];
+						game.die(playerShip);
+					} else if (mlaserBLDistToCenter <= playerDist1 || mlaserBLDistToCenter <= playerDist2) {
+						mothershipLaser.disappearMS(mothershipFactory.motherships[j], mothershipLaser);
+						mothershipFactory.motherships[j].shotsFired = [];
+						game.die(playerShip);
+					} else if (mlaserBRDistToCenter <= playerDist1 || mlaserBRDistToCenter <= playerDist2) {
+						mothership.disappearMS(mothershipFactory.motherships[j], mothershipLaser);
+						mothershipFactory.motherships[j].shotsFired = []; 
+						game.die(playerShip);
+					}
+
+						// if player shoots mothership	
+
+
+				}
+			}
+		}
+		// clone animation
+		for (let j = 0; j < cloneFactory.clones.length; j++) {
+			cloneFactory.clones[j].update();
+			cloneFactory.clones[j].draw();
+			cloneFactory.clones[j].move();
+
+			const cNumber = Math.floor(Math.random() * 100);
+			if(cNumber === 26) {
+				cloneFactory.clones[j].fire();
+			}		
+			if (cloneFactory.clones.length > 0) {
+				for(let k = 0; k < cloneFactory.clones[j].shotsFired.length; k++) {
+					let cloneLaser = cloneFactory.clones[j].shotsFired[k];
+					cloneLaser.draw();
+					cloneLaser.move();
+					let xCLaser = cloneLaser.x;
+					let yCLaser = cloneLaser.y;
+					let widthCLaser = cloneLaser.width;
+					let heightCLaser = cloneLaser.height;
+					let xCLaserCenter = xCLaser + (widthCLaser / 2);
+					let yCLaserCenter = yCLaser + (heightCLaser / 2);
+
+					let cLaserTLDistToCenter = getDistance(xCLaser, yCLaser, xPlayerCenter, yPlayerCenter);
+					let cLaserTRDistToCenter = getDistance(xCLaser + widthCLaser, yCLaser, xPlayerCenter, yPlayerCenter);
+					let cLaserBLDistToCenter = getDistance(xCLaser, yCLaser + heightCLaser, xPlayerCenter, yPlayerCenter);
+					let cLaserBRDistToCenter = getDistance(xCLaser + widthCLaser, yCLaser + heightCLaser, xPlayerCenter, yPlayerCenter);
+					// while using the center point of the alien ships, I only need to measure two distances for comparison:
+
+					// if clone shoots player
+					if (cLaserTLDistToCenter <= playerDist1 || cLaserTLDistToCenter <= playerDist2) {
+						cloneLaser.disappear(cloneFactory.clones[j], cloneLaser);
+						game.die(playerShip);
+					} else if (cLaserTRDistToCenter <= playerDist1 || cLaserTRDistToCenter <= playerDist2) {
+						cloneLaser.disappear(cloneFactory.clones[j], cloneLaser);
+						game.die(playerShip);
+					} else if (cLaserBLDistToCenter <= playerDist1 || cLaserBLDistToCenter <= playerDist2) {
+						cloneLaser.disappear(cloneFactory.clones[j], cloneLaser);
+						game.die(playerShip);
+					} else if (cLaserBRDistToCenter <= playerDist1 || cLaserBRDistToCenter <= playerDist2) {
+						cloneLaser.disappear(cloneFactory.clones[j], cloneLaser);
+						game.die(playerShip);
 					}
 				}
-			}
-		}
-	}
-	cancelMe2 = requestAnimationFrame(animatePlayerFire);
-}
 
-const animateClone = () => {
-	// check if player 1 or player 2 turn
-	let playerShip;
-	if (game.isPlayer1Turn) {
-		playerShip = player1Ship;
-	} else {
-		playerShip = player2Ship;
-	}
-	for (let j = 0; j < cloneFactory.clones.length; j++) {
-		cloneFactory.clones[j].update();
-		cloneFactory.clones[j].draw();
-		cloneFactory.clones[j].move();
+				let xClone = cloneFactory.clones[j].body.x;
+				let yClone = cloneFactory.clones[j].body.y;
+				let widthClone = cloneFactory.clones[j].body.width;
+				let heightClone = cloneFactory.clones[j].body.height;
 
-		const randomNumber = Math.floor(Math.random() * 100);
-		if(randomNumber === 26) {
-			cloneFactory.clones[j].fire();
-		}		
-		if (cloneFactory.clones.length > 0) {
-			for(let k = 0; k < cloneFactory.clones[j].shotsFired.length; k++) {
-				let enemyLaser = cloneFactory.clones[j].shotsFired[k];
-				enemyLaser.draw();
-				enemyLaser.move();
-				let x3 = enemyLaser.x;
-				let y3 = enemyLaser.y;
-				let width3 = enemyLaser.width;
-				let height3 = enemyLaser.height;
+				let xCloneCenter = xClone + (widthClone / 2);
+				let yCloneCenter = yClone + (heightClone / 2);
 
-				let x2 = playerShip.body.x;
-				let y2 = playerShip.body.y;
-				let xLaserCenter = x3 + (width3 / 2);
-				let yLaserCenter = y3 + (height3 / 2);
-
-				let xPlayerCenter = x2 + (playerShip.body.width / 2);
-				let yPlayerCenter = y2 + (playerShip.body.height / 2);
 				// let distance = getDistance(x1, y1, x2, y2);
-				let laserTLDistToCenter = getDistance(x3, y3, xPlayerCenter, yPlayerCenter);
-				let laserTRDistToCenter = getDistance(x3 + width3, y3, xPlayerCenter, yPlayerCenter);
-				let laserBLDistToCenter = getDistance(x3, y3 + height3, xPlayerCenter, yPlayerCenter);
-				let laserBRDistToCenter = getDistance(x3 + width3, y3 + height3, xPlayerCenter, yPlayerCenter);
-				// while using the center point of the alien ships, I only need to measure two distances for comparison:
-				let playerDist1 = getDistance(x2, y2, xPlayerCenter, yPlayerCenter);
-				let playerDist2 = getDistance(x2, y2 + playerShip.body.height, xPlayerCenter, yPlayerCenter);
-
-				// if alien shoots player
-				if (laserTLDistToCenter <= playerDist1 || laserTLDistToCenter <= playerDist2) {
-					enemyLaser.disappear(cloneFactory.clones[j], enemyLaser);
+				let cloneTLDistToCenter = getDistance(xClone, yClone, xPlayerCenter, yPlayerCenter);
+				let cloneTRDistToCenter = getDistance(xClone + widthClone, yClone, xPlayerCenter, yPlayerCenter);
+				let cloneBLDistToCenter = getDistance(xClone, yClone + heightClone, xPlayerCenter, yPlayerCenter);
+				let cloneBRDistToCenter = getDistance(xClone + widthClone, yClone + heightClone, xPlayerCenter, yPlayerCenter);
+				
+				// if clone and player crash into each other
+				if (cloneTLDistToCenter <= playerDist1 || cloneTLDistToCenter <= playerDist2) {
+					game.die(cloneFactory.clones[j]);
 					game.die(playerShip);
-				} else if (laserTRDistToCenter <= playerDist1 || laserTRDistToCenter <= playerDist2) {
-					enemyLaser.disappear(cloneFactory.clones[j], enemyLaser);
+				} else if (cloneTRDistToCenter <= playerDist1 || cloneTRDistToCenter <= playerDist2) {
+					game.die(cloneFactory.clones[j]);
 					game.die(playerShip);
-				} else if (laserBLDistToCenter <= playerDist1 || laserBLDistToCenter <= playerDist2) {
-					enemyLaser.disappear(cloneFactory.clones[j], enemyLaser);
+				} else if (cloneBLDistToCenter <= playerDist1 || cloneBLDistToCenter <= playerDist2) {
+					game.die(cloneFactory.clones[j]);
 					game.die(playerShip);
-				} else if (laserBRDistToCenter <= playerDist1 || laserBRDistToCenter <= playerDist2) {
-					enemyLaser.disappear(cloneFactory.clones[j], enemyLaser);
+				} else if (cloneBRDistToCenter <= playerDist1 || cloneBRDistToCenter <= playerDist2) {
+					game.die(cloneFactory.clones[j]);
 					game.die(playerShip);
 				}
-			}
-
-			let x1 = cloneFactory.clones[j].body.x;
-			let y1 = cloneFactory.clones[j].body.y;
-			let width1 = cloneFactory.clones[j].body.width;
-			let height1 = cloneFactory.clones[j].body.height;
-
-			let x2 = playerShip.body.x;
-			let y2 = playerShip.body.y;
-			let xCloneCenter = x1 + (width1 / 2);
-			let yCloneCenter = y1 + (height1 / 2);
-
-			let xPlayerCenter = x2 + (playerShip.body.width / 2);
-			let yPlayerCenter = y2 + (playerShip.body.height / 2);
-			// let distance = getDistance(x1, y1, x2, y2);
-			let cloneTLDistToCenter = getDistance(x1, y1, xPlayerCenter, yPlayerCenter);
-			let cloneTRDistToCenter = getDistance(x1 + width1, y1, xPlayerCenter, yPlayerCenter);
-			let cloneBLDistToCenter = getDistance(x1, y1 + height1, xPlayerCenter, yPlayerCenter);
-			let cloneBRDistToCenter = getDistance(x1 + width1, y1 + height1, xPlayerCenter, yPlayerCenter);
-			// while using the center point of the alien ships, I only need to measure two distances for comparison:
-			let playerDist1 = getDistance(x2, y2, xPlayerCenter, yPlayerCenter);
-			let playerDist2 = getDistance(x2, y2 + playerShip.body.height, xPlayerCenter, yPlayerCenter);
-			
-			// if alien and player crash into each other
-			if (cloneTLDistToCenter <= playerDist1 || cloneTLDistToCenter <= playerDist2) {
-				game.die(cloneFactory.clones[j]);
-				game.die(playerShip);
-			} else if (cloneTRDistToCenter <= playerDist1 || cloneTRDistToCenter <= playerDist2) {
-				game.die(cloneFactory.clones[j]);
-				game.die(playerShip);
-			} else if (cloneBLDistToCenter <= playerDist1 || cloneBLDistToCenter <= playerDist2) {
-				game.die(cloneFactory.clones[j]);
-				game.die(playerShip);
-			} else if (cloneBRDistToCenter <= playerDist1 || cloneBRDistToCenter <= playerDist2) {
-				game.die(cloneFactory.clones[j]);
-				game.die(playerShip);
+				
 			}
 		}
-	}// for all clones
-	cancelMe3 = requestAnimationFrame(animateClone);
-}
-
-const animateMothership = () => {
-	let playerShip;
-	if (game.isPlayer1Turn) {
-		playerShip = player1Ship;
-	} else {
-		playerShip = player2Ship;
-	}
-	for (let j = 0; j < mothershipFactory.motherships.length; j++) {
-		mothershipFactory.motherships[j].update();
-		mothershipFactory.motherships[j].draw();
-		mothershipFactory.motherships[j].move();
-
-		const randomNumber = Math.floor(Math.random() * 30);
-		if(randomNumber === 26) {
-			mothershipFactory.motherships[j].fire();
-		}		
-		if (mothershipFactory.motherships[0].shotsFired.length > 0) {
-			for(let k = 0; k < mothershipFactory.motherships[j].shotsFired.length; k++) {
-				let enemyLaser = mothershipFactory.motherships[j].shotsFired[k];
-				enemyLaser.draw();
-				enemyLaser.move();
-				let x3 = enemyLaser.x;
-				let y3 = enemyLaser.y;
-				let width3 = enemyLaser.width;
-				let height3 = enemyLaser.height;
-
-				let x2 = playerShip.body.x;
-				let y2 = playerShip.body.y;
-				let xLaserCenter = x3 + (width3 / 2);
-				let yLaserCenter = y3 + (height3 / 2);
-
-				let xPlayerCenter = x2 + (playerShip.body.width / 2);
-				let yPlayerCenter = y2 + (playerShip.body.height / 2);
-				// let distance = getDistance(x1, y1, x2, y2);
-				let laserTLDistToCenter = getDistance(x3, y3, xPlayerCenter, yPlayerCenter);
-				let laserTRDistToCenter = getDistance(x3 + width3, y3, xPlayerCenter, yPlayerCenter);
-				let laserBLDistToCenter = getDistance(x3, y3 + height3, xPlayerCenter, yPlayerCenter);
-				let laserBRDistToCenter = getDistance(x3 + width3, y3 + height3, xPlayerCenter, yPlayerCenter);
-				// while using the center point of the alien ships, I only need to measure two distances for comparison:
-				let playerDist1 = getDistance(x2, y2, xPlayerCenter, yPlayerCenter);
-				let playerDist2 = getDistance(x2, y2 + playerShip.body.height, xPlayerCenter, yPlayerCenter);
-
-				// if mothership shoots player
-				if (laserTLDistToCenter <= playerDist1 || laserTLDistToCenter <= playerDist2) {
-					enemyLaser.disappearMS(mothershipFactory.motherships[j], enemyLaser);
-					mothershipFactory.motherships[j].shotsFired = [];
-					game.die(playerShip);
-				} else if (laserTRDistToCenter <= playerDist1 || laserTRDistToCenter <= playerDist2) {
-					enemyLaser.disappearMS(mothershipFactory.motherships[j], enemyLaser);
-					mothershipFactory.motherships[j].shotsFired = [];
-					game.die(playerShip);
-				} else if (laserBLDistToCenter <= playerDist1 || laserBLDistToCenter <= playerDist2) {
-					enemyLaser.disappearMS(mothershipFactory.motherships[j], enemyLaser);
-					mothershipFactory.motherships[j].shotsFired = [];
-					game.die(playerShip);
-				} else if (laserBRDistToCenter <= playerDist1 || laserBRDistToCenter <= playerDist2) {
-					enemyLaser.disappearMS(mothershipFactory.motherships[j], enemyLaser);
-					mothershipFactory.motherships[j].shotsFired = []; 
-					game.die(playerShip);
-				}
-			}
-		}	
-	}
-	cancelMe4 = requestAnimationFrame(animateMothership);
+	cancelMe = requestAnimationFrame(animateGame);
 }
 
