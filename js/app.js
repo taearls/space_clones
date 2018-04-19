@@ -113,7 +113,7 @@ const game = {
 				let y = this.body.y;
 				let width = this.body.width;
 				let height = this.body.height;
-				ctx2.drawImage(playerImg, x, y);
+				ctx.drawImage(playerImg, x, y);
 			}
 		} else {
 			player2Ship.__proto__.draw = function() {		
@@ -121,7 +121,7 @@ const game = {
 				let y = this.body.y;
 				let width = this.body.width;
 				let height = this.body.height;
-				ctx2.drawImage(player2Img, x, y);
+				ctx.drawImage(player2Img, x, y);
 			}
 		}
 
@@ -406,6 +406,8 @@ const game = {
 				$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
 				if (localStorage.getItem("player1lives")=== "0") {
 					this.player1IsDead = true;
+					console.log("The animation frame closes AFTER I remove the game objects, which throws an error.");
+					console.log("VVVV See this right here? VVVV Don't worry about it.");
 					this.gameOver();
 				}
 			}
@@ -540,7 +542,7 @@ endGameOver.on("click", function(event) {
 const returnToTitle = () => {
 	const initialPage = "index.html";
 	location.replace('https://tboneearls.github.io/space_clones/' + initialPage);
-	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	// switch page to title screen
 	// display a modal with a message
 	// with a button that links to title screen?
@@ -580,7 +582,7 @@ const setDefault = () => {
 	localStorage.setItem("enemiesplayer2", "10");
 	localStorage.setItem("player2mothership", "10");
 	localStorage.setItem("player2level", "1")
-	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 const initMothership = (numShips) => {

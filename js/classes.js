@@ -78,8 +78,8 @@ class Player extends Ship {
 	initialize() {
 		this.body = {
 			// img: playerImg,
-			x: (gameCanvas.width / 2) - (this.body.width / 2),
-			y: (gameCanvas.height - this.body.height * 2),
+			x: (canvas.width / 2) - (this.body.width / 2),
+			y: (canvas.height - this.body.height * 2),
 			width: playerImg.width,
 			height: playerImg.height
 		}
@@ -119,7 +119,7 @@ class Player extends Ship {
 		let y = this.body.y;
 		let width = this.body.width;
 		let height = this.body.height;
-		ctx2.drawImage(playerImg, x, y);
+		ctx.drawImage(playerImg, x, y);
 	}
 }
 
@@ -242,7 +242,7 @@ class Clone extends Ship {
 	update() {
 		const leftBorder = 0;
 		const rightBorder = canvas.width - this.body.width;
-		if (this.body.y + this.descent >= gameCanvas.height - 50) {
+		if (this.body.y + this.descent >= canvas.height - 50) {
 			this.body.y = 100;
 			if (this.body.x >= leftBorder){
 				this.direction = "right";
@@ -253,14 +253,14 @@ class Clone extends Ship {
 	}
 	draw() {
 		// if (this.body.x < 0) {
-		// 	this.body.x += gameCanvas.width;
+		// 	this.body.x += canvas.width;
 		// 	this.body.y += this.descent;
 		// }
 		let x = this.body.x;
 		let y = this.body.y;
 		let width = this.body.width;
 		let height = this.body.height;
-		ctx2.drawImage(cloneImg, x, y);
+		ctx.drawImage(cloneImg, x, y);
 	}
 }
 
@@ -315,7 +315,7 @@ class Mothership extends Ship {
 		let y = this.body.y;
 		let width = this.body.width;
 		let height = this.body.height;
-		ctx2.drawImage(mothershipImg, x, y);
+		ctx.drawImage(mothershipImg, x, y);
 	}
 }
 
@@ -332,7 +332,7 @@ class Lasers {
 		this.dy = dy;
 	}
 	draw() {
-		ctx2.drawImage(laserImg, this.x, this.y);
+		ctx.drawImage(laserImg, this.x, this.y);
 	}
 	move() {
 		this.draw();

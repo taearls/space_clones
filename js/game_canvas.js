@@ -1,8 +1,3 @@
-const canvas = document.querySelector("canvas");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-
 const getDistance = (x1, y1, x2, y2) => {
 	// store dist between x and y coords in a variable
 	let xDistance = x2 - x1;
@@ -10,13 +5,10 @@ const getDistance = (x1, y1, x2, y2) => {
 	// use pythagoreon theorum to calc distance
 	return Math.sqrt(xDistance ** 2 + yDistance ** 2);
 }
-const ctx = canvas.getContext("2d");
-
 // create star array to store new stars
-let stars = [];
+const stars = [];
 // generate 500 stars with function, push into star array
 const initStars = () => {
-	stars = [];
 	for (i = 0; i < 500; i++) {
 		let x = Math.random() * canvas.width;
 		let y = Math.random() * canvas.height;
@@ -29,27 +21,13 @@ const initStars = () => {
 		stars.push(new Star(x, y, dy, radius))
 	}
 }
-initStars();
-// animate the stars in canvas backdrop
-function animateStars() {
-	requestAnimationFrame(animateStars);
-	ctx.clearRect(0, 0, canvas.width, canvas.height)
-	for (let i = 0; i < stars.length; i++) {
-		stars[i].draw();
-		stars[i].update();
-		stars[i].move();
-	}
-}
-
-animateStars();
 
 window.addEventListener("resize", function(event) {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx2.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
-	gameCanvas.width = window.innerWidth;
-	gameCanvas.height = window.innerHeight;
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
 	initStars();
 	// initPlayer1();
 	// initPlayer2();
@@ -110,7 +88,7 @@ document.addEventListener("keydown", function addKeys(event) {
 	} else if (key===27) {
 		game.reset();
 	} 
-	ctx2.clearRect(0,0, gameCanvas.width, gameCanvas.height)
+	ctx.clearRect(0,0, canvas.width, canvas.height)
 }) 
 }
 
@@ -137,11 +115,11 @@ document.addEventListener("keyup", function(event) {
 addKeys();
 // ***GAME CANVAS***
 
-const gameCanvas = document.querySelector("#game-canvas");
-gameCanvas.width = window.innerWidth;
+const canvas = document.querySelector("#game-canvas");
+canvas.width = window.innerWidth;
 // height will be distance between header/footer of game
-gameCanvas.height = window.innerHeight;
-const ctx2 = gameCanvas.getContext("2d");
+canvas.height = window.innerHeight;
+const ctx = canvas.getContext("2d");
 
 const playerShield = 1;
 const playerFirepower = 1;
@@ -156,9 +134,17 @@ initPlayer1();
 player1Ship.initialize();
 initPlayer2();
 player2Ship.initialize();
+initStars();
 
 const animateGame = () => {
-	ctx2.clearRect(0, 0, canvas.width, canvas.height)
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	// background animation
+	for (let i = 0; i < stars.length; i++) {
+		stars[i].draw();
+		stars[i].update();
+		stars[i].move();
+	}
 	// player animation
 	let playerShip;
 	if (game.isPlayer1Turn === true) {
@@ -318,7 +304,7 @@ const animateGame = () => {
 			if(cNumber === 26) {
 				cloneFactory.clones[j].fire();
 			}		
-			if (cloneFactory.clones.length > 0) {
+			if (cloneFactory.clones.length > 0 && cloneFactory.clones[j].shotsFired != undefined) {
 				for(let k = 0; k < cloneFactory.clones[j].shotsFired.length; k++) {
 					let cloneLaser = cloneFactory.clones[j].shotsFired[k];
 					cloneLaser.draw();
