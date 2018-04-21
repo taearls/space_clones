@@ -6,19 +6,23 @@ const getDistance = (x1, y1, x2, y2) => {
 	return Math.sqrt(xDistance ** 2 + yDistance ** 2);
 }
 // create star array to store new stars
-const stars = [];
+let stars = [];
 // generate 500 stars with function, push into star array
-const initStars = () => {
-	for (i = 0; i < 200; i++) {
-		let x = Math.random() * canvas.width;
-		let y = Math.random() * canvas.height;
-		let radius = Math.random() * 2;
-		let dy = Math.random() * 5;
-		ctx.beginPath();
-		ctx.fillStyle = "white";
-		ctx.arc(x, y, radius, 0, Math.PI * 2);
-		ctx.fill();
-		stars.push(new Star(x, y, dy, radius))
+const initStars = (length) => {
+	length = 200;
+	stars = [];
+	if (stars.length < length) {
+		for (i = 0; i < length; i++) {
+			let x = Math.random() * canvas.width;
+			let y = Math.random() * canvas.height;
+			let radius = Math.random() * 2;
+			let dy = Math.random() * 5;
+			ctx.beginPath();
+			ctx.fillStyle = "white";
+			ctx.arc(x, y, radius, 0, Math.PI * 2);
+			ctx.fill();
+			stars.push(new Star(x, y, dy, radius))
+		}		
 	}
 }
 
