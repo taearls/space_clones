@@ -221,14 +221,15 @@ const game = {
 		
 	},
 	endLevel() {
+		laserFactory.lasers = [];
 		this.currentLevel++;
 		$("#level").text("Level: " + this.currentLevel);
-		for (let i = 0; i < player1Ship.shotsFired.length; i++) {
-			player1Ship.shotsFired[i].disappear(player1Ship, player1Ship.shotsFired[i]);
-		}
-		for (let i = 0; i < player2Ship.shotsFired.length; i++) {
-			player2Ship.shotsFired[i].disappear(player2Ship, player2Ship.shotsFired[i]);
-		}
+		// for (let i = 0; i < player1Ship.shotsFired.length; i++) {
+		// 	player1Ship.shotsFired[i].shipHit(player1Ship, player1Ship.shotsFired[i]);
+		// }
+		// for (let i = 0; i < player2Ship.shotsFired.length; i++) {
+		// 	player2Ship.shotsFired[i].shipHit(player2Ship, player2Ship.shotsFired[i]);
+		// }
 		// display message
 		// firing accuracy
 		// end bonus points?
@@ -250,6 +251,7 @@ const game = {
 		}
 	},
 	initMothership() {
+		laserFactory.lasers = [];
 		initMothership(1);
 		// cancelAnimationFrame(cancelMe4)
 		// requestAnimationFrame(animateMothership);

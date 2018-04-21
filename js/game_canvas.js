@@ -9,7 +9,7 @@ const getDistance = (x1, y1, x2, y2) => {
 const stars = [];
 // generate 500 stars with function, push into star array
 const initStars = () => {
-	for (i = 0; i < 500; i++) {
+	for (i = 0; i < 200; i++) {
 		let x = Math.random() * canvas.width;
 		let y = Math.random() * canvas.height;
 		let radius = Math.random() * 2;
@@ -191,17 +191,19 @@ const animateGame = () => {
 				// while using the center point of the alien ships, I only need to measure two distances for comparison:
 				let cloneDist1 = getDistance(xClone, yClone, xCloneCenter, yCloneCenter);
 				let cloneDist2 = getDistance(xClone, yClone + heightClone, xCloneCenter, yCloneCenter);
+
+				// if player hits clone
 				if (pLaserTLDistToCCenter <= cloneDist1 || pLaserTLDistToCCenter <= cloneDist2) {
-					playerLaser.disappear(playerShip, playerLaser);
+					playerLaser.shipHit(playerShip, playerLaser);
 					game.die(cloneFactory.clones[j]);
 				} else if (pLaserTRDistToCCenter <= cloneDist1 || pLaserTRDistToCCenter <= cloneDist2) {
-					playerLaser.disappear(playerShip, playerLaser);
+					playerLaser.shipHit(playerShip, playerLaser);
 					game.die(cloneFactory.clones[j]);
 				} else if (pLaserBLDistToCCenter <= cloneDist1 || pLaserBLDistToCCenter <= cloneDist2) {
-					playerLaser.disappear(playerShip, playerLaser);
+					playerLaser.shipHit(playerShip, playerLaser);
 					game.die(cloneFactory.clones[j]);
 				} else if (pLaserBRDistToCCenter <= cloneDist1 || pLaserBRDistToCCenter <= cloneDist2) {
-					playerLaser.disappear(playerShip, playerLaser);
+					playerLaser.shipHit(playerShip, playerLaser);
 					game.die(cloneFactory.clones[j]);
 				}
 			}
@@ -222,17 +224,18 @@ const animateGame = () => {
 						let mothershipDist1 = getDistance(xMShip, yMShip, xMShipCenter, yMShipCenter);
 						let mothershipDist2 = getDistance(xMShip, yMShip + mothershipFactory.motherships[k].body.height, xMShipCenter, yMShipCenter);
 						
+						// if player hits mothership
 						if (pLaserTLDistToMSCenter <= mothershipDist1 || pLaserTLDistToMSCenter <= mothershipDist2) {
-							playerLaser.disappear(playerShip, playerLaser);
+							playerLaser.shipHit(playerShip, playerLaser);
 							game.hitMothership(mothershipFactory.motherships[k])
 						} else if (pLaserTRDistToMSCenter <= mothershipDist1 || pLaserTRDistToMSCenter <= mothershipDist2) {
-							playerLaser.disappear(playerShip, playerLaser);
+							playerLaser.shipHit(playerShip, playerLaser);
 							game.hitMothership(mothershipFactory.motherships[k])		
 						} else if (pLaserBLDistToMSCenter <= mothershipDist1 || pLaserBLDistToMSCenter <= mothershipDist2) {
-							playerLaser.disappear(playerShip, playerLaser);
+							playerLaser.shipHit(playerShip, playerLaser);
 							game.hitMothership(mothershipFactory.motherships[k]);
 						} else if (pLaserBRDistToMSCenter <= mothershipDist1 || pLaserBRDistToMSCenter <= mothershipDist2) {
-							playerLaser.disappear(playerShip, playerLaser);
+							playerLaser.shipHit(playerShip, playerLaser);
 							game.hitMothership(mothershipFactory.motherships[k]);
 						}
 			}
@@ -250,7 +253,7 @@ const animateGame = () => {
 			mothershipFactory.motherships[j].draw();
 			mothershipFactory.motherships[j].move();
 
-			const msNumber = Math.floor(Math.random() * 30);
+			const msNumber = Math.floor(Math.random() * 100);
 			if(msNumber === 26) {
 				mothershipFactory.motherships[j].fire();
 			}		
@@ -271,19 +274,19 @@ const animateGame = () => {
 					
 					// if mothership shoots player
 					if (mlaserTLDistToCenter <= playerDist1 || mlaserTLDistToCenter <= playerDist2) {
-						mothershipLaser.disappearMS(mothershipFactory.motherships[j], mothershipLaser);
+						mothershipLaser.mothershipHit(mothershipFactory.motherships[j], mothershipLaser);
 						mothershipFactory.motherships[j].shotsFired = [];
 						game.die(playerShip);
 					} else if (mlaserTRDistToCenter <= playerDist1 || mlaserTRDistToCenter <= playerDist2) {
-						mothershipLaser.disappearMS(mothershipFactory.motherships[j], mothershipLaser);
+						mothershipLaser.mothershipHit(mothershipFactory.motherships[j], mothershipLaser);
 						mothershipFactory.motherships[j].shotsFired = [];
 						game.die(playerShip);
 					} else if (mlaserBLDistToCenter <= playerDist1 || mlaserBLDistToCenter <= playerDist2) {
-						mothershipLaser.disappearMS(mothershipFactory.motherships[j], mothershipLaser);
+						mothershipLaser.mothershipHit(mothershipFactory.motherships[j], mothershipLaser);
 						mothershipFactory.motherships[j].shotsFired = [];
 						game.die(playerShip);
 					} else if (mlaserBRDistToCenter <= playerDist1 || mlaserBRDistToCenter <= playerDist2) {
-						mothership.disappearMS(mothershipFactory.motherships[j], mothershipLaser);
+						mothershipLaser.mothershipHit(mothershipFactory.motherships[j], mothershipLaser);
 						mothershipFactory.motherships[j].shotsFired = []; 
 						game.die(playerShip);
 					}
@@ -300,7 +303,7 @@ const animateGame = () => {
 			cloneFactory.clones[j].draw();
 			cloneFactory.clones[j].move();
 
-			const cNumber = Math.floor(Math.random() * 100);
+			const cNumber = Math.floor(Math.random() * 300);
 			if(cNumber === 26) {
 				cloneFactory.clones[j].fire();
 			}		
@@ -324,16 +327,16 @@ const animateGame = () => {
 
 					// if clone shoots player
 					if (cLaserTLDistToCenter <= playerDist1 || cLaserTLDistToCenter <= playerDist2) {
-						cloneLaser.disappear(cloneFactory.clones[j], cloneLaser);
+						cloneLaser.shipHit(cloneFactory.clones[j], cloneLaser);
 						game.die(playerShip);
 					} else if (cLaserTRDistToCenter <= playerDist1 || cLaserTRDistToCenter <= playerDist2) {
-						cloneLaser.disappear(cloneFactory.clones[j], cloneLaser);
+						cloneLaser.shipHit(cloneFactory.clones[j], cloneLaser);
 						game.die(playerShip);
 					} else if (cLaserBLDistToCenter <= playerDist1 || cLaserBLDistToCenter <= playerDist2) {
-						cloneLaser.disappear(cloneFactory.clones[j], cloneLaser);
+						cloneLaser.shipHit(cloneFactory.clones[j], cloneLaser);
 						game.die(playerShip);
 					} else if (cLaserBRDistToCenter <= playerDist1 || cLaserBRDistToCenter <= playerDist2) {
-						cloneLaser.disappear(cloneFactory.clones[j], cloneLaser);
+						cloneLaser.shipHit(cloneFactory.clones[j], cloneLaser);
 						game.die(playerShip);
 					}
 				}

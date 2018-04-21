@@ -86,7 +86,7 @@ class Player extends Ship {
 	}
 	initLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
 		if (this.shotsFired.length < this.charge) {		
-			this.shotsFired.push(new Lasers((this.body.x + 8), (this.body.y - this.body.height), (-6)));
+			this.shotsFired.push(laserFactory.generateLaser((this.body.x + 8), (this.body.y - this.body.height), (-6)));
 		}
 	}
 	move() {
@@ -234,7 +234,7 @@ class Clone extends Ship {
 		}
 	}
 	fire() {
-		this.shotsFired.push(new Lasers(this.body.x + 20, this.body.y + this.body.height, 2))
+		this.shotsFired.push(laserFactory.generateLaser(this.body.x + 20, this.body.y + this.body.height, 6))
 		for (let i = 0; i < this.shotsFired.length; i++) {
 			this.shotsFired[i].move();
 		}
@@ -305,7 +305,7 @@ class Mothership extends Ship {
 		}
 	}
 	fire() {
-		this.shotsFired.push(new Lasers(this.body.x + 110, this.body.y + this.body.height, 5))
+		this.shotsFired.push(laserFactory.generateLaser(this.body.x + 110, this.body.y + this.body.height, 6))
 		for (let i = 0; i < this.shotsFired.length; i++) {
 			this.shotsFired[i].move();
 		}
@@ -337,12 +337,9 @@ class Lasers {
 	move() {
 		this.draw();
 		this.y += this.dy;
-		if (this.y + this.height < 0) {
-			this.disappear(player1Ship, this)
-			this.disappear(player2Ship, this)
-		}
+		this.checkDisappear();
 	}
-	disappear(firingShip, laser) {
+	shipHit(firingShip, laser) {
 		// get the index of the ship that fired the laser from the clone factory
 		if (firingShip != player1Ship && firingShip != player2Ship) {
 			const indexShip = cloneFactory.clones.indexOf(firingShip);
@@ -359,12 +356,18 @@ class Lasers {
 		}
 		
 	}
-	disappearMS(mothership, laser) {
+	mothershipHit(mothership, laser) {
 		const indexShip = mothershipFactory.motherships.indexOf(mothership);
 		// get the index of the laser from that ship
 		const indexLaser = mothershipFactory.motherships[indexShip].shotsFired.indexOf(laser);
 		// remove that laser from the ship's array of lasers
 		mothershipFactory.motherships[indexShip].shotsFired.splice(indexLaser, 1);
+	}
+	checkDisappear(laser) {
+		const indexLaser = laserFactory.lasers.indexOf(laser);
+		if (this.y > canvas.height || this.y + this.height < 0) {
+			laserFactory.lasers.splice(indexLaser, 1);
+		}
 	}
 }
 // ***** FACTORIES *****
@@ -392,5 +395,18 @@ const mothershipFactory = {
 	},
 	findMothership(index) {
 		return this.motherships[index];
+	}
+}
+
+// factory to store lasers
+const laserFactory = {
+	lasers: [],
+	generateLaser(x, y, dy) {
+		const newLaser = new Lasers(x, y, dy);
+		this.lasers.push(newLaser);
+		return newLaser;
+	},
+	findLaser(index) {
+		return this.lasers[index];
 	}
 }

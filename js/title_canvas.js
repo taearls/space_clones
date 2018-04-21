@@ -9,7 +9,7 @@ let stars = [];
 // generate 500 stars with function, push into star array
 const initStars = () => {
 	stars = [];
-	for (i = 0; i < 500; i++) {
+	for (i = 0; i < 200; i++) {
 		let x = Math.random() * canvas.width;
 		let y = Math.random() * canvas.height;
 		let radius = Math.random() * 2;
