@@ -27,8 +27,8 @@ nav a {
 	margin: auto;
 	color: violet;
 	font-size: 26px;
-/*    cursor not available in IE until I make a .cur file as the second option below
-*/    cursor: url(../images/cursor.png), default;
+/*    cursor not available in IE until I make a .cur file as the second option below */    
+    cursor: url(../images/cursor.png), default;
 }
 canvas {
 	position: absolute;
