@@ -7,6 +7,8 @@ body * {
 	font-family: 'Roboto Condensed', sans-serif;
 	color: #0BD919;
 }
+
+/* GAME INFO */
 header {
     padding-left: 3vw;
     padding-right: 3vw;
@@ -17,26 +19,35 @@ header {
 	font-family: 'Press Start 2P', cursive;
 	text-align: center;
 	margin-bottom: 10vh;
-	font-size: 34px;
+	font-size: 45px;
 }
+
+footer {
+    position: absolute;
+    text-align: center;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    top: 90vh;
+    font-size: 14px;
+}
+
+/* GAME MENU */
+
 nav a {
 	text-decoration: none;
 	display: block;
-	width: 15vw;
+	width: 10vw;
 	text-align: center;
 	margin: auto;
 	color: violet;
-	font-size: 26px;
+	font-size: 30px;
 /*    cursor not available in IE until I make a .cur file as the second option below */    
     cursor: url(../images/cursor.png), default;
 }
-canvas {
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: -1;
-	background-color: black;
-}
+
+/* MODALS */
 
 .controls-modal, .prologue-modal {
     position: fixed;
@@ -111,16 +122,17 @@ button:hover {
 input:hover {
 	cursor: text;
 }
-footer {
-	position: absolute;
-	text-align: center;
-	left: 0;
-	right: 0;
-	margin-left: auto;
-	margin-right: auto;
-	top: 90vh;
-	font-size: 14px;
+
+/* CANVAS */
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: black;
 }
+
 /*ELEMENTS TO ANIMATE
 
 
