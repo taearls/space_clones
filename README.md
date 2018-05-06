@@ -1,6 +1,10 @@
 # Space Clones
 
-Original browser game inspired largely by the classic arcade game Space Invaders. Control a ship as you fight a brigade of alien ships.
+Original browser game inspired largely by the classic arcade game Space Invaders. Control a ship as you fight a brigade of alien clones hellbent on destroying Earth.
+
+Play [here.](https://tboneearls.github.io/space_clones/index.html)
+
+---
 
 ## TECH USED
 
@@ -20,9 +24,9 @@ Original browser game inspired largely by the classic arcade game Space Invaders
 
 -- User will be able to see if they have beaten the high score and how many enemies are remaining before the level's mothership while playing.
 
--- Like in Space Invaders, each level will feature an array of descending enemy ships which will move left to right as they descend. Each enemy will disintegrate with one hit. Once all enemies are defeated, a mothership will appear that takes more hits to defeat.
+-- Like in Space Invaders, each level features an array of descending enemy ships which will move left to right as they descend. Each enemy will disintegrate with one hit. Once all enemies are defeated, a mothership will appear that takes more hits to defeat.
 
--- As the player progresses, each level will increase the speed of the enemy ships, increasing the difficulty of the game.
+-- As the player progresses, each level increases the speed of the enemy ships, increasing the difficulty of the game.
 
 -- Each defeated enemy ship will increment the player's score by a set value, with the mothership incrementing it by an increased amount.
 
@@ -32,13 +36,7 @@ Original browser game inspired largely by the classic arcade game Space Invaders
 
 -- Implement a life bar rather than a one hit death.
 
--- Allow player to have x amount of continues upon a game over. Reset score/upgrades for each continue used.
-
 -- Allow player to upgrade shields/weapons.
-
--- Allow player to customize the color of their ship.
-
--- Allow player to name their character.
 
 -- Add a game demo if player leaves start menu open after a set interval of time.
 
@@ -48,13 +46,7 @@ Original browser game inspired largely by the classic arcade game Space Invaders
 
 -- Create a final boss character that will result in a win for the player once defeated. The conflict between the final boss and the player is what drives the basic "plot" of the game.
 
-## WIREFRAME
-
-### Title Screen Wireframe
-![Title Screen Wireframe](images/readme_imgs/title_screen_wireframe.jpg)
-
-### Gameplay Wireframe
-![Gameplay Wireframe](images/readme_imgs/gameplay_wireframe.jpg)
+---
 
 ## SCREENSHOTS
 
@@ -62,5 +54,15 @@ Original browser game inspired largely by the classic arcade game Space Invaders
 ![Title Screen Screenshot](images/readme_imgs/title_screenshot.png)
 
 ### Gameplay
-![Gameplay Screenshot](images/readme_imgs/gameplay_screenshot.png)
+![Gameplay Screenshot](images/readme_imgs/gameplay_main_screenshot.png)
 
+### End of Level
+![End of Level Screenshot](images/readme_imgs/gameplay_mothership_screenshot.png)
+
+## WIREFRAMES (Hand-drawn)
+
+### Title Screen Wireframe
+![Title Screen Wireframe](images/readme_imgs/title_screen_wireframe.jpg)
+
+### Gameplay Wireframe
+![Gameplay Wireframe](images/readme_imgs/gameplay_wireframe.jpg)
