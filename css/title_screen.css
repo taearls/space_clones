@@ -45,6 +45,7 @@ nav a {
 	font-size: 30px;
 /*    cursor not available in IE until I make a .cur file as the second option below */    
     cursor: url(../images/cursor.png), default;
+    z-index: 1000;
 }
 
 /* MODALS */
