@@ -7,6 +7,9 @@ body * {
 	font-family: 'Roboto Condensed', sans-serif;
 	color: #0BD919;
 }
+
+/* GAME INFO */
+
 header {
     padding-left: 3vw;
     padding-right: 3vw;
@@ -19,6 +22,9 @@ footer {
     display: flex;
     justify-content: space-evenly;
 }
+
+/* GAME MESSSAGES */
+
 #lives {
     position: absolute;
     top: 93vh;
@@ -33,6 +39,9 @@ footer {
     right: 3vw;
     z-index: 1000;
 }
+
+
+/* MODALS */
 
 header h2 {
 	margin: 0;
@@ -104,10 +113,7 @@ button:hover {
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
 
-#game-canvas {
-	background: none;
-	z-index: 1000;
-}
+/* CANVAS */
 
 canvas {
 	position: absolute;
@@ -118,8 +124,7 @@ canvas {
 
 /*ELEMENTS TO BE ANIMATED*/
 
-/*make it fade to 0 opacity
-*/#turn-start {
+#turn-start {
 	position: absolute;
 	text-align: center;
 	top: 45vh;
@@ -127,7 +132,6 @@ canvas {
 	right: 0;
 	margin-left: auto;
 	margin-right: auto;
-/*	animation: fadeAndScale 1s ease-in forwards;*/
 }
 #extra-life {
     visibility: hidden;
