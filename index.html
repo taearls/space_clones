@@ -8,6 +8,7 @@
 </head>
 <body>
 
+	<!-- HEADER -->
 	<header>
 		<h2 id="player1-score"></h2>
 		<h2 id="high-score"></h2>
@@ -16,11 +17,16 @@
 
 	<h1 id="game-title">Space Clones</h1>
 
+	<!-- START MENU -->
 	<nav class="start-menu">
+
+		<!-- ONE/TWO PLAYER OPTION (STARTS GAME) -->
 		<a id="solo" href="game.html?players=1">1 Player</a>
 		<br/><br/>
 		<a id="two" href="game.html?players=2">2 Players</a>
 		<br/><br/>
+
+		<!-- PROLOGUE MODAL -->
 		<a id="prologue" href="#">Prologue
 			<div class="prologue-modal">
 		
@@ -36,6 +42,8 @@
 			</div>
 		</a>
 		<br/><br/>
+
+		<!-- CONTROLS MODAL -->
 
 		<a id="how-to-play" href="#">Controls
 			<div class="controls-modal">
@@ -56,15 +64,18 @@
 
 	</nav>
 
-	<canvas id="title-canvas"></canvas>
-
+	<!-- FOOTER -->
 	<footer>
 		<h3 id="credit"> &#169;Tyler Earls</h3>
 	</footer>
 
+	<!-- CANVAS -->
+	<canvas id="title-canvas"></canvas>
+
+	<!-- SCRIPTS -->
 	<script type="text/javascript" src="js/classes.js"></script>
 	<script type="text/javascript" src="js/title_canvas.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
- 	<script type="text/javascript" src="js/game_canvas.js"></script>
+
 </body>
 </html>

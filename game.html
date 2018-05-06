@@ -8,6 +8,7 @@
 </head>
 <body>
 
+	<!-- HEADER -->
 	<header>
 		<h2 id="player-score">Player 1 Score: 0</h2>
 		<h2 id="high-score">
@@ -21,17 +22,19 @@
 		<h2 id="enemies-left">Clones: 10</h2>
 	</header>
 
+	<!-- GAME MESSAGES -->
 	<h1 class="run-animation" id="turn-start">Player 1 Start</h1>
 	<h1 id="extra-life">Extra life awarded!</h1>
 
-	<canvas id="title-canvas"></canvas>
-	<canvas id="game-canvas"></canvas>
-
+	<!-- FOOTER -->
 	<footer>
 		<h2 id="lives">Player 1 Lives: 3</h2>
 		<h2 id="level">Level: 1</h2>
 	</footer>
 
+	<!-- MODALS -->
+
+	<!-- PAUSE -->
 	<div class="pause-modal">
 		
 		<div class="pause-content">
@@ -51,6 +54,7 @@
 
 	</div>
 
+	<!-- END OF LEVEL MODAL -->
 	<div class="end-level-modal">
 		
 		<div class="end-level-content">
@@ -65,6 +69,7 @@
 
 	</div>
 
+	<!-- TURN SWITCH MODAL -->
 	<div class="turn-switch-modal">
 
 		<div class="turn-switch-content">
@@ -74,6 +79,7 @@
 
 	</div>
 
+	<!-- GAME OVER MODAL -->
 	<div class="game-over-modal">
 		<div class="game-over-content">
 			<h1 id="game-over-message">Game Over</h1>
@@ -81,6 +87,10 @@
 		</div>
 	</div>
 
+	<!-- CANVAS -->
+	<canvas id="game-canvas"></canvas>
+
+	<!-- SCRIPTS -->
 	<script type="text/javascript" src="js/classes.js"></script>
 	<script type="text/javascript" src="js/game_canvas.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
