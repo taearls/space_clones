@@ -8,17 +8,32 @@ body * {
 	color: #0BD919;
 }
 header {
-    padding-left: 10px;
-    padding-right: 10px;
-	margin-top: 1vh;
+    padding-left: 3vw;
+    padding-right: 3vw;
+	margin-top: 3vh;
 	margin-bottom: 0;
 	display: flex;
 	justify-content: space-between;
 }
 footer {
-    padding-left: 10px;
-    padding-right: 10px;
+    display: flex;
+    justify-content: space-evenly;
 }
+#lives {
+    position: absolute;
+    top: 93vh;
+    max-height: 7vh;
+    left: 3vw;
+    z-index: 1000;
+}
+#level {
+    position: absolute;
+    top: 93vh;
+    max-height: 7vh;
+    right: 3vw;
+    z-index: 1000;
+}
+
 header h2 {
 	margin: 0;
 }
@@ -28,7 +43,7 @@ button {
 button:hover {
     cursor: pointer;
     background-color: #FF3B31;
-    transition: 0.3s;
+    transition: 0.5s ease;
 }
 .pause-modal, .end-level-modal, .turn-switch-modal, .game-over-modal {
     position: fixed;
@@ -79,7 +94,7 @@ button:hover {
 }
 .close-button:hover {
     background-color: #FF3B31;
-    transition: 0.3s;
+    transition: 0.5s ease;
 }
 .show-modal {
     opacity: 1;
@@ -93,18 +108,7 @@ button:hover {
 	background: none;
 	z-index: 1000;
 }
-#lives {
-	position: absolute;
-	top: 93vh;
-	max-height: 7vh;
-	left: 1vw;
-}
-#level {
-	position: absolute;
-	top: 93vh;
-	max-height: 7vh;
-	right: 1vw;
-}
+
 canvas {
 	position: absolute;
 	top: 0;
