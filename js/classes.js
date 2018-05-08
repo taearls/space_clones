@@ -162,9 +162,6 @@ class Clone {
 				} 
 			}
 		} 
-		if (this.body.y + this.body.height >= canvas.height - (playerImg.height * 2)) {
-			game.win();
-		}
 		if (this.row % 2 === 1) {
 			this.direction = "left";
 		} else {
@@ -336,8 +333,6 @@ class Lasers {
 		}
 	}
 }
-
-
 // ***** FACTORIES *****
 
 // factory to store clones
