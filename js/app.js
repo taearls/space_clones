@@ -524,7 +524,7 @@ nextLevel.on("click", function(event){
 startTurn.on("click", function(event) {
 	$(this).parent().parent().toggleClass("show-modal", false)
 	game.betweenTurns = !game.betweenTurns;
-	stopAnimatons();
+	// stopAnimatons();
 
 	requestAnimationFrame(animateGame);
 	event.stopPropagation();
