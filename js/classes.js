@@ -22,35 +22,6 @@ class Star {
 	}
 }
 
-// initialize generic Ship class
-class Ship {
-	constructor(firepower, shield) {
-		this.firepower = 1;
-		this.shield = 1;
-		this.body = {};
-		this.direction = "down";
-	}
-	initialize() {
-		this.body = {
-			x: 30,
-			y: 30,
-			width: 30,
-			height: 30
-		};
-	}
-	fire(target) {
-		// 
-	}
-	move() {
-		// for enemies, increment speed with levels
-	}
-	die() {
-		// animation ends
-		// some sort of explosion graphic overlaying the ship sprite
-		// update enemies remaining
-		// update player lives
-	}
-}
 const player2Img = new Image();
 player2Img.src = "images/player2_ship.png";
 player2Img.width = 60;
@@ -60,10 +31,10 @@ const playerImg = new Image();
 playerImg.src = "images/player_ship.png";
 playerImg.width = 60;
 playerImg.height = 60;
+
 // class for player ships
-class Player extends Ship {
+class Player {
 	constructor(firepower, shield) {
-		super(firepower, shield);
 		this.body = {
 			// img: playerImg,
 			x: 300,
@@ -128,9 +99,8 @@ cloneImg.src = "images/clone_ship.png";
 cloneImg.width = 45;
 cloneImg.height = 45;
 // class for basic enemies
-class Clone extends Ship {
+class Clone {
 	constructor() {
-		super();
 		this.firepower = 1;
 		this.shield = 1;
 		this.speed = 2;
@@ -252,10 +222,6 @@ class Clone extends Ship {
 		}
 	}
 	draw() {
-		// if (this.body.x < 0) {
-		// 	this.body.x += canvas.width;
-		// 	this.body.y += this.descent;
-		// }
 		let x = this.body.x;
 		let y = this.body.y;
 		let width = this.body.width;
@@ -269,9 +235,8 @@ mothershipImg.src = "images/mothership.png";
 mothershipImg.width = 240;
 mothershipImg.height = 150;
 // class for end of level enemies
-class Mothership extends Ship {
+class Mothership {
 	constructor() {
-		super();
 		this.firepower = 1;
 		this.shield = 10;
 		this.speed = 5;
@@ -323,6 +288,7 @@ const laserImg = new Image();
 laserImg.src = "images/laser.png";
 laserImg.width = 60;
 laserImg.height = 100;
+
 class Lasers {
 	constructor(x, y, dy) {
 		this.x = x;
@@ -370,6 +336,8 @@ class Lasers {
 		}
 	}
 }
+
+
 // ***** FACTORIES *****
 
 // factory to store clones

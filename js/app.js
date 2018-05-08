@@ -92,8 +92,7 @@ const game = {
 		
 		
 		if (this.betweenTurns) {
-			playerTurn.text(player + " has died. (Do not hit Pause.)");
-			playerTurn.html(playerTurn.html().replace("(Do not hit Pause.)", "<br />(Do not hit Pause.)"));
+			playerTurn.text(player + " has died.");
 			startTurn.text(otherPlayer + " Start Turn")
 			$(".turn-switch-modal").addClass("show-modal");
 			stopAnimatons();
@@ -194,12 +193,12 @@ const game = {
 			$(".pause-modal").addClass("show-modal");
 			// stop animations
 			cancelAnimationFrame(cancelMe);
-					
 		} else {
 			// this makes it so I can press enter and toggle if it's paused
 			$(".pause-modal").toggleClass("show-modal", false)
 			this.isPaused = false;
 			// resume animations
+			cancelAnimationFrame(cancelMe);
 			requestAnimationFrame(animateGame);
 			event.stopPropagation();
 		}
@@ -354,12 +353,6 @@ const game = {
 			document.getElementById("high-score").innerHTML = ("High Score: " + localStorage.getItem("highscore"));
 		}
 	},
-	win() {
-		console.log("you win!")
-		// victory message with concluding story text
-		// animation depicting end
-		// display player score, accuracy
-	},
 	reset() {
 		// restore all values to default
 		// return to title screen
@@ -486,6 +479,8 @@ closePrologue.on("click", function(event) {
 closePause.on("click", function(event){
 	$(this).parent().parent().toggleClass("show-modal", false)
 	game.isPaused = false;
+	stopAnimatons();
+	cancelAnimationFrame(cancelMe);
 	requestAnimationFrame(animateGame);
 	event.stopPropagation();
 })
@@ -529,6 +524,8 @@ nextLevel.on("click", function(event){
 startTurn.on("click", function(event) {
 	$(this).parent().parent().toggleClass("show-modal", false)
 	game.betweenTurns = !game.betweenTurns;
+	stopAnimatons();
+
 	requestAnimationFrame(animateGame);
 	event.stopPropagation();
 	game.startTurn();

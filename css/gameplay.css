@@ -146,6 +146,7 @@ canvas {
 
 /*ANIMATIONS*/
 
+/* animations need to be switched so I can repeat */
 @keyframes fadeAndScale {
 	from {
 		opacity: 1;
@@ -166,6 +167,8 @@ canvas {
         transform: scale3d(.75, .75, 1);
     }
 }
+
+/* animations need to be switched so I can repeat */
 @keyframes extraLives {
     from {
         visibility: visible;
