@@ -36,19 +36,15 @@ playerImg.height = 60;
 class Player {
 	constructor(firepower, shield) {
 		this.body = {
-			// img: playerImg,
 			x: 300,
 			y: 500,
 			width: playerImg.width,
 			height: playerImg.height
 		};
-		// charge == how many lasers player can fire.
-		this.charge = Infinity;
 		this.shotsFired = [];
 	}
 	initialize() {
 		this.body = {
-			// img: playerImg,
 			x: (canvas.width / 2) - (this.body.width / 2),
 			y: (canvas.height - this.body.height * 2),
 			width: playerImg.width,
@@ -56,9 +52,7 @@ class Player {
 		}
 	}
 	initLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
-		if (this.shotsFired.length < this.charge) {		
 			this.shotsFired.push(laserFactory.generateLaser((this.body.x + 8), (this.body.y - this.body.height), (-6)));
-		}
 	}
 	move() {
 		let speed = 5;
@@ -85,7 +79,6 @@ class Player {
 		}
 	}
 	draw() {
-		
 		let x = this.body.x;
 		let y = this.body.y;
 		let width = this.body.width;
@@ -108,9 +101,13 @@ class Clone {
 		this.direction = "left";
 		this.distBetweenShips = 100;
 		this.descent = 55;
-		this.charge = Infinity;
 		this.shotsFired = [];
 		this.row = 1;
+	}
+	adjustShipRow() {
+		this.row++;
+		this.body.x -= canvas.width;
+		this.body.y += rowY;
 	}
 	initialize() {
 		this.body = {
@@ -122,44 +119,14 @@ class Clone {
 		let rowY = this.descent * this.row;
 		// if dist between ships makes x a negative value.
 		// only bug is if I need to start with more than two rows of ships
+
+
 		if (this.body.x <= 0) {
 			this.row++;
 			this.body.x = Math.abs(this.body.x);
 			this.body.y += rowY;
 			if (this.body.x + this.body.width >= canvas.width) {
-				this.row++;
-				this.body.x -= canvas.width;
-				this.body.y += rowY;
-				if (this.body.x + this.body.width >= canvas.width) {
-					this.row++;
-					this.body.x -= canvas.width;
-					this.body.y += rowY;
-					if (this.body.x + this.body.width >= canvas.width) {
-						this.row++;
-						this.body.x -= canvas.width;
-						this.body.y += rowY;
-						if (this.body.x + this.body.width >= canvas.width) {
-							this.row++;
-							this.body.x -= canvas.width;
-							this.body.y += rowY;
-							if (this.body.x + this.body.width >= canvas.width) {
-								this.row++;
-								this.body.x -= canvas.width;
-								this.body.y += rowY;
-								if (this.body.x + this.body.width >= canvas.width) {
-									this.row++;
-									this.body.x -= canvas.width;
-									this.body.y += rowY;
-									if (this.body.x + this.body.width >= canvas.width) {
-										this.row++;
-										this.body.x -= canvas.width;
-										this.body.y += rowY;
-									}
-								}
-							}
-						}
-					}
-				} 
+				this.adjustShipRow();
 			}
 		} 
 		if (this.row % 2 === 1) {

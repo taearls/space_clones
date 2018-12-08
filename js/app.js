@@ -2,27 +2,27 @@
 
 const myStorage = window.localStorage;
 
-const url = window.location.href;
-const getQuery = url.split('?')[1];
-const isSolo = (getQuery === "players=1"? true : false)
-// use .split type thing to get the player=2 part of the URL
-// then use split type thing again to get the string after the =
+const queryString = window.location.href.split('?')[1];
+const isSolo = (queryString === "players=1" ? true : false)
 
 // TITLE SCREEN DISPLAY
-$("#player1-score").text("Player 1 Score: " + localStorage.getItem("player1score"));
-if ($("#player1-score").text() === "Player 1 Score: null") {
+if (localStorage.getItem("player1score") == null) {
 	$("#player1-score").text("Player 1 Score: 0");
-};
+} else {
+	$("#player1-score").text("Player 1 Score: " + localStorage.getItem("player1score"));
+}
 
-$("#player2-score").text("Player 2 Score: " + localStorage.getItem("player2score"));
-if ($("#player2-score").text() === "Player 2 Score: null") {
+if (localStorage.getItem("player2score") == null) {
 	$("#player2-score").text("Player 2 Score: 0");
-};
+} else {
+	$("#player2-score").text("Player 2 Score: " + localStorage.getItem("player2score"));
+}
 
-$("#high-score").text("High Score: " + localStorage.getItem("highscore"));
-if ($("#high-score").text() === "High Score: null") {
-	$("#high-score").text("High Score: 0");
-};
+if (localStorage.getItem("high-score") == null) {
+	$("#high--score").text("High Score: 0");
+} else {
+	$("#high--score").text("High Score: " + localStorage.getItem("high-score"));
+}
 
 // EVENT LISTENER VARIABLES
 
@@ -51,7 +51,6 @@ let initialClones = 10;
 // instantiate game object
 const game = {
 	highScore: "5000",
-	// switch to false if 2 player mode selected
 	isSolo: isSolo,
 	isPlayer1Turn: true,
 	player1Score: "0",
@@ -74,10 +73,10 @@ const game = {
 	totalShotsLevelPlayer2: 0,
 	isMuted: false,
 	animation1: true,
+	maxClones: 20,
 	playerSwitch() {
 		let player;
 		let otherPlayer;
-		// console.clear();
 		console.log("The animation frame closes AFTER I remove the game objects, which throws an error.");
 		console.log("VVVV See this right here? VVVV Don't worry about it.");
 		if (this.isPlayer1Turn) {
@@ -182,7 +181,6 @@ const game = {
 				$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer2"));
 				cloneFactory.clones = [];
 				initClones(Number(localStorage.getItem("enemiesplayer2")));
-				
 			}
 		}
 		// reboot level where progress was made
@@ -205,16 +203,15 @@ const game = {
 	},
 	genLevel() {
 		if (this.isPlayer1Turn) {
-			this.player1Clones = `${Number(initialClones) + Number(localStorage.getItem("player1level")) * 1}`;
+			this.player1Clones = `${Math.min(Number(initialClones) + Number(localStorage.getItem("player1level")) * 1, this.maxClones)}`;
 			localStorage.setItem("enemiesplayer1", this.player1Clones.toString());
 			$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer1"));
 			
 			initClones(this.player1Clones);
 		} else {
-			this.player2Clones = `${Number(initialClones) + Number(localStorage.getItem("player2level")) * 1}`;
+			this.player2Clones = `${Math.min(Number(initialClones) + Number(localStorage.getItem("player2level")) * 1, this.maxClones)}`;
 			localStorage.setItem("enemiesplayer2", this.player2Clones.toString());
 			$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer2"));
-		
 			initClones(this.player2Clones);
 		}
 		
@@ -223,17 +220,9 @@ const game = {
 		laserFactory.lasers = [];
 		this.currentLevel++;
 		$("#level").text("Level: " + this.currentLevel);
-		// for (let i = 0; i < player1Ship.shotsFired.length; i++) {
-		// 	player1Ship.shotsFired[i].shipHit(player1Ship, player1Ship.shotsFired[i]);
-		// }
-		// for (let i = 0; i < player2Ship.shotsFired.length; i++) {
-		// 	player2Ship.shotsFired[i].shipHit(player2Ship, player2Ship.shotsFired[i]);
-		// }
-		// display message
-		// firing accuracy
-		// end bonus points?
+
 		endLevelModal.addClass("show-modal");
-		endLevelMessage.text("You beat Level " + `${this.currentLevel - 1}` + "!");
+		endLevelMessage.text(`You beat Level ${this.currentLevel - 1}!`);
 		nextLevel.text("Begin Level " + this.currentLevel);
 		if (this.isPlayer1Turn) {
 			localStorage.setItem("player1level", this.currentLevel);
@@ -362,15 +351,13 @@ const game = {
 	},
 	die(ship) {
 		// if player dies
-		if (ship === player1Ship) {
-			this.checkGameEnd();
-		} else if (ship === player2Ship) {
+		if (ship === player1Ship || ship === player2Ship) {
 			this.checkGameEnd();
 		} else {
 			// if a clone dies
+			const index = cloneFactory.clones.indexOf(ship);
+			cloneFactory.clones.splice(index, 1);
 			if (this.isPlayer1Turn) {
-				const index = cloneFactory.clones.indexOf(ship);
-				cloneFactory.clones.splice(index, 1);
 				localStorage.setItem("enemiesplayer1", `${Number(localStorage.getItem("enemiesplayer1")) - 1}`);
 				this.score();
 				$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer1"));
@@ -378,8 +365,6 @@ const game = {
 					this.initMothership();
 				}
 			} else {
-				const index = cloneFactory.clones.indexOf(ship);
-				cloneFactory.clones.splice(index, 1);
 				localStorage.setItem("enemiesplayer2", `${Number(localStorage.getItem("enemiesplayer2")) - 1}`);
 				this.score();
 				$("#enemies-left").text("Clones: " + localStorage.getItem("enemiesplayer2"));
@@ -399,7 +384,7 @@ const game = {
 			if (!this.player1IsDead) {
 				// so lives don't keep going down
 				$("#lives").text("Player 1 Lives: " + localStorage.getItem("player1lives"));
-				if (localStorage.getItem("player1lives")=== "0") {
+				if (localStorage.getItem("player1lives") === "0") {
 					this.player1IsDead = true;
 					console.log("The animation frame closes AFTER I remove the game objects, which throws an error.");
 					console.log("VVVV See this right here? VVVV Don't worry about it.");
@@ -420,7 +405,7 @@ const game = {
 					this.player1IsDead = true;
 					if (this.player1IsDead && this.player2IsDead) {
 						this.gameOver();
-					} else if (this.player2IsDead === false) {
+					} else if (!this.player2IsDead) {
 						this.playerSwitch();
 					}
 				} else if (!this.player2IsDead) {
@@ -444,7 +429,6 @@ const game = {
 					this.playerSwitch();
 				}
 			}
-			// set conditions for both players
 		}
 	},
 	gameOver() {
@@ -459,37 +443,38 @@ const game = {
 
 //  ***** MODALS *****
 
-controls.on("click", function(event){
-	$(".controls-modal").addClass("show-modal")
-})
+controls.on("click", function(event) {
+	$(".controls-modal").addClass("show-modal");
+});
 
 closeControls.on("click", function(event) {
-	$(this).parent().parent().toggleClass("show-modal", false)
+	$(this).parent().parent().toggleClass("show-modal", false);
 	event.stopPropagation();
-})
+});
 
-prologue.on("click", function(event){
+prologue.on("click", function(event) {
 	$(".prologue-modal").addClass("show-modal");
-})
+});
 
 closePrologue.on("click", function(event) {
 	$(this).parent().parent().toggleClass("show-modal", false)
 	event.stopPropagation();
-})
-closePause.on("click", function(event){
-	$(this).parent().parent().toggleClass("show-modal", false)
+});
+
+closePause.on("click", function(event) {
+	$(this).parent().parent().toggleClass("show-modal", false);
 	game.isPaused = false;
 	stopAnimatons();
 	cancelAnimationFrame(cancelMe);
 	requestAnimationFrame(animateGame);
 	event.stopPropagation();
-})
+});
 resetGame.on("click", function(event) {
 	game.reset();
-})
+});
 endLevelReset.on("click", function(event){
 	game.reset();
-})
+});
 muteButton.on("click", function(){
 	game.isMuted = !game.isMuted;
 	if (game.isMuted) {
@@ -534,8 +519,6 @@ endGameOver.on("click", function(event) {
 	game.reset();
 })
 // ***** FUNCTIONS *****
-
-
 
 // switch from game screen to title screen
 const returnToTitle = () => {
@@ -592,8 +575,8 @@ const initMothership = (numShips) => {
 }
 const initClones = (numClones) => {
 	for (let i = 0; i < numClones; i++) {
-	cloneFactory.generateClone(new Clone());
-	cloneFactory.clones[i].initialize();
+		cloneFactory.generateClone(new Clone());
+		cloneFactory.clones[i].initialize();
 	}
 
 }
@@ -608,9 +591,9 @@ const restartAnimation = () => {
 	const element = $("h1")[0];
 
 	// remove run animation class
-  	element.classList.remove("run-animation");
+  element.classList.remove("run-animation");
   
-  	// trigger reflow
+  // trigger reflow
 	void element.offsetWidth;
   
 	// re-add the run animation class

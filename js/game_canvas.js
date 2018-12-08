@@ -9,20 +9,20 @@ const getDistance = (x1, y1, x2, y2) => {
 let stars = [];
 // generate 500 stars with function, push into star array
 const initStars = (length) => {
-	length = 200;
 	stars = [];
-	if (stars.length < length) {
-		for (i = 0; i < length; i++) {
-			let x = Math.random() * canvas.width;
-			let y = Math.random() * canvas.height;
-			let radius = Math.random() * 2;
-			let dy = Math.random() * 5;
-			ctx.beginPath();
-			ctx.fillStyle = "white";
-			ctx.arc(x, y, radius, 0, Math.PI * 2);
-			ctx.fill();
-			stars.push(new Star(x, y, dy, radius))
-		}		
+	for (i = 0; i < length; i++) {
+		let x = Math.random() * canvas.width;
+		let y = Math.random() * canvas.height;
+		let radius = Math.random() * 2;
+		let dy = Math.random() * 5;
+		ctx.beginPath();
+		ctx.fillStyle = "white";
+		ctx.arc(x, y, radius, 0, Math.PI * 2);
+		ctx.fill();
+		stars.push(new Star(x, y, dy, radius));
+		if (stars.length == length) {
+			return;
+		}
 	}
 }
 
@@ -32,7 +32,7 @@ window.addEventListener("resize", function(event) {
 	canvas.height = window.innerHeight;
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
-	initStars();
+	initStars(200);
 	// initPlayer1();
 	// initPlayer2();
 	if (game.isPlayer1Turn) {
@@ -45,11 +45,11 @@ window.addEventListener("resize", function(event) {
 	
 })
 
-const laserSound = new Audio("audio/laser.wav")
-function addKeys (){
+const laserSound = new Audio("audio/laser.wav");
+function addKeys() {
 document.addEventListener("keydown", function addKeys(event) {
 	const key = event.keyCode;
-	// console.log(event.keyCode);
+
 	// PLAYER MOVEMENT
 	// right using right arrow or D
 	if(key===39 || key===68) {
@@ -138,7 +138,7 @@ initPlayer1();
 player1Ship.initialize();
 initPlayer2();
 player2Ship.initialize();
-initStars();
+initStars(200);
 
 const animateGame = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
