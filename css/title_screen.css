@@ -38,6 +38,7 @@ footer {
 nav a {
 	text-decoration: none;
 	display: block;
+    min-width: 110px;
 	width: 10vw;
 	text-align: center;
 	margin: auto;

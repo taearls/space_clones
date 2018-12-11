@@ -5,26 +5,6 @@ const getDistance = (x1, y1, x2, y2) => {
 	// use pythagoreon theorum to calc distance
 	return Math.sqrt(xDistance ** 2 + yDistance ** 2);
 }
-// create star array to store new stars
-let stars = [];
-// generate 500 stars with function, push into star array
-const initStars = (length) => {
-	stars = [];
-	for (i = 0; i < length; i++) {
-		let x = Math.random() * canvas.width;
-		let y = Math.random() * canvas.height;
-		let radius = Math.random() * 2;
-		let dy = Math.random() * 5;
-		ctx.beginPath();
-		ctx.fillStyle = "white";
-		ctx.arc(x, y, radius, 0, Math.PI * 2);
-		ctx.fill();
-		stars.push(new Star(x, y, dy, radius));
-		if (stars.length == length) {
-			return;
-		}
-	}
-}
 
 window.addEventListener("resize", function(event) {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -118,12 +98,6 @@ document.addEventListener("keyup", function(event) {
 
 addKeys();
 // ***GAME CANVAS***
-
-const canvas = document.querySelector("#game-canvas");
-canvas.width = window.innerWidth;
-// height will be distance between header/footer of game
-canvas.height = window.innerHeight;
-const ctx = canvas.getContext("2d");
 
 const playerShield = 1;
 const playerFirepower = 1;

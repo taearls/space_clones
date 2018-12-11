@@ -120,7 +120,6 @@ class Clone {
 		// if dist between ships makes x a negative value.
 		// only bug is if I need to start with more than two rows of ships
 
-
 		if (this.body.x <= 0) {
 			this.row++;
 			this.body.x = Math.abs(this.body.x);
