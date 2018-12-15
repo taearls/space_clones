@@ -4,6 +4,29 @@ canvas.height = window.innerHeight;
 
 const ctx = canvas.getContext("2d");
 
+class Star {
+  constructor(x, y, dy, radius) {
+    this.x = x;
+    this.y = y;
+    this.dy = dy;
+    this.radius = radius;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.fillStyle = "white";
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  update() {
+    if (this.y + this.radius >= canvas.height) {
+      this.y = this.radius;
+    }
+  }
+  move() {
+    this.y += this.dy;
+  }
+}
+
 // create star array to store new stars
 let stars = [];
 // generate 500 stars with function, push into star array
