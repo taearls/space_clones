@@ -1,27 +1,3 @@
-// instantiate star class for background
-// class Star {
-// 	constructor(x, y, dy, radius) {
-// 		this.x = x;
-// 		this.y = y;
-// 		this.dy = dy;
-// 		this.radius = radius;
-// 	}
-// 	draw() {
-// 		ctx.beginPath();
-// 		ctx.fillStyle = "white";
-// 		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-// 		ctx.fill();
-// 	}
-// 	update() {
-// 		if (this.y + this.radius >= canvas.height) {
-// 			this.y = this.radius;
-// 		}
-// 	}
-// 	move() {
-// 		this.y += this.dy;
-// 	}
-// }
-
 const player2Img = new Image();
 player2Img.src = "images/player2_ship.png";
 player2Img.width = 60;

@@ -26,10 +26,6 @@ if (localStorage.getItem("high-score") == null) {
 
 // EVENT LISTENER VARIABLES
 
-const controls = $("#how-to-play");
-const closeControls = $(".close-controls");
-const prologue = $("#prologue");
-const closePrologue = $(".close-prologue");
 const closePause = $(".close-pause");
 const resetGame = $("#reset-game");
 const muteButton = $("#mute-button");
@@ -442,24 +438,6 @@ const game = {
 
 
 //  ***** MODALS *****
-
-controls.on("click", function(event) {
-	$(".controls-modal").addClass("show-modal");
-});
-
-closeControls.on("click", function(event) {
-	$(this).parent().parent().toggleClass("show-modal", false);
-	event.stopPropagation();
-});
-
-prologue.on("click", function(event) {
-	$(".prologue-modal").addClass("show-modal");
-});
-
-closePrologue.on("click", function(event) {
-	$(this).parent().parent().toggleClass("show-modal", false)
-	event.stopPropagation();
-});
 
 closePause.on("click", function(event) {
 	$(this).parent().parent().toggleClass("show-modal", false);

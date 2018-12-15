@@ -125,6 +125,13 @@ input:hover {
 	cursor: text;
 }
 
+.backstory {
+    font-size: 20px;
+}
+.controls-content h3 {
+    font-size: 22px;
+}
+
 /* CANVAS */
 
 canvas {
