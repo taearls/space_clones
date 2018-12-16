@@ -24,7 +24,6 @@ const endGameOver = $("#game-over-button");
 
 let initialClones = 10;
 
-// instantiate game object
 const game = {
 	highScore: "5000",
 	isSolo: isSolo,
