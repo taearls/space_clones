@@ -10,10 +10,23 @@ window.addEventListener("resize", function(event) {
 	requestAnimationFrame(animateStars);
 });
 
+// TITLE SCREEN DISPLAY
+if (localStorage.getItem("player1score") == null) {
+	$("#player1-score").text("Player 1 Score: 0");
+} else {
+	$("#player1-score").text(`Player 1 Score: ${localStorage.getItem("player1score")}`);
+}
+
+if (localStorage.getItem("player2score") == null) {
+	$("#player2-score").text("Player 2 Score: 0");
+} else {
+	$("#player2-score").text(`Player 2 Score: ${localStorage.getItem("player2score")}`);
+}
+
 if (localStorage.getItem("highscore") == null) {
 	$("#high-score").text("High Score: 5000");
 } else {
-	$("#high-score").text("High Score: " + localStorage.getItem("highscore"));
+	$("#high-score").text(`High Score: ${localStorage.getItem("highscore")}`);
 }
 
 //  ***** MODALS *****

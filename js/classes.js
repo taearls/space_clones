@@ -79,11 +79,12 @@ class Clone {
 		this.descent = 55;
 		this.shotsFired = [];
 		this.row = 1;
+		this.rowY = 55;
 	}
 	adjustShipRow() {
 		this.row++;
 		this.body.x -= canvas.width;
-		this.body.y += rowY;
+		this.body.y += this.rowY;
 	}
 	initialize() {
 		this.body = {
@@ -92,14 +93,13 @@ class Clone {
 			width: cloneImg.width,
 			height: cloneImg.height
 		}
-		let rowY = this.descent * this.row;
 		// if dist between ships makes x a negative value.
 		// only bug is if I need to start with more than two rows of ships
 
 		if (this.body.x <= 0) {
 			this.row++;
 			this.body.x = Math.abs(this.body.x);
-			this.body.y += rowY;
+			this.body.y += this.rowY;
 			if (this.body.x + this.body.width >= canvas.width) {
 				this.adjustShipRow();
 			}
@@ -151,7 +151,7 @@ class Clone {
 	update() {
 		const leftBorder = 0;
 		const rightBorder = canvas.width - this.body.width;
-		if (this.body.y + this.descent >= canvas.height - 50) {
+		if (this.body.y + this.descent >= canvas.height - this.body.height) {
 			this.body.y = 100;
 			if (this.body.x >= leftBorder){
 				this.direction = "right";
@@ -163,8 +163,6 @@ class Clone {
 	draw() {
 		let x = this.body.x;
 		let y = this.body.y;
-		let width = this.body.width;
-		let height = this.body.height;
 		ctx.drawImage(cloneImg, x, y);
 	}
 }
@@ -181,7 +179,6 @@ class Mothership {
 		this.speed = 5;
 		this.body = {};
 		this.direction = "left";
-		this.charge = Infinity;
 		this.shotsFired = [];
 	}
 	initialize() { 
@@ -217,8 +214,6 @@ class Mothership {
 	draw() {
 		let x = this.body.x;
 		let y = this.body.y;
-		let width = this.body.width;
-		let height = this.body.height;
 		ctx.drawImage(mothershipImg, x, y);
 	}
 }
