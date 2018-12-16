@@ -28,11 +28,11 @@ const game = {
 	highScore: "5000",
 	isSolo: isSolo,
 	isPlayer1Turn: true,
-	player1Score: "0",
+	player1Score: 0,
 	player1Lives: 3,
 	player1IsDead: false,
 	player1Items: [],
-	player2Score: "0",
+	player2Score: 0,
 	player2Lives: 3,
 	player2IsDead: false,
 	player2Items: [],
@@ -245,12 +245,12 @@ const game = {
 	},
 	killMothership(mothership) {
 		if (this.isPlayer1Turn) {
-			this.player1Score += 1500;
-			localStorage.setItem("player1score", this.player1Score.toString());
+			this.player1Score = Number(this.player1Score) + 1500;
+			localStorage.setItem("player1score", this.player1Score);
 			$("#player-score").text(`Player 1 Score: ${localStorage.getItem("player1score")}`);
 		} else {
 			this.player2Score += 1500;
-			localStorage.setItem("player2score", this.player2Score.toString());
+			localStorage.setItem("player2score", this.player2Score);
 			$("#player-score").text(`Player 2 Score: ${localStorage.getItem("player2score")}`);
 		}
 
@@ -270,7 +270,7 @@ const game = {
 			localStorage.setItem("player1accshots", this.accurateShotsPlayer1.toString());
 
 			this.player1Score = `${Number(this.player1Score) + 100}`;
-			localStorage.setItem("player1score", this.player1Score.toString());
+			localStorage.setItem("player1score", this.player1Score);
 
 			if (this.player1Score === "9000" || this.player1Score === "15000" || this.player1Score === "22000") {
 				this.player1Lives++;
