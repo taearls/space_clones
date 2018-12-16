@@ -25,7 +25,7 @@ const endGameOver = $("#game-over-button");
 let initialClones = 10;
 
 const game = {
-	highScore: "5000",
+	highScore: 5000,
 	isSolo: isSolo,
 	isPlayer1Turn: true,
 	player1Score: 0,
@@ -128,7 +128,7 @@ const game = {
 			// need to set default local storage for 2nd player the first time
 			if (localStorage.getItem("player2level") === null) {
 				localStorage.setItem("player2lives", "3");
-				localStorage.setItem("player2score", "0");
+				localStorage.setItem("player2score", 0);
 				localStorage.setItem("player2accshots", "0");
 				localStorage.setItem("player2totalshots", "0");
 				localStorage.setItem("enemiesplayer2", "10");
@@ -249,7 +249,7 @@ const game = {
 			localStorage.setItem("player1score", this.player1Score);
 			$("#player-score").text(`Player 1 Score: ${localStorage.getItem("player1score")}`);
 		} else {
-			this.player2Score += 1500;
+			this.player2Score = Number(this.player2Score) + 1500;
 			localStorage.setItem("player2score", this.player2Score);
 			$("#player-score").text(`Player 2 Score: ${localStorage.getItem("player2score")}`);
 		}
@@ -269,10 +269,10 @@ const game = {
 			this.accurateShotsPlayer1++;
 			localStorage.setItem("player1accshots", this.accurateShotsPlayer1.toString());
 
-			this.player1Score = `${Number(this.player1Score) + 100}`;
+			this.player1Score = Number(this.player1Score) + 100;
 			localStorage.setItem("player1score", this.player1Score);
 
-			if (this.player1Score === "9000" || this.player1Score === "15000" || this.player1Score === "22000") {
+			if (this.player1Score === 9000 || this.player1Score === 15000 || this.player1Score === 22000) {
 				this.player1Lives++;
 				localStorage.setItem("player1lives", this.player1Lives.toString());
 				$("#lives").text(`Player 1 Lives: ${localStorage.getItem("player1lives")}`);
@@ -292,7 +292,7 @@ const game = {
 			this.accurateShotsPlayer2++;
 			localStorage.setItem("player2accshots", this.accurateShotsPlayer2.toString());
 
-			this.player2Score = `${Number(this.player2Score) + 100}`;
+			this.player2Score = Number(this.player2Score) + 100;
 			localStorage.setItem("player2score", this.player2Score.toString());
 
 			if (this.player2Score === "9000" || this.player2Score === "15000" || this.player2Score === "22000") {
@@ -313,11 +313,11 @@ const game = {
 		// set high score updating conditions
 		if (Number(localStorage.getItem("player1score")) > Number(localStorage.getItem("player2score")) && Number(localStorage.getItem("player1score")) > Number(localStorage.getItem("highscore"))) {
 			this.highScore = this.player1Score;
-			localStorage.setItem("highscore", this.highScore.toString());
+			localStorage.setItem("highscore", this.highScore);
 			document.getElementById("high-score").innerText = ("High Score: " + localStorage.getItem("highscore"));
 		} else if (Number(localStorage.getItem("player2score")) > Number(localStorage.getItem("player1score")) && Number(localStorage.getItem("player2score")) > Number(localStorage.getItem("highscore"))) {
 			this.highScore = this.player2Score;
-			localStorage.setItem("highscore", this.highScore.toString());
+			localStorage.setItem("highscore", this.highScore);
 			document.getElementById("high-score").innerText = ("High Score: " + localStorage.getItem("highscore"));
 		}
 	},
