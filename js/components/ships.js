@@ -17,7 +17,7 @@ class Player {
       width: playerImg.width,
       height: playerImg.height
     };
-    this.shotsFired = [];
+    this.lasersFired = 0;
   }
   initialize() {
     this.body = {
@@ -27,8 +27,9 @@ class Player {
       height: playerImg.height
     }
   }
-  initLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
-      this.shotsFired.push(laserFactory.generateLaser((this.body.x + 8), (this.body.y - this.body.height), (-6)));
+  fireLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
+    laserFactory.generateLaser((this.body.x + 8), (this.body.y - this.body.height), (-6), "player");
+    this.lasersFired++;
   }
   move() {
     let speed = 5;
@@ -57,8 +58,6 @@ class Player {
   draw() {
     let x = this.body.x;
     let y = this.body.y;
-    let width = this.body.width;
-    let height = this.body.height;
     ctx.drawImage(playerImg, x, y);
   }
 }
@@ -77,7 +76,6 @@ class Clone {
     this.direction = "left";
     this.distBetweenShips = 100;
     this.descent = 55;
-    this.shotsFired = [];
     this.row = 1;
     this.rowY = 55;
   }
@@ -143,10 +141,8 @@ class Clone {
     }
   }
   fire() {
-    this.shotsFired.push(laserFactory.generateLaser(this.body.x + 20, this.body.y + this.body.height, 6))
-    for (let i = 0; i < this.shotsFired.length; i++) {
-      this.shotsFired[i].move();
-    }
+    const indexLaser = laserFactory.generateLaser(this.body.x + 20, this.body.y + this.body.height, 6, "clone");
+    laserFactory.lasers[indexLaser].move();
   }
   update() {
     const leftBorder = 0;
@@ -179,7 +175,6 @@ class Mothership {
     this.speed = 5;
     this.body = {};
     this.direction = "left";
-    this.shotsFired = [];
   }
   initialize() { 
     this.body = {
@@ -206,10 +201,8 @@ class Mothership {
     }
   }
   fire() {
-    this.shotsFired.push(laserFactory.generateLaser(this.body.x + 110, this.body.y + this.body.height, 6))
-    for (let i = 0; i < this.shotsFired.length; i++) {
-      this.shotsFired[i].move();
-    }
+    const index = laserFactory.generateLaser(this.body.x + 110, this.body.y + this.body.height, 6, "mothership");
+    laserFactory.lasers[index].move();
   }
   draw() {
     let x = this.body.x;
@@ -239,29 +232,13 @@ class Lasers {
     this.y += this.dy;
     this.checkDisappear();
   }
-  shipHit(firingShip, laser) {
-    // get the index of the ship that fired the laser from the clone factory
-    if (firingShip != player1Ship && firingShip != player2Ship) {
-      const indexShip = cloneFactory.clones.indexOf(firingShip);
-      // get the index of the laser from that ship
-      const indexLaser = cloneFactory.clones[indexShip].shotsFired.indexOf(laser);
-      // remove that laser from the ship's array of lasers
-      cloneFactory.clones[indexShip].shotsFired.splice(indexLaser, 1);
-    } else if (firingShip === player1Ship) {
-      const indexLaser = player1Ship.shotsFired.indexOf(laser);
-      player1Ship.shotsFired.splice(indexLaser, 1);
-    } else if (firingShip === player2Ship) {
-      const indexLaser = player2Ship.shotsFired.indexOf(laser);
-      player2Ship.shotsFired.splice(indexLaser, 1);
-    }
-    
+  removeLaser(laser) {
+    const indexLaser = laserFactory.lasers.indexOf(laser);
+    laserFactory.deleteLaser(indexLaser);
   }
-  mothershipHit(mothership, laser) {
-    const indexShip = mothershipFactory.motherships.indexOf(mothership);
-    // get the index of the laser from that ship
-    const indexLaser = mothershipFactory.motherships[indexShip].shotsFired.indexOf(laser);
-    // remove that laser from the ship's array of lasers
-    mothershipFactory.motherships[indexShip].shotsFired.splice(indexLaser, 1);
+  destroyTarget(targetedShip, laser) {
+    game.die(targetedShip);
+    removeLaser(laser);
   }
   checkDisappear(laser) {
     const indexLaser = laserFactory.lasers.indexOf(laser);
@@ -301,12 +278,16 @@ const mothershipFactory = {
 // factory to store lasers
 const laserFactory = {
   lasers: [],
-  generateLaser(x, y, dy) {
-    const newLaser = new Lasers(x, y, dy);
+  generateLaser(x, y, dy, firingShip) {
+    const newLaser = new Lasers(x, y, dy, firingShip);
     this.lasers.push(newLaser);
-    return newLaser;
+    const index = this.lasers.length - 1;
+    return index;
   },
   findLaser(index) {
     return this.lasers[index];
+  },
+  deleteLaser(index) {
+    this.lasers.splice(index, 1);
   }
 }

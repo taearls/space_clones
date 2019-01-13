@@ -1,7 +1,4 @@
 // ***** GLOBAL VARIABLES *****
-
-const myStorage = window.localStorage;
-
 const queryString = window.location.href.split('?')[1];
 const isSolo = (queryString === "players=1" ? true : false);
 
@@ -49,6 +46,7 @@ const game = {
 	isMuted: false,
 	animation1: true,
 	maxClones: 20,
+	bossLevel: false,
 	playerSwitch() {
 		let player;
 		let otherPlayer;
@@ -71,9 +69,6 @@ const game = {
 			$(".turn-switch-modal").addClass("show-modal");
 			stopAnimatons();
 		}
-		
-			// stop animations
-
 	},
 	startTurn() {
 		// display player 1 start or player 2 start
@@ -108,22 +103,21 @@ const game = {
 			$("#turn-start").text("Player 1 Start");
 			$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
 
-
-
 			// if no clones remaining, display mothership shield instead
 			if (localStorage.getItem("enemiesplayer1") === "0") {
+				this.bossLevel = true;
 				mothershipFactory.motherships = [];
 				initMothership(1);
 				mothershipFactory.motherships[0].shield = (Number(localStorage.getItem("player1mothership")));
 				$("#enemies-left").text(`Shield: ${localStorage.getItem("player1mothership")}`);
 			} else {
+				this.bossLevel = false;
 				mothershipFactory.motherships = [];
 				$("#enemies-left").text(`Clones: ${localStorage.getItem("enemiesplayer1")}`);
 				cloneFactory.clones = [];
 				initClones(Number(localStorage.getItem("enemiesplayer1")));
 			}
 		} else {
-
 			// check if 2nd player local storage is empty
 			// need to set default local storage for 2nd player the first time
 			if (localStorage.getItem("player2level") === null) {
@@ -139,19 +133,21 @@ const game = {
 			this.currentLevel = localStorage.getItem("player2level");
 			this.player2Score = localStorage.getItem("player2score");
 			this.player2Lives = localStorage.getItem("player2lives");
-			$("#level").text(`Level: ${localStorage.getItem("player2level")}`);
-			$("#player-score").text(`Player 2 Score: ${localStorage.getItem("player2score")}`);
-			$("#lives").text(`Player 2 Lives: ${localStorage.getItem("player2lives")}`);
+			$("#level").text(`Level: ${this.currentLevel}`);
+			$("#player-score").text(`Player 2 Score: ${this.player2Score}`);
+			$("#lives").text(`Player 2 Lives: ${this.player2Lives}`);
 
 			$("#turn-start").text("Player 2 Start");
 			$("#turn-start").css("animation", "");
 			$("#turn-start").css("animation", "fadeAndScale2 1s ease-in forwards");
 			if (localStorage.getItem("enemiesplayer2") === "0") {
+				this.bossLevel = true;
 				mothershipFactory.motherships = [];
 				initMothership(1);
 				mothershipFactory.motherships[0].shield = (Number(localStorage.getItem("player2mothership")));
 				$("#enemies-left").text(`Shield: ${localStorage.getItem("player2mothership")}`);
 			} else {
+				this.bossLevel = false;
 				mothershipFactory.motherships = [];
 				$("#enemies-left").text(`Clones: ${localStorage.getItem("enemiesplayer2")}`);
 				cloneFactory.clones = [];
@@ -180,8 +176,7 @@ const game = {
 		if (this.isPlayer1Turn) {
 			this.player1Clones = `${Math.min(Number(initialClones) + Number(localStorage.getItem("player1level")) * 1, this.maxClones)}`;
 			localStorage.setItem("enemiesplayer1", this.player1Clones.toString());
-			$("#enemies-left").text(`Clones: ${localStorage.getItem("enemiesplayer1")}`);
-			
+			$("#enemies-left").text(`Clones: ${localStorage.getItem("enemiesplayer1")}`);		
 			initClones(this.player1Clones);
 		} else {
 			this.player2Clones = `${Math.min(Number(initialClones) + Number(localStorage.getItem("player2level")) * 1, this.maxClones)}`;
@@ -267,14 +262,14 @@ const game = {
 			this.player1Clones--;
 			localStorage.setItem("enemiesplayer1", this.player1Clones);
 			this.accurateShotsPlayer1++;
-			localStorage.setItem("player1accshots", this.accurateShotsPlayer1.toString());
+			localStorage.setItem("player1accshots", this.accurateShotsPlayer1);
 
 			this.player1Score = Number(this.player1Score) + 100;
 			localStorage.setItem("player1score", this.player1Score);
 
 			if (this.player1Score === 9000 || this.player1Score === 15000 || this.player1Score === 22000) {
 				this.player1Lives++;
-				localStorage.setItem("player1lives", this.player1Lives.toString());
+				localStorage.setItem("player1lives", this.player1Lives);
 				$("#lives").text(`Player 1 Lives: ${localStorage.getItem("player1lives")}`);
 				if (this.animation1) {
 					$("#extra-life").css("animation", "extraLives 1s ease-in forwards");
@@ -538,7 +533,6 @@ const initClones = (numClones) => {
 		cloneFactory.generateClone(new Clone());
 		cloneFactory.clones[i].initialize();
 	}
-
 }
 const round = (value, precision) => {
 	const multiplier = Math.pow(10, precision || 0);
@@ -547,7 +541,4 @@ const round = (value, precision) => {
 initClones(initialClones);
 $("#enemies-left").text("Clones: " + initialClones);
 
-
-
-animateGame();
-
+animateShips();

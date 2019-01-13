@@ -1,4 +1,3 @@
-addKeys();
 // ***GAME CANVAS***
 
 const playerShield = 1;
@@ -15,4 +14,3 @@ player1Ship.initialize();
 initPlayer2();
 player2Ship.initialize();
 initStars(200);
-
