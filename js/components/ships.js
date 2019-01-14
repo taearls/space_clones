@@ -217,12 +217,13 @@ laserImg.width = 60;
 laserImg.height = 100;
 
 class Lasers {
-  constructor(x, y, dy) {
+  constructor(x, y, dy, firingShip) {
     this.x = x;
     this.y = y;
     this.width = laserImg.width;
     this.height = laserImg.height;
     this.dy = dy;
+    this.firingShip = firingShip;
   }
   draw() {
     ctx.drawImage(laserImg, this.x, this.y);
@@ -230,7 +231,7 @@ class Lasers {
   move() {
     this.draw();
     this.y += this.dy;
-    this.checkDisappear();
+    this.checkDisappear(this);
   }
   removeLaser(laser) {
     const indexLaser = laserFactory.lasers.indexOf(laser);
@@ -238,7 +239,7 @@ class Lasers {
   }
   destroyTarget(targetedShip, laser) {
     game.die(targetedShip);
-    removeLaser(laser);
+    this.removeLaser(laser);
   }
   checkDisappear(laser) {
     const indexLaser = laserFactory.lasers.indexOf(laser);
