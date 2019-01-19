@@ -161,7 +161,11 @@ const handleEnemyFiring = () => {
   } else { // if mothership fires
     const msNumber = Math.floor(Math.random() * 100);
     if (msNumber === 26) {
-      mothershipFactory.motherships[0].fire();
+      if (mothershipFactory.length > 1 && !game.isPlayer1Turn) {
+        motherShipFactory.motherships[1].fire();
+      } else {
+        mothershipFactory.motherships[0].fire();
+      }
     }
   }
 }

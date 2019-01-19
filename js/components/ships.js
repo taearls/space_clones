@@ -238,17 +238,20 @@ class Lasers {
     laserFactory.deleteLaser(indexLaser);
   }
   destroyTarget(targetedShip, laser) {
-    if (!game.bossLevel) {
+    const playerShip = game.isPlayer1Turn ? player1Ship : player2Ship;
+    if (targetedShip == playerShip) {
+      game.die(playerShip);
+    } else if (!game.bossLevel) {
       game.die(targetedShip);
     } else {
       game.hitMothership();
-    }
+    } 
     this.removeLaser(laser);
   }
   checkDisappear(laser) {
     const indexLaser = laserFactory.lasers.indexOf(laser);
     if (this.y > canvas.height || this.y + this.height < 0) {
-      laserFactory.lasers.splice(indexLaser, 1);
+      laserFactory.deleteLaser(indexLaser);
     }
   }
 }

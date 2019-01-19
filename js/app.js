@@ -80,7 +80,6 @@ const game = {
 	endLevel() {
 		laserFactory.lasers = [];
 		this.currentLevel++;
-		$("#level").text(`Level: ${this.currentLevel}`);
 
 		endLevelModal.addClass("show-modal");
 		endLevelMessage.text(`You beat Level ${this.currentLevel - 1}!`);
@@ -99,33 +98,20 @@ const game = {
 			playerAccuracy.text(`Firing Accuracy: ${roundedPercentAcc}%`);
 		}
 	},
-	initMothershipLevel() {
-
-		// laserFactory.lasers = [];
-		$("#enemies-left").text(`Shield: 10`);
-		// if (this.isPlayer1Turn) {
-		// 	console.log('set mothership text');
-		// 	$("#enemies-left").text(`Shield: ${Number(localStorage.getItem('player1mothership'))}`);
-		// } else {
-		// 	$("#enemies-left").text(`Shield: ${Number(localStorage.getItem('player2mothership'))}`);
-		// }
-		initMothership(1);
-	},
 	hitMothership() {
-		const mothership = mothershipFactory.motherships[0];
+		let mothership;
 		if (this.isPlayer1Turn) {
+			mothership = mothershipFactory.motherships[0];
 			mothership.shield--;
-			console.log(mothership.shield, " shield");
-			localStorage.setItem("player1mothership", mothership.shield);
-			console.log(Number(localStorage.getItem("player1mothership")));
-			$("#enemies-left").text(`Shield: ${Number(localStorage.getItem("player1mothership"))}`);
+			this.player1Mothership = mothership.shield;
+			$("#enemies-left").text(`Shield: ${this.player1Mothership}`);
 			this.accurateShotsPlayer1++;
 			localStorage.setItem("player1accshots", this.accurateShotsPlayer1);
-			if (Number(localStorage.getItem("player1mothership")) <= 0) {
-				console.log('mothership should die now');
+			if (this.player1Mothership <= 0) {
 				this.killMothership(mothership);
 			}
 		} else {
+			mothership = mothershipFactory.motherships.length > 1 ? mothershipFactory.motherships[0] : mothershipFactory.motherships[1];
 			mothership.shield--;
 			localStorage.setItem("player2mothership", mothership.shield);
 			$("#enemies-left").text(`Shield: ${this.player2Mothership}`);
@@ -137,41 +123,61 @@ const game = {
 		}
 		
 	},
-	genLevel() {
+	initMothershipLevel() {
+		laserFactory.lasers = [];
+		initMothership(1);
+		let mothership;
 		if (this.isPlayer1Turn) {
-			this.player1Clones = `${Math.min(Number(initialClones) + this.player1Level * 1, this.maxClones)}`;
+			mothership = mothershipFactory.motherships[0];
+			$("#enemies-left").text(`Shield: ${this.player1Mothership}`);		
+			localStorage.setItem("player1mothership", this.player1Mothership);
+		} else {
+			mothership = mothershipFactory.motherships.length > 1 ? mothershipFactory.motherships[0] : mothershipFactory.motherships[1];
+			$("#enemies-left").text(`Shield: ${this.player2Mothership}`);
+			this.player2Mothership = 10;
+			localStorage.setItem("player2mothership", this.player1Mothership);
+		}
+	},
+	initClonesLevel() {
+		laserFactory.lasers = [];
+		$("#level").text(`Level: ${this.currentLevel}`);
+		if (this.isPlayer1Turn) {
+			this.player1Clones = `${Math.min(Number(initialClones) + this.player1Level * 2, this.maxClones)}`;
 			localStorage.setItem("player1clones", this.player1Clones);
 			$("#enemies-left").text(`Clones: ${this.player1Clones}`);		
 			initClones(this.player1Clones);
 		} else {
-			this.player2Clones = `${Math.min(Number(initialClones) + this.player2Level * 1, this.maxClones)}`;
+			this.player2Clones = `${Math.min(Number(initialClones) + this.player2Level * 2, this.maxClones)}`;
 			localStorage.setItem("player2clones", this.player2Clones);
 			$("#enemies-left").text(`Clones: ${this.player2Clones}`);
 			initClones(this.player2Clones);
 		}
-		
 	},
 	killMothership() {
+		let mothership;
 		if (this.isPlayer1Turn) {
-			const mothership = mothershipFactory.motherships[0];
+			mothership = mothershipFactory.motherships[0];
 			this.player1Score += 1500;
 			localStorage.setItem("player1score", this.player1Score);
 			$("#player-score").text(`Player 1 Score: ${this.player1Score}`);
 		} else {
-			const mothership = mothershipFactory.motherships.length > 1 ? mothershipFactory.motherships[0] : mothershipFactory.motherships[1];
+		 	mothership = mothershipFactory.motherships.length > 1 ? mothershipFactory.motherships[0] : mothershipFactory.motherships[1];
 			this.player2Score += 1500;
 			localStorage.setItem("player2score", this.player2Score);
 			$("#player-score").text(`Player 2 Score: ${this.player2Score}`);
 		}
 
-		// const index = mothershipFactory.motherships.indexOf(mothership);
-		// mothershipFactory.motherships.splice(index, 1);
+		this.checkHighScore();
+
+		const index = mothershipFactory.motherships.indexOf(mothership);
+		mothershipFactory.motherships.splice(index, 1);
 		this.bossLevel = false;
 		this.endLevel();
 	},
 	killClone() {
 		if (this.isPlayer1Turn) {
 			this.player1Clones--;
+			$('#enemies-left').text(`Clones: ${this.player1Clones}`);
 			localStorage.setItem("player1clones", this.player1Clones);
 			this.accurateShotsPlayer1++;
 			localStorage.setItem("player1accshots", this.accurateShotsPlayer1);
@@ -194,6 +200,9 @@ const game = {
 			$("#player-score").text(`Player 1 Score: ${this.player1Score}`);
 
 			if (this.player1Clones == 0) {
+				$('#enemies-left').text(`Shield: 10`);
+				$('#enemies-left').text();
+				// $('#enemies-left')[0].innerText = 'Shield: 10';
 				this.bossLevel = true;
 				this.initMothershipLevel();
 			}
@@ -201,6 +210,7 @@ const game = {
 		} else {
 			this.player2Clones--;
 			localStorage.setItem("player2clones", this.player2Clones);
+			$('#enemies-left').text(`Clones: ${this.player2Clones}`);
 			this.accurateShotsPlayer2++;
 			localStorage.setItem("player2accshots", this.accurateShotsPlayer2);
 
@@ -223,11 +233,15 @@ const game = {
 
 			if (this.player2Clones == 0) {
 				this.bossLevel = true;
+
 				this.initMothershipLevel();
 			}
 		}
 		
 		// set high score updating conditions
+		this.checkHighScore();
+	},
+	checkHighScore() {
 		if (this.player1Score > this.player2Score && this.player1Score > this.highScore) {
 			this.highScore = this.player1Score;
 			localStorage.setItem("highscore", this.highScore);
@@ -274,11 +288,9 @@ const game = {
 				if (this.isPlayer1Turn) {
 					localStorage.setItem("player1clones", `${this.player1Clones - 1}`);
 					this.killClone();
-					$("#enemies-left").text(`Clones: ${this.player1Clones}`);
 				} else {
 					localStorage.setItem("player2clones", `${this.player2Clones - 1}`);
 					this.killClone();
-					$("#enemies-left").text(`Clones: ${this.player2Clones}`);
 				}			
 			} else {
 				this.killMothership();
@@ -385,9 +397,7 @@ endLevelMute.on("click", function(){
 nextLevel.on("click", function(event){
 	$(this).parent().parent().toggleClass("show-modal", false)
 	event.stopPropagation();
-	game.accurateShots = 0;
-	game.totalShotsLevel = 0;
-	game.genLevel();
+	game.initClonesLevel();
 })
 startTurn.on("click", function(event) {
 	$(this).parent().parent().toggleClass("show-modal", false)
@@ -428,6 +438,7 @@ const initClones = (numClones) => {
 	for (let i = 0; i < numClones; i++) {
 		cloneFactory.generateClone(new Clone());
 		cloneFactory.clones[i].initialize();
+		// cloneFactory.clones[i].resetValues();
 	}
 }
 const round = (value, precision) => {
