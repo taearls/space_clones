@@ -238,7 +238,11 @@ class Lasers {
     laserFactory.deleteLaser(indexLaser);
   }
   destroyTarget(targetedShip, laser) {
-    game.die(targetedShip);
+    if (!game.bossLevel) {
+      game.die(targetedShip);
+    } else {
+      game.hitMothership();
+    }
     this.removeLaser(laser);
   }
   checkDisappear(laser) {

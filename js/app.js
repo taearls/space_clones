@@ -1,6 +1,6 @@
 // ***** GLOBAL VARIABLES *****
-const queryString = window.location.href.split('?')[1];
-const isSolo = (queryString === "players=1" ? true : false);
+const queryString = window.location.search;
+const isSolo = (queryString === "?players=1" ? true : false);
 
 // EVENT LISTENER VARIABLES
 
@@ -19,32 +19,30 @@ const startTurn = $(".start-turn");
 const gameOverModal = $(".game-over-modal");
 const endGameOver = $("#game-over-button");
 
-let initialClones = 10;
+const initialClones = 10;
 
 const game = {
-	highScore: localStorage.getItem("highscore") > 5000 ? localStorage.getItem("highscore") : 5000,
-	player1Score: localStorage.getItem('player1score') || 0,
-	player1Lives: localStorage.getItem('player1lives') || 3,
-	player2Score: localStorage.getItem('player2score') || 0,
-	player2Lives: localStorage.getItem('player2lives') || 3,
-	player1Clones: localStorage.getItem('player1clones') || 10,
-	player2Clones: localStorage.getItem('player2clones') || 10,
-	player1MotherShip: localStorage.getItem('player1mothership') || 10,
-	player2MotherShip: localStorage.getItem('player2mothership') || 10,
-	player1Level: localStorage.getItem('player1level') || 1,
-	player2Level: localStorage.getItem('player2level') || 1,
+	highScore: Number(localStorage.getItem("highscore")) > 5000 ? Number(localStorage.getItem("highscore")) : 5000,
+	player1Score: Number(localStorage.getItem('player1score')),
+	player1Lives: Number(localStorage.getItem('player1lives')),
+	player2Score: Number(localStorage.getItem('player2score')),
+	player2Lives: Number(localStorage.getItem('player2lives')),
+	player1Clones: Number(localStorage.getItem('player1clones')),
+	player2Clones: Number(localStorage.getItem('player2clones')),
+	player1Mothership: Number(localStorage.getItem('player1mothership')),
+	player2Mothership: Number(localStorage.getItem('player2mothership')),
+	player1Level: Number(localStorage.getItem('player1level')),
+	player2Level: Number(localStorage.getItem('player2level')),
 	isSolo: isSolo,
 	isPlayer1Turn: true,
 	player1IsDead: false,
 	player2IsDead: false,
 	isPaused: false,
 	betweenTurns: false,
-	accurateShotsPlayer1: localStorage.getItem('player1accshots'),
-	totalShotsLevelPlayer1: localStorage.getItem('player1totalshots'),
-	percentAccuracyPlayer1: (localStorage.getItem('player1accshots') / localStorage.getItem('player1totalshots') * 100),
-	accurateShotsPlayer2: localStorage.getItem('player2accshots'),
-	totalShotsLevelPlayer2: localStorage.getItem('player2totalshots'),
-	percentAccuracyPlayer2: (localStorage.getItem('player2accshots') / localStorage.getItem('player2totalshots') * 100),
+	accurateShotsPlayer1: Number(localStorage.getItem('player1accshots')),
+	totalShotsPlayer1: Number(localStorage.getItem('player1totalshots')),
+	accurateShotsPlayer2: Number(localStorage.getItem('player2accshots')),
+	totalShotsPlayer2: Number(localStorage.getItem('player2totalshots')),
 	isMuted: false,
 	animation1: true,
 	maxClones: 20,
@@ -63,87 +61,6 @@ const game = {
 			stopAnimatons();
 		}
 	},
-	startTurn() {
-		// display player 1 start or player 2 start
-		// switch all stats displayed // affected
-
-		// readjusts player 1 and player 2 image while still instantiating from same Player class
-		if (this.isPlayer1Turn) {
-			player1Ship.__proto__.draw = function() {		
-				let x = this.body.x;
-				let y = this.body.y;
-				let width = this.body.width;
-				let height = this.body.height;
-				ctx.drawImage(playerImg, x, y);
-			}
-		} else {
-			player2Ship.__proto__.draw = function() {		
-				let x = this.body.x;
-				let y = this.body.y;
-				let width = this.body.width;
-				let height = this.body.height;
-				ctx.drawImage(player2Img, x, y);
-			}
-		}
-
-		if (this.isPlayer1Turn) {
-			$("#level").text(`Level: ${this.player1Level}`);
-			$("#player-score").text(`Player 1 Score: ${this.player1Score}`);
-			$("#lives").text(`Player 1 Lives: ${this.player1Lives}`);
-
-			$("#turn-start").text("Player 1 Start");
-			$("#turn-start").css("animation", "fadeAndScale 1s ease-in forwards");
-			
-			if (this.player1Clones === 0) {
-				console.log('boom')
-				this.bossLevel = true;
-				mothershipFactory.motherships = [];
-				initMothership(1);
-				mothershipFactory.motherships[0].shield = this.player1MotherShip;
-				$("#enemies-left").text(`Shield: ${this.player1MotherShip}`);
-			} else {
-				this.bossLevel = false;
-				mothershipFactory.motherships = [];
-				$("#enemies-left").text(`Clones: ${this.player1Clones}`);
-				cloneFactory.clones = [];
-				initClones(this.player1Clones);
-			}
-		} else {
-			// check if 2nd player local storage is empty
-			// need to set default local storage for 2nd player the first time
-			if (this.player2Level === null) {
-				localStorage.setItem("player2lives", 3);
-				localStorage.setItem("player2score", 0);
-				localStorage.setItem("player2accshots", 0);
-				localStorage.setItem("player2totalshots", 0);
-				localStorage.setItem("enemiesplayer2", 10);
-				localStorage.setItem("player2mothership", 10);
-				localStorage.setItem("player2level", 1);
-			}
-
-			$("#level").text(`Level: ${this.player2Level}`);
-			$("#player-score").text(`Player 2 Score: ${this.player2Score}`);
-			$("#lives").text(`Player 2 Lives: ${this.player2Lives}`);
-
-			$("#turn-start").text("Player 2 Start");
-			$("#turn-start").css("animation", "");
-			$("#turn-start").css("animation", "fadeAndScale2 1s ease-in forwards");
-			if (this.player2Clones === 0) {
-				this.bossLevel = true;
-				mothershipFactory.motherships = [];
-				initMothership(1);
-				mothershipFactory.motherships[0].shield = this.player2MotherShip;
-				$("#enemies-left").text(`Shield: ${this.player2MotherShip}`);
-			} else {
-				this.bossLevel = false;
-				// mothershipFactory.motherships = [];
-				$("#enemies-left").text(`Clones: ${this.player2Clones}`);
-				cloneFactory.clones = [];
-				initClones(this.player2Clones);
-			}
-		}
-		// reboot level where progress was made
-	},
 	pause() {
 		this.isPaused = !this.isPaused;
 		if (this.isPaused) {
@@ -156,23 +73,9 @@ const game = {
 			this.isPaused = false;
 			// resume animations
 			cancelAnimationFrame(cancelMe);
-			requestAnimationFrame(animateGame);
+			requestAnimationFrame(animateShips);
 			event.stopPropagation();
 		}
-	},
-	genLevel() {
-		if (this.isPlayer1Turn) {
-			this.player1Clones = `${Math.min(Number(initialClones) + this.player1Level * 1, this.maxClones)}`;
-			localStorage.setItem("enemiesplayer1", this.player1Clones);
-			$("#enemies-left").text(`Clones: ${this.player1Clones}`);		
-			initClones(this.player1Clones);
-		} else {
-			this.player2Clones = `${Math.min(Number(initialClones) + this.player2Level * 1, this.maxClones)}`;
-			localStorage.setItem("enemiesplayer2", this.player2Clones);
-			$("#enemies-left").text(`Clones: ${this.player2Clones}`);
-			initClones(this.player2Clones);
-		}
-		
 	},
 	endLevel() {
 		laserFactory.lasers = [];
@@ -185,61 +88,91 @@ const game = {
 		if (this.isPlayer1Turn) {
 			localStorage.setItem("player1level", this.currentLevel);
 			endLevelScore.text(`Player 1 Score: ${this.player1Score}`);
-			const accPercentPlayer1 = round(this.percentAccuracyPlayer1, 1);
-			playerAccuracy.text(`Firing Accuracy: ${accPercentPlayer1}%`);
+			const percentAcc = Number(this.accurateShotsPlayer1) / Number(this.totalShotsPlayer1) * 100;
+			const roundedPercentAcc = round(percentAcc, 1);
+			playerAccuracy.text(`Firing Accuracy: ${roundedPercentAcc}%`);
 		} else {
 			localStorage.setItem("player2level", this.currentLevel);
 			endLevelScore.text(`Player 2 Score: ${this.player2Score}`);
-			const accPercentPlayer1 = round(this.percentAccuracyPlayer2, 1);
-			playerAccuracy.text(`Firing Accuracy: ${accPercentPlayer2}%`);
+			const percentAcc = Number(this.accurateShotsPlayer2) / Number(this.totalShotsPlayer2) * 100;
+			const roundedPercentAcc = round(percentAcc, 1);
+			playerAccuracy.text(`Firing Accuracy: ${roundedPercentAcc}%`);
 		}
 	},
-	initMothership() {
-		laserFactory.lasers = [];
+	initMothershipLevel() {
+
+		// laserFactory.lasers = [];
+		$("#enemies-left").text(`Shield: 10`);
+		// if (this.isPlayer1Turn) {
+		// 	console.log('set mothership text');
+		// 	$("#enemies-left").text(`Shield: ${Number(localStorage.getItem('player1mothership'))}`);
+		// } else {
+		// 	$("#enemies-left").text(`Shield: ${Number(localStorage.getItem('player2mothership'))}`);
+		// }
 		initMothership(1);
-		$("#enemies-left").text("Shield: 10");
 	},
-	hitMothership(mothership) {
+	hitMothership() {
+		const mothership = mothershipFactory.motherships[0];
 		if (this.isPlayer1Turn) {
 			mothership.shield--;
+			console.log(mothership.shield, " shield");
 			localStorage.setItem("player1mothership", mothership.shield);
-			$("#enemies-left").text(`Shield: ${this.player1MotherShip}`);
+			console.log(Number(localStorage.getItem("player1mothership")));
+			$("#enemies-left").text(`Shield: ${Number(localStorage.getItem("player1mothership"))}`);
 			this.accurateShotsPlayer1++;
 			localStorage.setItem("player1accshots", this.accurateShotsPlayer1);
+			if (Number(localStorage.getItem("player1mothership")) <= 0) {
+				console.log('mothership should die now');
+				this.killMothership(mothership);
+			}
 		} else {
 			mothership.shield--;
 			localStorage.setItem("player2mothership", mothership.shield);
-			$("#enemies-left").text(`Shield: ${this.player2MotherShip}`);
+			$("#enemies-left").text(`Shield: ${this.player2Mothership}`);
 			this.accurateShotsPlayer2++;
 			localStorage.setItem("player2accshots", this.accurateShotsPlayer2);
+			if (this.player2Mothership <= 0) {
+				this.killMothership(mothership);
+			}
 		}
-		if (mothership.shield <= 0) {
-			this.killMothership(mothership);
-		}
+		
 	},
-	killMothership(mothership) {
+	genLevel() {
 		if (this.isPlayer1Turn) {
+			this.player1Clones = `${Math.min(Number(initialClones) + this.player1Level * 1, this.maxClones)}`;
+			localStorage.setItem("player1clones", this.player1Clones);
+			$("#enemies-left").text(`Clones: ${this.player1Clones}`);		
+			initClones(this.player1Clones);
+		} else {
+			this.player2Clones = `${Math.min(Number(initialClones) + this.player2Level * 1, this.maxClones)}`;
+			localStorage.setItem("player2clones", this.player2Clones);
+			$("#enemies-left").text(`Clones: ${this.player2Clones}`);
+			initClones(this.player2Clones);
+		}
+		
+	},
+	killMothership() {
+		if (this.isPlayer1Turn) {
+			const mothership = mothershipFactory.motherships[0];
 			this.player1Score += 1500;
 			localStorage.setItem("player1score", this.player1Score);
 			$("#player-score").text(`Player 1 Score: ${this.player1Score}`);
 		} else {
+			const mothership = mothershipFactory.motherships.length > 1 ? mothershipFactory.motherships[0] : mothershipFactory.motherships[1];
 			this.player2Score += 1500;
 			localStorage.setItem("player2score", this.player2Score);
 			$("#player-score").text(`Player 2 Score: ${this.player2Score}`);
 		}
 
-		if (mothership.shield <= 0) {
-			const index = mothershipFactory.motherships.indexOf(mothership);
-			mothershipFactory.motherships.splice(index, 1);
-			if (mothershipFactory.motherships.length === 0) {
-				this.endLevel();
-			}
-		}
+		// const index = mothershipFactory.motherships.indexOf(mothership);
+		// mothershipFactory.motherships.splice(index, 1);
+		this.bossLevel = false;
+		this.endLevel();
 	},
-	score() {
+	killClone() {
 		if (this.isPlayer1Turn) {
 			this.player1Clones--;
-			localStorage.setItem("enemiesplayer1", this.player1Clones);
+			localStorage.setItem("player1clones", this.player1Clones);
 			this.accurateShotsPlayer1++;
 			localStorage.setItem("player1accshots", this.accurateShotsPlayer1);
 
@@ -260,9 +193,14 @@ const game = {
 			}
 			$("#player-score").text(`Player 1 Score: ${this.player1Score}`);
 
+			if (this.player1Clones == 0) {
+				this.bossLevel = true;
+				this.initMothershipLevel();
+			}
+
 		} else {
 			this.player2Clones--;
-			localStorage.setItem("enemiesplayer2", this.player2Clones);
+			localStorage.setItem("player2clones", this.player2Clones);
 			this.accurateShotsPlayer2++;
 			localStorage.setItem("player2accshots", this.accurateShotsPlayer2);
 
@@ -282,6 +220,11 @@ const game = {
 				}
 			}
 			$("#player-score").text(`Player 2 Score: ${this.player2Score}`);
+
+			if (this.player2Clones == 0) {
+				this.bossLevel = true;
+				this.initMothershipLevel();
+			}
 		}
 		
 		// set high score updating conditions
@@ -306,17 +249,18 @@ const game = {
 		localStorage.setItem("player1score", 0);
 		localStorage.setItem("player1accshots", 0);
 		localStorage.setItem("player1totalshots", 0);
-		localStorage.setItem("enemiesplayer1", 10);
+		localStorage.setItem("player1level", 1);
+		localStorage.setItem("player1clones", 10);
 		localStorage.setItem("player1mothership", 10);
-		localStorage.setItem("player1level", 1)
 
 		localStorage.setItem("player2lives", 3);
 		localStorage.setItem("player2score", 0);
 		localStorage.setItem("player2accshots", 0);
 		localStorage.setItem("player2totalshots", 0);
-		localStorage.setItem("enemiesplayer2", 10);
+		localStorage.setItem("player2level", 1);
+		localStorage.setItem("player2clones", 10);
 		localStorage.setItem("player2mothership", 10);
-		localStorage.setItem("player2level", 1)
+
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	},
 	die(ship) {
@@ -324,23 +268,20 @@ const game = {
 		if (ship === player1Ship || ship === player2Ship) {
 			this.checkGameEnd();
 		} else {
-			// if a clone dies
-			const index = cloneFactory.clones.indexOf(ship);
-			cloneFactory.clones.splice(index, 1);
-			if (this.isPlayer1Turn) {
-				localStorage.setItem("enemiesplayer1", `${this.player1Clones - 1}`);
-				this.score();
-				$("#enemies-left").text(`Clones: ${this.player1Clones}`);
-				if (this.player1Clones === 0) {
-					this.initMothership();
-				}
+			if (!this.bossLevel) { // if a clone dies
+				const index = cloneFactory.clones.indexOf(ship);
+				cloneFactory.clones.splice(index, 1);
+				if (this.isPlayer1Turn) {
+					localStorage.setItem("player1clones", `${this.player1Clones - 1}`);
+					this.killClone();
+					$("#enemies-left").text(`Clones: ${this.player1Clones}`);
+				} else {
+					localStorage.setItem("player2clones", `${this.player2Clones - 1}`);
+					this.killClone();
+					$("#enemies-left").text(`Clones: ${this.player2Clones}`);
+				}			
 			} else {
-				localStorage.setItem("enemiesplayer2", `${this.player2Clones - 1}`);
-				this.score();
-				$("#enemies-left").text(`Clones: ${this.player2Clones}`);
-				if (this.player2Clones === 0) {
-					this.initMothership();
-				}
+				this.killMothership();
 			}
 		}
 	},
@@ -408,7 +349,7 @@ closePause.on("click", function(event) {
 	game.isPaused = false;
 	stopAnimatons();
 	cancelAnimationFrame(cancelMe);
-	requestAnimationFrame(animateGame);
+	requestAnimationFrame(animateShips);
 	event.stopPropagation();
 });
 resetGame.on("click", function(event) {
@@ -453,68 +394,36 @@ startTurn.on("click", function(event) {
 	game.betweenTurns = !game.betweenTurns;
 	// stopAnimatons();
 
-	requestAnimationFrame(animateGame);
+	requestAnimationFrame(animateShips);
 	event.stopPropagation();
 	game.startTurn();
 })
 endGameOver.on("click", function(event) {
 	game.reset();
 })
+
+$(window).on('beforeunload', function() { // restarts game when browser is refreshed
+	game.setDefault();
+});
+
 // ***** FUNCTIONS *****
 
-// switch from game screen to title screen
 const returnToTitle = () => {
-	const initialPage = "index.html";
-	location.replace('https://tboneearls.github.io/space_clones/' + initialPage);
+	const currentURL = window.location.href;
+	const urlWithoutQueryParams = currentURL.split("?")[0];
+	const titleScreenURL = urlWithoutQueryParams.replace("game.html", "index.html");
+
+	window.location.replace(titleScreenURL);
+
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	// switch page to title screen
-	// display a modal with a message
-	// with a button that links to title screen?
+	game.setDefault();
 }
 
-// function to restore all default stats for both players
-// const setDefault = () => {
-// 	// this.player1Score = 0;
-// 	// this.player1IsDead = false;
-// 	// this.accurateShotsPlayer1 = 0;
-// 	// this.totalShotsLevelPlayer1 = 0;
-// 	// this.player1Lives = 3;
-
-// 	// this.player2Score = 0;
-// 	// this.player2IsDead = false;
-// 	// this.accurateShotsPlayer2 = 0;
-// 	// this.totalShotsLevelPlayer2 = 0;
-// 	// this.player2Lives = 3;
-
-// 	// // this.currentLevel = 1;
-// 	// this.isPaused = false;
-// 	// this.isMuted = false;
-
-// 	// local storage reset
-// 	localStorage.setItem("player1lives", "3");
-// 	localStorage.setItem("player1score", "0");
-// 	localStorage.setItem("player1accshots", "0");
-// 	localStorage.setItem("player1totalshots", "0");
-// 	localStorage.setItem("enemiesplayer1", "10");
-// 	localStorage.setItem("player1mothership", "10");
-// 	localStorage.setItem("player1level", "1")
-
-// 	localStorage.setItem("player2lives", "3");
-// 	localStorage.setItem("player2score", "0");
-// 	localStorage.setItem("player2accshots", "0");
-// 	localStorage.setItem("player2totalshots", "0");
-// 	localStorage.setItem("enemiesplayer2", "10");
-// 	localStorage.setItem("player2mothership", "10");
-// 	localStorage.setItem("player2level", "1")
-// 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-// }
-
-const initMothership = (numShips) => {
-	for (let i = 0; i < numShips; i++) {
+const initMothership = () => {
 		mothershipFactory.generateMothership(new Mothership());		
-		mothershipFactory.motherships[i].initialize();
-	}
+		mothershipFactory.motherships[0].initialize();
 }
+
 const initClones = (numClones) => {
 	for (let i = 0; i < numClones; i++) {
 		cloneFactory.generateClone(new Clone());
@@ -526,6 +435,5 @@ const round = (value, precision) => {
 	return Math.round(value * multiplier) / multiplier;
 }
 initClones(initialClones);
-$("#enemies-left").text(`Clones: ${initialClones}`);
 
 animateShips();

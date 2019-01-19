@@ -10,7 +10,8 @@ window.addEventListener("resize", function(event) {
 	requestAnimationFrame(animateStars);
 });
 
-// TITLE SCREEN DISPLAY
+//  ***** TITLE SCREEN DISPLAY ***** 
+
 if (localStorage.getItem("player1score") == null) {
 	$("#player1-score").text("Player 1 Score: 0");
 } else {
@@ -29,7 +30,7 @@ if (localStorage.getItem("highscore") == null) {
 	$("#high-score").text(`High Score: ${localStorage.getItem("highscore")}`);
 }
 
-//  ***** MODALS *****
+//  ***** MODALS ***** 
 
 const controls = $("#how-to-play");
 const closeControls = $(".close-controls");
