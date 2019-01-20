@@ -19,7 +19,6 @@ const startTurn = $(".start-turn");
 const gameOverModal = $(".game-over-modal");
 const endGameOver = $("#game-over-button");
 
-const initialClones = 10;
 
 const game = {
 	highScore: Number(localStorage.getItem("highscore")) > 5000 ? Number(localStorage.getItem("highscore")) : 5000,
@@ -48,6 +47,7 @@ const game = {
 	maxClones: 20,
 	bossLevel: false,
 	currentLevel: 1,
+	initialClones: 10,
 	playerSwitch() {
 		const player = this.isPlayer1Turn ? "Player 1" : "Player 2";
 		const otherPlayer = this.isPlayer1Turn ? "Player 2" : "Player 1";
@@ -142,12 +142,14 @@ const game = {
 		laserFactory.lasers = [];
 		$("#level").text(`Level: ${this.currentLevel}`);
 		if (this.isPlayer1Turn) {
-			this.player1Clones = `${Math.min(Number(initialClones) + this.player1Level * 2, this.maxClones)}`;
+			this.player1Level = this.currentLevel;
+			this.player1Clones = `${Math.min(this.initialClones + (this.player1Level - 1) * 2, this.maxClones)}`;
 			localStorage.setItem("player1clones", this.player1Clones);
-			$("#enemies-left").text(`Clones: ${this.player1Clones}`);		
+			$("#enemies-left").text(`Clones: ${this.player1Clones}`);
 			initClones(this.player1Clones);
 		} else {
-			this.player2Clones = `${Math.min(Number(initialClones) + this.player2Level * 2, this.maxClones)}`;
+			this.player2Level = this.currentLevel;
+			this.player2Clones = `${Math.min(this.initialClones + this.player2Level * 1, this.maxClones)}`;
 			localStorage.setItem("player2clones", this.player2Clones);
 			$("#enemies-left").text(`Clones: ${this.player2Clones}`);
 			initClones(this.player2Clones);
@@ -445,6 +447,6 @@ const round = (value, precision) => {
 	const multiplier = Math.pow(10, precision || 0);
 	return Math.round(value * multiplier) / multiplier;
 }
-initClones(initialClones);
+initClones(game.initialClones);
 
 animateShips();

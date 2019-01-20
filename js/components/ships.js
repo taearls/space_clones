@@ -108,35 +108,37 @@ class Clone {
       this.direction = "right";
     }
   }
-  move() {
+  move(index) {
+    const currentClone = cloneFactory.findClone(index);
+
     const leftBorder = 0;
     const rightBorder = canvas.width - this.body.width; // or if circle, this.body.radius
     
-    if (this.direction === "left") {
+    if (currentClone.direction === "left") {
       // if the direction changes to left, subtract speed value from x
-      if (this.body.x <= leftBorder) {
-        this.speed = 0;
-        this.body.x = 0;
-        this.direction = "down";
-        this.speed = this.descent;
-        this.body.y += this.speed;
-        this.direction = "right";
+      if (currentClone.body.x <= leftBorder) {
+        currentClone.speed = 0;
+        currentClone.body.x = 0;
+        currentClone.direction = "down";
+        currentClone.speed = currentClone.descent;
+        currentClone.body.y += currentClone.speed;
+        currentClone.direction = "right";
       } else {
-        this.speed = 2;
-        this.body.x -= this.speed;
+        currentClone.speed = 2;
+        currentClone.body.x -= currentClone.speed;
       }
-    } else if (this.direction === "right") {
+    } else if (currentClone.direction === "right") {
       // if the direction changes to right, add speed value to x
-      if (this.body.x >= rightBorder - 1) {
-        this.speed = 0;
-        this.body.x = rightBorder - 1;
-        this.direction = "down";
-        this.speed = this.descent;
-        this.body.y += this.speed;
-        this.direction = "left";
+      if (currentClone.body.x >= rightBorder - 1) {
+        currentClone.speed = 0;
+        currentClone.body.x = rightBorder - 1;
+        currentClone.direction = "down";
+        currentClone.speed = currentClone.descent;
+        currentClone.body.y += currentClone.speed;
+        currentClone.direction = "left";
       } else {
-        this.speed = 2;
-        this.body.x += this.speed;
+        currentClone.speed = 2;
+        currentClone.body.x += currentClone.speed;
       }
     }
   }

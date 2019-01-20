@@ -134,7 +134,7 @@ const animateShips = () => {
     for (let j = 0; j < cloneFactory.clones.length; j++) {
       cloneFactory.clones[j].draw();
       cloneFactory.clones[j].update();
-      cloneFactory.clones[j].move();
+      cloneFactory.clones[j].move(j);
     }
   } else {
     mothershipFactory.motherships[0].draw();
