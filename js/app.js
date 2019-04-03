@@ -359,12 +359,7 @@ const game = {
 //  ***** MODALS *****
 
 closePause.on("click", function(event) {
-	$(this).parent().parent().toggleClass("show-modal", false);
-	game.isPaused = false;
-	stopAnimatons();
-	cancelAnimationFrame(cancelMe);
-	requestAnimationFrame(animateShips);
-	event.stopPropagation();
+	game.pause();
 });
 resetGame.on("click", function(event) {
 	game.reset();

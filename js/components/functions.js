@@ -55,10 +55,8 @@ window.addEventListener("resize", function(event) {
   initStars(200);
   if (game.isPlayer1Turn) {
     player1Ship.initialize();
-    player1Ship.draw();
   } else {
     player2Ship.initialize();
-    player2Ship.draw();
   } 
 });
 

@@ -117,14 +117,6 @@ class Clone {
       width: cloneImg.width,
       height: cloneImg.height
     }
-    if (this.index === 0) { 
-      console.log(canvas.width);
-    }
-    if (this.index >= 0) {
-      console.log("ship: " + parseInt(this.index + 1));
-      console.log(this.body);
-    }
-
 
     if (this.row % 2 === 1) {
       this.direction = "left";
