@@ -64,8 +64,8 @@ class Player {
 
 const cloneImg = new Image();
 cloneImg.src = "images/clone_ship.png";
-cloneImg.width = 45;
-cloneImg.height = 45;
+cloneImg.width = 52;
+cloneImg.height = 52;
 // class for basic enemies
 class Clone {
   constructor(index) {
@@ -86,34 +86,47 @@ class Clone {
     this.row = row;
     return row;
   }
-  calculateX() {
+  calculateX(index) {
     let xVal = this.index * this.distBetweenShips;
     const currentRow = this.calculateRow();
     const roundedCanvas = Math.ceil(canvas.width / this.distBetweenShips) * this.distBetweenShips;
     while (xVal >= canvas.width) {
       xVal -= roundedCanvas;
       if (currentRow % 2 === 1) {
-        xVal = roundedCanvas - xVal - this.distBetweenShips - 45; // 45 is the ship width
-      }    
+        xVal = roundedCanvas - xVal - this.distBetweenShips - 52; // 52 is the ship width
+      }
       if (xVal < 0) {
         xVal += roundedCanvas;
       }
-      // }
       if (xVal >= 0 && xVal + this.body.width <= canvas.width) {
         break;
       }
     }
-    // if (xVal >= canvas.width) {
-    //   xVal -= canvas.width;
-    //   xVal = Math.floor(xVal / this.distBetweenShips) * this.distBetweenShips;
-    // }
+
+    if (canvas.width - roundedCanvas + this.distBetweenShips < 52) {
+      if (canvas.width - xVal < 52 && currentRow > 1) {
+        if (currentRow % 2 === 0) {  
+          this.row += 1;
+        } 
+        // xVal -= (canvas.width - roundedCanvas + this.distBetweenShips);
+        xVal += (2 * (canvas.width - (xVal + 52)));
+      } else if (currentRow > 2) {
+        // console.log(cloneFactory.clones[index]);
+        xVal = cloneFactory.clones[index - 1].body.x - this.distBetweenShips;      
+      }
+    } else {
+      if (currentRow > 1 && canvas.width - cloneFactory.clones[index - 1].body.x < 52) {
+        xVal += canvas.width - cloneFactory.clones[index - 1].body.x;
+      }
+    }
+
     return xVal;
   }
   initialize() {
 
     this.body = {
-      x: this.calculateX(),
-      y: this.descent * this.calculateRow(),
+      x: this.calculateX(this.index),
+      y: this.descent * this.row,
       width: cloneImg.width,
       height: cloneImg.height
     }
@@ -123,7 +136,6 @@ class Clone {
     } else {
       this.direction = "right";
     }
-
   }
   move(index) {
     const currentClone = cloneFactory.findClone(index);

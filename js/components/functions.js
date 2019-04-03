@@ -153,7 +153,7 @@ const handleEnemyFiring = () => {
     for (let j = 0; j < cloneFactory.clones.length; j++) {
       const cNumber = Math.floor(Math.random() * 300);
       if (cNumber === 26) {
-        cloneFactory.clones[j].fire();
+        // cloneFactory.clones[j].fire();
       }
     }
   } else { // if mothership fires

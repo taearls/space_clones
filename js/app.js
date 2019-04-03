@@ -203,8 +203,6 @@ const game = {
 
 			if (this.player1Clones == 0) {
 				$('#enemies-left').text(`Shield: 10`);
-				$('#enemies-left').text();
-				// $('#enemies-left')[0].innerText = 'Shield: 10';
 				this.bossLevel = true;
 				this.initMothershipLevel();
 			}
