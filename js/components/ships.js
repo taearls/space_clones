@@ -68,7 +68,7 @@ cloneImg.width = 45;
 cloneImg.height = 45;
 // class for basic enemies
 class Clone {
-  constructor() {
+  constructor(index) {
     this.firepower = 1;
     this.shield = 1;
     this.speed = 2;
@@ -77,42 +77,67 @@ class Clone {
     this.distBetweenShips = 100;
     this.descent = 55;
     this.row = 1;
-    this.rowY = 55;
+    this.index = index;
   }
-  adjustShipRow() {
-    this.row++;
-    this.body.x -= canvas.width;
-    this.body.y += this.rowY;
+  calculateRow() {
+    const numerator = (this.index + 1) * this.distBetweenShips;
+    const denominator = Math.ceil(canvas.width / this.distBetweenShips) * this.distBetweenShips + 1;
+    const row = Math.ceil(numerator / denominator);
+    this.row = row;
+    return row;
+  }
+  calculateX() {
+    let xVal = this.index * this.distBetweenShips;
+    const currentRow = this.calculateRow();
+    const roundedCanvas = Math.ceil(canvas.width / this.distBetweenShips) * this.distBetweenShips;
+    while (xVal >= canvas.width) {
+      xVal -= roundedCanvas;
+      if (currentRow % 2 === 1) {
+        xVal = roundedCanvas - xVal - this.distBetweenShips - 45; // 45 is the ship width
+      }    
+      if (xVal < 0) {
+        xVal += roundedCanvas;
+      }
+      // }
+      if (xVal >= 0 && xVal + this.body.width <= canvas.width) {
+        break;
+      }
+    }
+    // if (xVal >= canvas.width) {
+    //   xVal -= canvas.width;
+    //   xVal = Math.floor(xVal / this.distBetweenShips) * this.distBetweenShips;
+    // }
+    return xVal;
   }
   initialize() {
+
     this.body = {
-      x: canvas.width - (this.distBetweenShips * (cloneFactory.clones.length)),
-      y: 100,
+      x: this.calculateX(),
+      y: this.descent * this.calculateRow(),
       width: cloneImg.width,
       height: cloneImg.height
     }
-    // if dist between ships makes x a negative value.
-    // only bug is if I need to start with more than two rows of ships
+    if (this.index === 0) { 
+      console.log(canvas.width);
+    }
+    if (this.index >= 0) {
+      console.log("ship: " + parseInt(this.index + 1));
+      console.log(this.body);
+    }
 
-    if (this.body.x <= 0) {
-      this.row++;
-      this.body.x = Math.abs(this.body.x);
-      this.body.y += this.rowY;
-      if (this.body.x + this.body.width >= canvas.width) {
-        this.adjustShipRow();
-      }
-    } 
+
     if (this.row % 2 === 1) {
       this.direction = "left";
     } else {
       this.direction = "right";
     }
+
   }
   move(index) {
     const currentClone = cloneFactory.findClone(index);
 
     const leftBorder = 0;
-    const rightBorder = canvas.width - this.body.width; // or if circle, this.body.radius
+    const rightBorder = canvas.width; // or if circle, this.body.radius
     
     if (currentClone.direction === "left") {
       // if the direction changes to left, subtract speed value from x
@@ -120,8 +145,7 @@ class Clone {
         currentClone.speed = 0;
         currentClone.body.x = 0;
         currentClone.direction = "down";
-        currentClone.speed = currentClone.descent;
-        currentClone.body.y += currentClone.speed;
+        currentClone.body.y += currentClone.descent;
         currentClone.direction = "right";
       } else {
         currentClone.speed = 2;
@@ -129,12 +153,11 @@ class Clone {
       }
     } else if (currentClone.direction === "right") {
       // if the direction changes to right, add speed value to x
-      if (currentClone.body.x >= rightBorder - 1) {
+      if (currentClone.body.x + currentClone.body.width >= rightBorder - 1) {
         currentClone.speed = 0;
-        currentClone.body.x = rightBorder - 1;
+        currentClone.body.x = rightBorder - currentClone.body.width;
         currentClone.direction = "down";
-        currentClone.speed = currentClone.descent;
-        currentClone.body.y += currentClone.speed;
+        currentClone.body.y += currentClone.descent;
         currentClone.direction = "left";
       } else {
         currentClone.speed = 2;
@@ -146,11 +169,11 @@ class Clone {
     const indexLaser = laserFactory.generateLaser(this.body.x + 20, this.body.y + this.body.height, 6, "clone");
     laserFactory.lasers[indexLaser].move();
   }
-  update() {
+  update(index) {
     const leftBorder = 0;
-    const rightBorder = canvas.width - this.body.width;
+    const rightBorder = canvas.width;
     if (this.body.y + this.descent >= canvas.height - this.body.height) {
-      this.body.y = 100;
+      this.body.y = this.descent;
       if (this.body.x >= leftBorder){
         this.direction = "right";
       } else if (this.body.x + this.body.width <= rightBorder) {
@@ -263,7 +286,8 @@ class Lasers {
 const cloneFactory = {
   clones: [],
   generateClone() {
-    const newClone = new Clone();
+    const index = this.clones.length;
+    const newClone = new Clone(index);
     this.clones.push(newClone);
     return newClone;
   },
