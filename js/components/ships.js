@@ -2,11 +2,10 @@ const player2Img = new Image();
 player2Img.src = "images/player2_ship.png";
 player2Img.width = 60;
 player2Img.height = 60;
-
-const playerImg = new Image();
-playerImg.src = "images/player_ship.png";
-playerImg.width = 60;
-playerImg.height = 60;
+const player1Img = new Image();
+player1Img.src = "images/player_ship.png";
+player1Img.width = 60;
+player1Img.height = 60;
 
 // class for player ships
 class Player {
@@ -14,8 +13,8 @@ class Player {
     this.body = {
       x: 300,
       y: 500,
-      width: playerImg.width,
-      height: playerImg.height
+      width: player1Img.width,
+      height: player1Img.height
     };
     this.lasersFired = 0;
   }
@@ -23,8 +22,8 @@ class Player {
     this.body = {
       x: (canvas.width / 2) - (this.body.width / 2),
       y: (canvas.height - this.body.height * 2),
-      width: playerImg.width,
-      height: playerImg.height
+      width: player1Img.width,
+      height: player1Img.height
     }
   }
   fireLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
@@ -45,7 +44,6 @@ class Player {
         this.body.x -= speed;
       }
     } else if (this.direction === "right") {
-      // if the direction changes to right, add speed value to x
       if (this.body.x >= rightBorder - 1) {
         speed = 0;
         this.body.x = rightBorder - 1;
@@ -58,7 +56,7 @@ class Player {
   draw() {
     let x = this.body.x;
     let y = this.body.y;
-    ctx.drawImage(playerImg, x, y);
+    ctx.drawImage(player1Img, x, y);
   }
 }
 
@@ -66,7 +64,7 @@ const cloneImg = new Image();
 cloneImg.src = "images/clone_ship.png";
 cloneImg.width = 52;
 cloneImg.height = 52;
-// class for basic enemies
+
 class Clone {
   constructor(index) {
     this.firepower = 1;
@@ -76,57 +74,31 @@ class Clone {
     this.direction = "left";
     this.distBetweenShips = 100;
     this.descent = 55;
-    this.row = 1;
     this.index = index;
+    this.row = 1;
+    this.column = 1;
   }
-  calculateRow() {
-    const numerator = (this.index + 1) * this.distBetweenShips;
-    const denominator = Math.ceil(canvas.width / this.distBetweenShips) * this.distBetweenShips + 1;
-    const row = Math.ceil(numerator / denominator);
-    this.row = row;
+  calculateRow(index) {
+    const maxShipsPerRow = Math.floor(canvas.width / this.distBetweenShips);
+    const row = Math.ceil((index + 1) / maxShipsPerRow);
     return row;
   }
-  calculateX(index) {
-    let xVal = this.index * this.distBetweenShips;
-    const currentRow = this.calculateRow();
-    const roundedCanvas = Math.ceil(canvas.width / this.distBetweenShips) * this.distBetweenShips;
-    while (xVal >= canvas.width) {
-      xVal -= roundedCanvas;
-      if (currentRow % 2 === 1) {
-        xVal = roundedCanvas - xVal - this.distBetweenShips - 52; // 52 is the ship width
-      }
-      if (xVal < 0) {
-        xVal += roundedCanvas;
-      }
-      if (xVal >= 0 && xVal + this.body.width <= canvas.width) {
-        break;
-      }
-    }
-
-    if (canvas.width - roundedCanvas + this.distBetweenShips < 52) {
-      if (canvas.width - xVal < 52 && currentRow > 1) {
-        if (currentRow % 2 === 0) {  
-          this.row += 1;
-        } 
-        // xVal -= (canvas.width - roundedCanvas + this.distBetweenShips);
-        xVal += (2 * (canvas.width - (xVal + 52)));
-      } else if (currentRow > 2) {
-        // console.log(cloneFactory.clones[index]);
-        xVal = cloneFactory.clones[index - 1].body.x - this.distBetweenShips;      
-      }
+  calculateColumn(index) {
+    const numberColumns = Math.floor(canvas.width / this.distBetweenShips);
+    let column;
+    if (this.row % 2 == 1) { // alternate drawing ships from left to right
+      column = index % numberColumns;
     } else {
-      if (currentRow > 1 && canvas.width - cloneFactory.clones[index - 1].body.x < 52) {
-        xVal += canvas.width - cloneFactory.clones[index - 1].body.x;
-      }
+      column = index % numberColumns + 1;
     }
-
-    return xVal;
+    return column;
   }
   initialize() {
-
+    this.row = this.calculateRow(this.index);
+    this.column = this.calculateColumn(this.index);
     this.body = {
-      x: this.calculateX(this.index),
       y: this.descent * this.row,
+      x: this.distBetweenShips * this.column,
       width: cloneImg.width,
       height: cloneImg.height
     }
@@ -179,9 +151,9 @@ class Clone {
     if (this.body.y + this.descent >= canvas.height - this.body.height) {
       this.body.y = this.descent;
       if (this.body.x >= leftBorder){
-        this.direction = "right";
-      } else if (this.body.x + this.body.width <= rightBorder) {
         this.direction = "left";
+      } else if (this.body.x + this.body.width <= rightBorder) {
+        this.direction = "right";
       }
     }
   }
@@ -196,7 +168,7 @@ const mothershipImg = new Image();
 mothershipImg.src = "images/mothership.png";
 mothershipImg.width = 240;
 mothershipImg.height = 150;
-// class for end of level enemies
+
 class Mothership {
   constructor() {
     this.firepower = 1;

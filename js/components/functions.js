@@ -57,7 +57,7 @@ window.addEventListener("resize", function(event) {
     player1Ship.initialize();
   } else {
     player2Ship.initialize();
-  } 
+  }
 });
 
 const laserSound = new Audio("audio/laser.wav");
@@ -87,12 +87,10 @@ document.addEventListener("keydown", function addKeys(event) {
     // space bar to fire
     if (game.isPlayer1Turn) {
       player1Ship.fireLaser();
-      game.totalShotsPlayer1++;
-      localStorage.setItem("player1totalshots", game.totalShotsPlayer1);
+      game.player1GameData.totalShots++;
     } else {
       player2Ship.fireLaser();
-      game.totalShotsPlayer2++;
-      localStorage.setItem("player2totalshots", game.totalShotsPlayer2);
+      game.player2GameData.totalShots++;
     }
     if (!game.isMuted) {
       laserSound.play();
@@ -134,7 +132,7 @@ const animateShips = () => {
       cloneFactory.clones[j].update(j);
       cloneFactory.clones[j].move(j);
     }
-  } else {
+  } else if (mothershipFactory.motherships[0]) {
     mothershipFactory.motherships[0].draw();
     mothershipFactory.motherships[0].update();
     mothershipFactory.motherships[0].move();
@@ -153,17 +151,13 @@ const handleEnemyFiring = () => {
     for (let j = 0; j < cloneFactory.clones.length; j++) {
       const cNumber = Math.floor(Math.random() * 300);
       if (cNumber === 26) {
-        // cloneFactory.clones[j].fire();
+        cloneFactory.clones[j].fire();
       }
     }
-  } else { // if mothership fires
+  } else if (mothershipFactory.motherships[0]) { // if mothership fires
     const msNumber = Math.floor(Math.random() * 100);
     if (msNumber === 26) {
-      if (mothershipFactory.length > 1 && !game.isPlayer1Turn) {
-        motherShipFactory.motherships[1].fire();
-      } else {
-        mothershipFactory.motherships[0].fire();
-      }
+      mothershipFactory.motherships[0].fire();
     }
   }
 }
@@ -263,7 +257,7 @@ const detectCollisions = () => {
             playerLaser.destroyTarget(cloneShip, playerLaser);
           }
         }
-      } else {
+      } else if (mothershipFactory.motherships[0]) {
         let mothership = mothershipFactory.motherships[0];
         let xMShip = mothership.body.x;
         let yMShip = mothership.body.y;
