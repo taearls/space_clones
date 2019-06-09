@@ -9,6 +9,7 @@ const $resetButton = $(".reset-button");
 const $playerAccuracy = $(".player-accuracy");
 
 // Pause Modal
+const $pauseModal = $(".pause-modal");
 const $pauseClose = $(".close-pause");
 const $pauseMute = $("#mute-button");
 
@@ -21,6 +22,7 @@ const $endOfLevelMute = $("#end-level-mute");
 const $endOfLevelReset = $("#end-level-reset");
 
 // Switch Turn Modal
+const $endOfTurnModal = $(".turn-switch-modal");
 const $endOfTurnText = $("#player-turn");
 const $endOfTurnStartTurn = $(".start-turn");
 
@@ -154,14 +156,14 @@ const game = {
 		$endOfTurnText.text("Player 1 has died.");
 		$endOfTurnStartTurn.text("Player 1 Start Turn");
 		this.getPlayerAccuracy();
-		$(".turn-switch-modal").addClass("show-modal");
+		showModal($endOfTurnModal);
 		// this.updateDisplay();
 		this.savePlayerStats();
 	},
 	playerSwitch() {
 		const player = this.getPlayerDisplayString();
 		const otherPlayer = this.isPlayer1Turn ? "Player 2" : "Player 1";
-		this.currentGameLevel = this.isPlayer1Turn ? this.player1GameData.level : this.player1GameData.level;
+		this.currentGameLevel = this.isPlayer1Turn ? this.player1GameData.level : this.player2GameData.level;
 
 		// save, switch players, get other player's stats
 		this.savePlayerStats();
@@ -171,19 +173,18 @@ const game = {
 		// set modal
 		$endOfTurnText.text(`${player} has died.`);
 		$endOfTurnStartTurn.text(`${otherPlayer} Start Turn`);
-		$(".turn-switch-modal").addClass("show-modal");
+		showModal($endOfTurnModal);
 		laserFactory.lasers = [];
 		stopAnimatons();
-
 	},
 	pause() {
 		this.isPaused = !this.isPaused;
 		if (this.isPaused) {
-			$(".pause-modal").addClass("show-modal");
+			showModal($pauseModal);
 			cancelAnimationFrame(cancelMe);
 		} else {
 			// this makes it so I can press enter and toggle if it's paused
-			$(".pause-modal").toggleClass("show-modal", false);
+			closeAllModals();
 			this.isPaused = false;
 			// resume animations
 			cancelAnimationFrame(cancelMe);
@@ -195,8 +196,8 @@ const game = {
 		// display player 1 start or player 2 start
 		// switch all stats displayed // affected
 		const playerShip = this.isPlayer1Turn ? player1Ship : player2Ship;
-		const playerData = this.isPlayer1Turn ? this.player1GameData : this.player2GameData;
-		const playerString = this.isPlayer1Turn ? "Player 1" : "Player 2";
+		const playerData = this.getPlayerData();
+		const playerString = this.getPlayerDisplayString();
 		// readjusts player 1 and player 2 image while still instantiating from same Player class
 		playerShip.__proto__.draw = function() {		
 			let x = this.body.x;
@@ -212,10 +213,10 @@ const game = {
 			.css("animation", "fadeAndScale 1s ease-in forwards");
 
 		// if no clones remaining, display mothership shield instead
-		if (playerData.clones > 0) {
-			this.initClonesLevel(playerData.clones);
-		} else {
+		if (this.bossLevel) {
 			this.initMothershipLevel();
+		} else {
+			this.initClonesLevel(playerData.clones);
 		}
 	},
 	initClonesLevel(clones) {
@@ -245,16 +246,15 @@ const game = {
 		const playerData = this.getPlayerData();
 		const playerString = this.getPlayerDisplayString();
 		this.currentGameLevel++;
+		playerData.level = this.currentGameLevel;
 
-		$endOfLevelModal.addClass("show-modal");
 		$endOfLevelMessage.text(`You beat Level ${this.currentGameLevel - 1}!`);
 		$endOfLevelNextLevelButton.text(`Begin Level ${this.currentGameLevel}`);
-		playerData.level = this.currentGameLevel;
 		$endOfLevelScore.text(`Player 1 Score: ${playerData.score}`);
+		showModal($endOfLevelModal);
 		this.getPlayerAccuracy();
+		playerData.mothership = 10;
 		this.savePlayerStats();
-		this.initClonesLevel();
-
 	},
 	hitMothership() {
 		const playerData = this.getPlayerData();
@@ -274,7 +274,7 @@ const game = {
 		playerData.score += 1500;
 		$playerScore.text(`Player 1 Score: ${playerData.score}`);
 
-		this.checkHighScore();
+		this.checkHighScore(playerData.score);
 		this.bossLevel = false;
 		this.endLevel();
 	},
@@ -311,7 +311,7 @@ const game = {
 		const playerData = this.getPlayerData();
 		if (score === 9000 || score === 15000 || score === 22000) {
 			playerData.lives++;
-			$playerLives.text(`Player 1 Lives: ${playerData.lives}`);
+			$lives.text(`Player 1 Lives: ${playerData.lives}`);
 			if (this.animation1) {
 				$("#extra-life").css("animation", "extraLives 1s ease-in forwards");
 				this.animation1 = false;
@@ -325,6 +325,8 @@ const game = {
 		this.isPaused = false;
 		this.isMuted = false;
 		this.bossLevel = false;
+		setLocalStorage("highscore", game.highScore); // save high score
+
 		setLocalStorage("player1lives", 3);
 		setLocalStorage("player1score", 0);
 		setLocalStorage("player1accurateshots", 0);
@@ -347,14 +349,21 @@ const game = {
 
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	},
-	die(ship) {		
+	die(ship) {
+		var playerData = this.getPlayerData();
+		var otherPlayerData = this.isPlayer1Turn ? this.player2GameData : this.player1GameData;
 		if (ship === player1Ship || ship === player2Ship) { // if player dies
-			this.checkGameEnd();
 			if (!this.isSolo) {
+				if (this.bossLevel && !otherPlayerData.bossLevel) {
+					this.bossLevel = false;
+				} else if (!this.bossLevel && otherPlayerData.bossLevel) {
+					this.bossLevel = true;
+				}
 				this.playerSwitch();
 			} else {
 				this.soloGameDeath();
 			}
+			this.checkGameEnd();
 		} else {
 			if (!this.bossLevel) { // if a clone dies
 				const index = cloneFactory.clones.indexOf(ship);
@@ -367,8 +376,6 @@ const game = {
 	},
 	checkGameEnd() {
 		const currentPlayerData = this.getPlayerData();
-		const player1Data = this.player1GameData;
-		const player2Data = this.player2GameData;
 		const playerString = this.getPlayerDisplayString();
 
 		if (this.isSolo) {
@@ -394,7 +401,7 @@ const game = {
 		}
 	},
 	gameOver() {
-		$gameOverModal.addClass("show-modal");
+		showModal($gameOverModal);
 		setTimeout(stopAnimatons, 2000);
 	}
 };
@@ -432,13 +439,13 @@ $endOfLevelMute.on("click", function(){
 		laserSound.play();
 	}
 });
-$endOfLevelNextLevelButton.on("click", function(event){
-	$(this).parent().parent().toggleClass("show-modal", false);
+$endOfLevelNextLevelButton.on("click", (event) => {
+	closeAllModals();
 	event.stopPropagation();
 	game.initClonesLevel();
 });
-$endOfTurnStartTurn.on("click", function(event) {
-	$(this).parent().parent().toggleClass("show-modal", false);
+$endOfTurnStartTurn.on("click", (event) => {
+	closeAllModals();
 	stopAnimatons();
 
 	requestAnimationFrame(animateShips);
@@ -446,7 +453,15 @@ $endOfTurnStartTurn.on("click", function(event) {
 	game.startTurn();
 });
 
-$(window).on('beforeunload', function() { // restarts game when browser is refreshed
+const showModal = (modal) => {
+	$(".show-modal").removeClass("show-modal"); // closes all modals currently open
+	modal.addClass("show-modal");
+};
+const closeAllModals = () => {
+	$(".show-modal").removeClass("show-modal");
+};
+
+$(window).on('beforeunload', () => { // restarts game when browser is refreshed
 	game.setDefault();
 });
 
