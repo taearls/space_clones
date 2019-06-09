@@ -219,16 +219,21 @@ const game = {
 			this.initClonesLevel(playerData.clones);
 		}
 	},
+	setPlayerClones() {
+		const playerData = this.getPlayerData();
+		console.log(playerData);
+		console.log(this.initialClones);
+		console.log(this.maxClones);
+		playerData.clones = Math.min(this.initialClones + (playerData.level - 1) * 2, this.maxClones);
+		console.log(playerData.clones);
+	},
 	initClonesLevel(clones) {
 		const playerData = this.getPlayerData();
 
 		laserFactory.lasers = [];
 		cloneFactory.clones = [];
 		mothershipFactory.motherships = [];
-
-		playerData.clones = clones ? clones: `${Math.min(this.initialClones + (playerData.level - 1) * 2, this.maxClones)}`;
 		initClones(playerData.clones);
-
 	},
 	initMothershipLevel() {
 		const playerData = this.getPlayerData();
@@ -247,14 +252,18 @@ const game = {
 		const playerString = this.getPlayerDisplayString();
 		this.currentGameLevel++;
 		playerData.level = this.currentGameLevel;
+		this.setPlayerClones();
 
+		$enemiesLeft.text(`Clones: ${playerData.clones}`);
 		$endOfLevelMessage.text(`You beat Level ${this.currentGameLevel - 1}!`);
 		$endOfLevelNextLevelButton.text(`Begin Level ${this.currentGameLevel}`);
 		$endOfLevelScore.text(`Player 1 Score: ${playerData.score}`);
+
 		showModal($endOfLevelModal);
 		this.getPlayerAccuracy();
 		playerData.mothership = 10;
 		this.savePlayerStats();
+		this.updateDisplay();
 	},
 	hitMothership() {
 		const playerData = this.getPlayerData();
@@ -273,7 +282,6 @@ const game = {
 		const mothership = mothershipFactory.motherships[0];
 		playerData.score += 1500;
 		$playerScore.text(`Player 1 Score: ${playerData.score}`);
-
 		this.checkHighScore(playerData.score);
 		this.bossLevel = false;
 		this.endLevel();
@@ -289,7 +297,7 @@ const game = {
 		$playerScore.text(`Player 1 Score: ${playerData.score}`);
 
 		if (playerData.clones == 0) {
-			$enemiesLeft.text(`Shield: 10`);
+			$enemiesLeft.text("Shield: 10");
 			this.bossLevel = true;
 			this.initMothershipLevel();
 		}
@@ -454,7 +462,7 @@ $endOfTurnStartTurn.on("click", (event) => {
 });
 
 const showModal = (modal) => {
-	$(".show-modal").removeClass("show-modal"); // closes all modals currently open
+	closeAllModals();
 	modal.addClass("show-modal");
 };
 const closeAllModals = () => {
