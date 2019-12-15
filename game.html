@@ -11,17 +11,9 @@
 
 	<!-- HEADER -->
 	<header>
-		<h2 id="player-score">Player 1 Score: 0</h2>
-		<h2 id="high-score">
-			<script>
-				if (localStorage.getItem("highscore") == null) {
-					$("#high-score").text("High Score: 5000");
-				} else {
-					$("#high-score").text("High Score: " + localStorage.getItem("highscore"));
-				}
-			</script>
-		</h2>
-		<h2 id="enemies-left">Clones: 10</h2>
+		<h2 id="player-score"></h2>
+		<h2 id="high-score"></h2>
+		<h2 id="enemies-left"></h2>
 	</header>
 
 	<!-- GAME MESSAGES -->
@@ -30,8 +22,8 @@
 
 	<!-- FOOTER -->
 	<footer>
-		<h2 id="lives">Player 1 Lives: 3</h2>
-		<h2 id="level">Level: 1</h2>
+		<h2 id="lives"></h2>
+		<h2 id="level"></h2>
 	</footer>
 
 	<!-- CANVAS -->
@@ -52,7 +44,7 @@
 			<h2>Pause: Return</h2>
 			<h2>Reset: Escape</h2>
 			<button id="mute-button">Mute</button>
-			<button id="reset-game">Reset Game</button>
+			<button class="reset-button">Reset Game</button>
 			<button class="close-pause">Resume Game</button>
 			
 		</div>
@@ -65,10 +57,10 @@
 		<div class="end-level-content">
 			<h1 id="end-level-message"></h1>
 			<h1 id="end-level-score"></h1>
-			<h1 id="player-accuracy"></h1>
+			<h1 class="player-accuracy"></h1>
 			<button class="next-level">Begin Next Level</button>
 			<button id="end-level-mute">Mute</button>
-			<button id="end-level-reset">Reset Game</button>
+			<button class="reset-button">Reset Game</button>
 		</div>
 
 	</div>
@@ -78,6 +70,7 @@
 
 		<div class="turn-switch-content">
 			<h1 id="player-turn"></h1>
+			<h1 class="player-accuracy"></h1>
 			<button class="start-turn">Start Turn</button>
 		</div>
 
@@ -87,7 +80,7 @@
 	<div class="game-over-modal">
 		<div class="game-over-content">
 			<h1 id="game-over-message">Game Over</h1>
-			<button id="game-over-button">Return to Title Screen</button>
+			<button class="reset-button">Return to Title Screen</button>
 		</div>
 	</div>
 

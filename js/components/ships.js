@@ -2,11 +2,10 @@ const player2Img = new Image();
 player2Img.src = "images/player2_ship.png";
 player2Img.width = 60;
 player2Img.height = 60;
-
-const playerImg = new Image();
-playerImg.src = "images/player_ship.png";
-playerImg.width = 60;
-playerImg.height = 60;
+const player1Img = new Image();
+player1Img.src = "images/player_ship.png";
+player1Img.width = 60;
+player1Img.height = 60;
 
 // class for player ships
 class Player {
@@ -14,21 +13,22 @@ class Player {
     this.body = {
       x: 300,
       y: 500,
-      width: playerImg.width,
-      height: playerImg.height
+      width: player1Img.width,
+      height: player1Img.height
     };
-    this.shotsFired = [];
+    this.lasersFired = 0;
   }
   initialize() {
     this.body = {
       x: (canvas.width / 2) - (this.body.width / 2),
       y: (canvas.height - this.body.height * 2),
-      width: playerImg.width,
-      height: playerImg.height
+      width: player1Img.width,
+      height: player1Img.height
     }
   }
-  initLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
-      this.shotsFired.push(laserFactory.generateLaser((this.body.x + 8), (this.body.y - this.body.height), (-6)));
+  fireLaser() { // creates player bullet and "fires" it(i.e. adds it to shotsFired)
+    laserFactory.generateLaser((this.body.x + 8), (this.body.y - this.body.height), (-6), "player");
+    this.lasersFired++;
   }
   move() {
     let speed = 5;
@@ -44,7 +44,6 @@ class Player {
         this.body.x -= speed;
       }
     } else if (this.direction === "right") {
-      // if the direction changes to right, add speed value to x
       if (this.body.x >= rightBorder - 1) {
         speed = 0;
         this.body.x = rightBorder - 1;
@@ -57,19 +56,17 @@ class Player {
   draw() {
     let x = this.body.x;
     let y = this.body.y;
-    let width = this.body.width;
-    let height = this.body.height;
-    ctx.drawImage(playerImg, x, y);
+    ctx.drawImage(player1Img, x, y);
   }
 }
 
 const cloneImg = new Image();
 cloneImg.src = "images/clone_ship.png";
-cloneImg.width = 45;
-cloneImg.height = 45;
-// class for basic enemies
+cloneImg.width = 52;
+cloneImg.height = 52;
+
 class Clone {
-  constructor() {
+  constructor(index) {
     this.firepower = 1;
     this.shield = 1;
     this.speed = 2;
@@ -77,86 +74,86 @@ class Clone {
     this.direction = "left";
     this.distBetweenShips = 100;
     this.descent = 55;
-    this.shotsFired = [];
+    this.index = index;
     this.row = 1;
-    this.rowY = 55;
+    this.column = 1;
   }
-  adjustShipRow() {
-    this.row++;
-    this.body.x -= canvas.width;
-    this.body.y += this.rowY;
+  calculateRow(index) {
+    const maxShipsPerRow = Math.floor(canvas.width / this.distBetweenShips);
+    const row = Math.ceil((index + 1) / maxShipsPerRow);
+    return row;
+  }
+  calculateColumn(index) {
+    const numberColumns = Math.floor(canvas.width / this.distBetweenShips);
+    let column;
+    if (this.row % 2 == 1) { // alternate drawing ships from left to right
+      column = index % numberColumns;
+    } else {
+      column = index % numberColumns + 1;
+    }
+    return column;
   }
   initialize() {
+    this.row = this.calculateRow(this.index);
+    this.column = this.calculateColumn(this.index);
     this.body = {
-      x: canvas.width - (this.distBetweenShips * (cloneFactory.clones.length)),
-      y: 100,
+      y: this.descent * this.row,
+      x: this.distBetweenShips * this.column,
       width: cloneImg.width,
       height: cloneImg.height
     }
-    // if dist between ships makes x a negative value.
-    // only bug is if I need to start with more than two rows of ships
 
-    if (this.body.x <= 0) {
-      this.row++;
-      this.body.x = Math.abs(this.body.x);
-      this.body.y += this.rowY;
-      if (this.body.x + this.body.width >= canvas.width) {
-        this.adjustShipRow();
-      }
-    } 
     if (this.row % 2 === 1) {
       this.direction = "left";
     } else {
       this.direction = "right";
     }
   }
-  move() {
+  move(index) {
+    const currentClone = cloneFactory.findClone(index);
+
     const leftBorder = 0;
-    const rightBorder = canvas.width - this.body.width; // or if circle, this.body.radius
+    const rightBorder = canvas.width; // or if circle, this.body.radius
     
-    if (this.direction === "left") {
+    if (currentClone.direction === "left") {
       // if the direction changes to left, subtract speed value from x
-      if (this.body.x <= leftBorder) {
-        this.speed = 0;
-        this.body.x = 0;
-        this.direction = "down";
-        this.speed = this.descent;
-        this.body.y += this.speed;
-        this.direction = "right";
+      if (currentClone.body.x <= leftBorder) {
+        currentClone.speed = 0;
+        currentClone.body.x = 0;
+        currentClone.direction = "down";
+        currentClone.body.y += currentClone.descent;
+        currentClone.direction = "right";
       } else {
-        this.speed = 2;
-        this.body.x -= this.speed;
+        currentClone.speed = 2;
+        currentClone.body.x -= currentClone.speed;
       }
-    } else if (this.direction === "right") {
+    } else if (currentClone.direction === "right") {
       // if the direction changes to right, add speed value to x
-      if (this.body.x >= rightBorder - 1) {
-        this.speed = 0;
-        this.body.x = rightBorder - 1;
-        this.direction = "down";
-        this.speed = this.descent;
-        this.body.y += this.speed;
-        this.direction = "left";
+      if (currentClone.body.x + currentClone.body.width >= rightBorder - 1) {
+        currentClone.speed = 0;
+        currentClone.body.x = rightBorder - currentClone.body.width;
+        currentClone.direction = "down";
+        currentClone.body.y += currentClone.descent;
+        currentClone.direction = "left";
       } else {
-        this.speed = 2;
-        this.body.x += this.speed;
+        currentClone.speed = 2;
+        currentClone.body.x += currentClone.speed;
       }
     }
   }
   fire() {
-    this.shotsFired.push(laserFactory.generateLaser(this.body.x + 20, this.body.y + this.body.height, 6))
-    for (let i = 0; i < this.shotsFired.length; i++) {
-      this.shotsFired[i].move();
-    }
+    const indexLaser = laserFactory.generateLaser(this.body.x + 20, this.body.y + this.body.height, 6, "clone");
+    laserFactory.lasers[indexLaser].move();
   }
-  update() {
+  update(index) {
     const leftBorder = 0;
-    const rightBorder = canvas.width - this.body.width;
+    const rightBorder = canvas.width;
     if (this.body.y + this.descent >= canvas.height - this.body.height) {
-      this.body.y = 100;
+      this.body.y = this.descent;
       if (this.body.x >= leftBorder){
-        this.direction = "right";
-      } else if (this.body.x + this.body.width <= rightBorder) {
         this.direction = "left";
+      } else if (this.body.x + this.body.width <= rightBorder) {
+        this.direction = "right";
       }
     }
   }
@@ -171,7 +168,7 @@ const mothershipImg = new Image();
 mothershipImg.src = "images/mothership.png";
 mothershipImg.width = 240;
 mothershipImg.height = 150;
-// class for end of level enemies
+
 class Mothership {
   constructor() {
     this.firepower = 1;
@@ -179,7 +176,6 @@ class Mothership {
     this.speed = 5;
     this.body = {};
     this.direction = "left";
-    this.shotsFired = [];
   }
   initialize() { 
     this.body = {
@@ -206,10 +202,8 @@ class Mothership {
     }
   }
   fire() {
-    this.shotsFired.push(laserFactory.generateLaser(this.body.x + 110, this.body.y + this.body.height, 6))
-    for (let i = 0; i < this.shotsFired.length; i++) {
-      this.shotsFired[i].move();
-    }
+    const index = laserFactory.generateLaser(this.body.x + 110, this.body.y + this.body.height, 6, "mothership");
+    laserFactory.lasers[index].move();
   }
   draw() {
     let x = this.body.x;
@@ -224,12 +218,13 @@ laserImg.width = 60;
 laserImg.height = 100;
 
 class Lasers {
-  constructor(x, y, dy) {
+  constructor(x, y, dy, firingShip) {
     this.x = x;
     this.y = y;
     this.width = laserImg.width;
     this.height = laserImg.height;
     this.dy = dy;
+    this.firingShip = firingShip;
   }
   draw() {
     ctx.drawImage(laserImg, this.x, this.y);
@@ -237,36 +232,29 @@ class Lasers {
   move() {
     this.draw();
     this.y += this.dy;
-    this.checkDisappear();
+    this.checkDisappear(this);
   }
-  shipHit(firingShip, laser) {
-    // get the index of the ship that fired the laser from the clone factory
-    if (firingShip != player1Ship && firingShip != player2Ship) {
-      const indexShip = cloneFactory.clones.indexOf(firingShip);
-      // get the index of the laser from that ship
-      const indexLaser = cloneFactory.clones[indexShip].shotsFired.indexOf(laser);
-      // remove that laser from the ship's array of lasers
-      cloneFactory.clones[indexShip].shotsFired.splice(indexLaser, 1);
-    } else if (firingShip === player1Ship) {
-      const indexLaser = player1Ship.shotsFired.indexOf(laser);
-      player1Ship.shotsFired.splice(indexLaser, 1);
-    } else if (firingShip === player2Ship) {
-      const indexLaser = player2Ship.shotsFired.indexOf(laser);
-      player2Ship.shotsFired.splice(indexLaser, 1);
-    }
+  removeLaser(laser) {
+    const indexLaser = laserFactory.lasers.indexOf(laser);
+    laserFactory.deleteLaser(indexLaser);
+  }
+  destroyTarget(targetedShip, laser) {
+    const playerShip = game.isPlayer1Turn ? player1Ship : player2Ship;
+    const playerData = game.isPlayer1Turn ? game.player1GameData : game.player2GameData;
     
-  }
-  mothershipHit(mothership, laser) {
-    const indexShip = mothershipFactory.motherships.indexOf(mothership);
-    // get the index of the laser from that ship
-    const indexLaser = mothershipFactory.motherships[indexShip].shotsFired.indexOf(laser);
-    // remove that laser from the ship's array of lasers
-    mothershipFactory.motherships[indexShip].shotsFired.splice(indexLaser, 1);
+    if (targetedShip == playerShip) {
+      game.die(playerShip);
+    } else if (!playerData.bossLevel) {
+      game.die(targetedShip);
+    } else {
+      game.hitMothership();
+    } 
+    this.removeLaser(laser);
   }
   checkDisappear(laser) {
     const indexLaser = laserFactory.lasers.indexOf(laser);
     if (this.y > canvas.height || this.y + this.height < 0) {
-      laserFactory.lasers.splice(indexLaser, 1);
+      laserFactory.deleteLaser(indexLaser);
     }
   }
 }
@@ -276,7 +264,8 @@ class Lasers {
 const cloneFactory = {
   clones: [],
   generateClone() {
-    const newClone = new Clone();
+    const index = this.clones.length;
+    const newClone = new Clone(index);
     this.clones.push(newClone);
     return newClone;
   },
@@ -301,12 +290,16 @@ const mothershipFactory = {
 // factory to store lasers
 const laserFactory = {
   lasers: [],
-  generateLaser(x, y, dy) {
-    const newLaser = new Lasers(x, y, dy);
+  generateLaser(x, y, dy, firingShip) {
+    const newLaser = new Lasers(x, y, dy, firingShip);
     this.lasers.push(newLaser);
-    return newLaser;
+    const index = this.lasers.length - 1;
+    return index;
   },
   findLaser(index) {
     return this.lasers[index];
+  },
+  deleteLaser(index) {
+    this.lasers.splice(index, 1);
   }
 }

@@ -12,8 +12,8 @@ body * {
 header {
     padding-left: 3vw;
     padding-right: 3vw;
-    display: flex;
-    justify-content: space-between;
+    display: block;
+    text-align: center;
 }
 #game-title {
 	font-family: 'Press Start 2P', cursive;
@@ -21,7 +21,6 @@ header {
 	margin-bottom: 10vh;
 	font-size: 45px;
 }
-
 footer {
     position: absolute;
     text-align: center;
@@ -30,11 +29,12 @@ footer {
     margin-left: auto;
     margin-right: auto;
     top: 90vh;
-    font-size: 14px;
+}
+#credit {
+    font-size: 20px;
 }
 
 /* GAME MENU */
-
 nav a {
 	text-decoration: none;
 	display: block;
@@ -50,59 +50,41 @@ nav a {
 }
 
 /* MODALS */
-
+.controls-content, .prologue-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #462980;
+    padding-bottom: 2rem;
+    width: 26rem;
+    border-radius: 0.5rem;
+}
 .controls-modal, .prologue-modal {
     position: fixed;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
     opacity: 0;
     visibility: hidden;
-    transform: scale(1.1);
     transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
 }
-.controls-modal button {
-    font-size: 13px;
-}
-.prologue-modal button {
-	font-size: 13px;
-}
-.controls-content, .prologue-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #8A69D9;
-    padding: 2rem 2rem;
-    width: 26rem;
-    border-radius: 0.5rem;
-}
-#close-controls, #close-prologue {
-	float: right;
-    width: 1.5rem;
-    line-height: 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    background-color: white;
-    margin-bottom: 4px;
-    transition: 0.5s;
-}
-.close-button {
+.close-modal {
+    height: 30px;
+    width: 30px;
+    font-size: 22px;
     float: right;
-    width: 1.5rem;
-    line-height: 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    background-color: white;
-    margin-bottom: 4px;
-    transition: 0.5s;
+    background-color: transparent;
+    border: none;
 }
-.close-button:hover {
-    background-color: #FF3B31;
+.close-modal:focus {
+    outline: none;
+}
+.close-modal:hover {
+    cursor: pointer;
+    background-color: transparent;
     transition: 0.3s;
 }
 .show-modal {
@@ -116,17 +98,14 @@ nav a {
 button {
 	color: black;
 }
-button:hover {
-	cursor: pointer;
-	background-color: firebrick;
-	transition: 0.3s;
-}
+
 input:hover {
 	cursor: text;
 }
-
 .backstory {
     font-size: 20px;
+    text-align: justify;
+    margin: 2rem 1rem 0.5rem 1rem;
 }
 .controls-content h3 {
     font-size: 22px;
