@@ -123,7 +123,7 @@ const game = {
 		$highScore.text(`High Score: ${this.highScore}`);
 		$level.text(`Level: ${playerData.level}`);
 		$lives.text(`${playerString} Lives: ${playerData.lives}`);
-		if (this.bossLevel) {
+		if (playerData.bossLevel) {
 			$enemiesLeft.text(`Shield: ${playerData.mothership}`);
 		} else {
 			$enemiesLeft.text(`Clones: ${playerData.clones}`);
@@ -132,78 +132,72 @@ const game = {
 	},
 	savePlayerStats() {
 		const playerData = this.getPlayerData();
-		const playerString = this.getPlayerStorageString();
+		const playerStorageString = this.getPlayerStorageString();
 
-		setLocalStorage(playerString + "score", playerData.score);
-		setLocalStorage(playerString + "lives", playerData.lives);
-		setLocalStorage(playerString + "clones", playerData.clones);
-		setLocalStorage(playerString + "mothership", playerData.mothership);
-		setLocalStorage(playerString + "isdead", playerData.isDead);
-		setLocalStorage(playerString + "accurateshots", playerData.accurateShots);
-		setLocalStorage(playerString + "totalshots", playerData.totalShots);
+		setLocalStorage(playerStorageString + "score", playerData.score);
+		setLocalStorage(playerStorageString + "lives", playerData.lives);
+		setLocalStorage(playerStorageString + "clones", playerData.clones);
+		setLocalStorage(playerStorageString + "mothership", playerData.mothership);
+		setLocalStorage(playerStorageString + "isdead", playerData.isDead);
+		setLocalStorage(playerStorageString + "accurateshots", playerData.accurateShots);
+		setLocalStorage(playerStorageString + "totalshots", playerData.totalShots);
 		setLocalStorage("highscore", this.highScore);
 
 		// check if in clone part of level or mothership part
 		if (playerData.mothership != 0) {
-			setLocalStorage(playerString + "bosslevel", true);
+			setLocalStorage(playerStorageString + "bosslevel", true);
 		} else {
-			setLocalStorage(playerString + "bosslevel", false);		
+			setLocalStorage(playerStorageString + "bosslevel", false);		
 		}
 	},
-	soloGameDeath() {
-		stopAnimatons();
+	playerDeath() {
+		// call this function before switching turns
+		const playerData = this.getPlayerData();
+		const playerString = this.getPlayerDisplayString();
+		const otherPlayerString = this.isPlayer1Turn ? "Player 2" : "Player 1";
+
+		playerData.lives--;
+		setTimeout(stopAnimations, 20);
 		laserFactory.lasers = [];
-		$endOfTurnText.text("Player 1 has died.");
-		$endOfTurnStartTurn.text("Player 1 Start Turn");
+		$endOfTurnText.text(`${playerString} has died.`);
+		$endOfTurnStartTurn.text(`${isSolo ? playerString : otherPlayerString} Start Turn`);
 		this.getPlayerAccuracy();
 		showModal($endOfTurnModal);
-		// this.updateDisplay();
+		this.updateDisplay();
 		this.savePlayerStats();
 	},
 	playerSwitch() {
-		const player = this.getPlayerDisplayString();
-		const otherPlayer = this.isPlayer1Turn ? "Player 2" : "Player 1";
-		this.currentGameLevel = this.isPlayer1Turn ? this.player1GameData.level : this.player2GameData.level;
-
-		// save, switch players, get other player's stats
-		this.savePlayerStats();
+		const playerData = this.getPlayerData();
+		this.currentGameLevel = playerData.level;
 		this.isPlayer1Turn = !this.isPlayer1Turn;
-		this.getPlayerAccuracy();
-
-		// set modal
-		$endOfTurnText.text(`${player} has died.`);
-		$endOfTurnStartTurn.text(`${otherPlayer} Start Turn`);
-		showModal($endOfTurnModal);
-		laserFactory.lasers = [];
-		stopAnimatons();
 	},
 	pause() {
 		this.isPaused = !this.isPaused;
 		if (this.isPaused) {
-			showModal($pauseModal);
-			cancelAnimationFrame(cancelMe);
+			showModal($pauseModal, true);
+			// setTimeout(stopAnimations, 20);
 		} else {
 			// this makes it so I can press enter and toggle if it's paused
 			closeAllModals();
 			this.isPaused = false;
 			// resume animations
-			cancelAnimationFrame(cancelMe);
-			requestAnimationFrame(animateShips);
+
+			if (!isAnimated) {
+				animateShips();
+			}
 			event.stopPropagation();
 		}
 	},
 	startTurn() {
-		// display player 1 start or player 2 start
 		// switch all stats displayed // affected
 		const playerShip = this.isPlayer1Turn ? player1Ship : player2Ship;
 		const playerData = this.getPlayerData();
 		const playerString = this.getPlayerDisplayString();
+
 		// readjusts player 1 and player 2 image while still instantiating from same Player class
 		playerShip.__proto__.draw = function() {		
 			let x = this.body.x;
 			let y = this.body.y;
-			let width = this.body.width;
-			let height = this.body.height;
 			ctx.drawImage(playerData.img, x, y);
 		}
 
@@ -213,21 +207,20 @@ const game = {
 			.css("animation", "fadeAndScale 1s ease-in forwards");
 
 		// if no clones remaining, display mothership shield instead
-		if (this.bossLevel) {
+		if (playerData.bossLevel) {
 			this.initMothershipLevel();
 		} else {
 			this.initClonesLevel(playerData.clones);
 		}
+		if (!isAnimated) {
+			animateShips();
+		}
 	},
 	setPlayerClones() {
 		const playerData = this.getPlayerData();
-		console.log(playerData);
-		console.log(this.initialClones);
-		console.log(this.maxClones);
 		playerData.clones = Math.min(this.initialClones + (playerData.level - 1) * 2, this.maxClones);
-		console.log(playerData.clones);
 	},
-	initClonesLevel(clones) {
+	initClonesLevel() {
 		const playerData = this.getPlayerData();
 
 		laserFactory.lasers = [];
@@ -242,6 +235,7 @@ const game = {
 		mothershipFactory.motherships = [];
 		initMothership();
 		mothershipFactory.motherships[0].shield = playerData.mothership;
+		$enemiesLeft.text(`Shield: ${playerData.mothership}`);
 	},
 	endLevel() {
 		laserFactory.lasers = [];
@@ -257,9 +251,9 @@ const game = {
 		$enemiesLeft.text(`Clones: ${playerData.clones}`);
 		$endOfLevelMessage.text(`You beat Level ${this.currentGameLevel - 1}!`);
 		$endOfLevelNextLevelButton.text(`Begin Level ${this.currentGameLevel}`);
-		$endOfLevelScore.text(`Player 1 Score: ${playerData.score}`);
+		$endOfLevelScore.text(`${playerString} Score: ${playerData.score}`);
 
-		showModal($endOfLevelModal);
+		showModal($endOfLevelModal, false, true);
 		this.getPlayerAccuracy();
 		playerData.mothership = 10;
 		this.savePlayerStats();
@@ -279,26 +273,29 @@ const game = {
 	},
 	killMothership() {
 		const playerData = this.getPlayerData();
-		const mothership = mothershipFactory.motherships[0];
+		const playerString = this.getPlayerDisplayString();
+
 		playerData.score += 1500;
-		$playerScore.text(`Player 1 Score: ${playerData.score}`);
+
+		$playerScore.text(`${playerString} Score: ${playerData.score}`);
 		this.checkHighScore(playerData.score);
-		this.bossLevel = false;
+		playerData.bossLevel = false;
 		this.endLevel();
 	},
 	killClone() {
 		const playerData = this.getPlayerData();
+		const playerString = this.getPlayerDisplayString();
+
 		playerData.clones--;
 		$enemiesLeft.text(`Clones: ${playerData.clones}`);
 		playerData.accurateShots++;
 		playerData.totalShots++;
 		playerData.score += 100;
 			
-		$playerScore.text(`Player 1 Score: ${playerData.score}`);
+		$playerScore.text(`${playerString} Score: ${playerData.score}`);
 
 		if (playerData.clones == 0) {
-			$enemiesLeft.text("Shield: 10");
-			this.bossLevel = true;
+			playerData.bossLevel = true;
 			this.initMothershipLevel();
 		}
 
@@ -306,7 +303,7 @@ const game = {
 		this.checkHighScore(playerData.score);
 	},
 	checkHighScore(score) {
-		if (score > Number(this.highScore)) {		
+		if (score > this.highScore) {		
 			this.highScore = score;
 			$highScore.text(`High Score: ${this.highScore}`);
 		}
@@ -317,9 +314,11 @@ const game = {
 	},
 	checkExtraLives(score) {
 		const playerData = this.getPlayerData();
+		const playerString = this.getPlayerDisplayString();
+
 		if (score === 9000 || score === 15000 || score === 22000) {
 			playerData.lives++;
-			$lives.text(`Player 1 Lives: ${playerData.lives}`);
+			$lives.text(`${playerString} Lives: ${playerData.lives}`);
 			if (this.animation1) {
 				$("#extra-life").css("animation", "extraLives 1s ease-in forwards");
 				this.animation1 = false;
@@ -332,7 +331,6 @@ const game = {
 	setDefault() {
 		this.isPaused = false;
 		this.isMuted = false;
-		this.bossLevel = false;
 		setLocalStorage("highscore", game.highScore); // save high score
 
 		setLocalStorage("player1lives", 3);
@@ -359,21 +357,11 @@ const game = {
 	},
 	die(ship) {
 		var playerData = this.getPlayerData();
-		var otherPlayerData = this.isPlayer1Turn ? this.player2GameData : this.player1GameData;
 		if (ship === player1Ship || ship === player2Ship) { // if player dies
-			if (!this.isSolo) {
-				if (this.bossLevel && !otherPlayerData.bossLevel) {
-					this.bossLevel = false;
-				} else if (!this.bossLevel && otherPlayerData.bossLevel) {
-					this.bossLevel = true;
-				}
-				this.playerSwitch();
-			} else {
-				this.soloGameDeath();
-			}
+			this.playerDeath();
 			this.checkGameEnd();
 		} else {
-			if (!this.bossLevel) { // if a clone dies
+			if (!playerData.bossLevel) { // if a clone dies
 				const index = cloneFactory.clones.indexOf(ship);
 				cloneFactory.clones.splice(index, 1);
 				this.killClone();
@@ -383,34 +371,30 @@ const game = {
 		}
 	},
 	checkGameEnd() {
-		const currentPlayerData = this.getPlayerData();
-		const playerString = this.getPlayerDisplayString();
+		const playerData = this.getPlayerData();
 
 		if (this.isSolo) {
-			currentPlayerData.lives--;
-			$lives.text(`${playerString} Lives: ${currentPlayerData.lives}`);
-			if (currentPlayerData.lives <= 0) {
-				currentPlayerData.isDead = true;
+			if (playerData.lives <= 0) {
+				playerData.isDead = true;
 				this.gameOver();
 			}
 		} else {
-			currentPlayerData.lives--;
-			if (!currentPlayerData.isDead) {
-				$lives.text(`${playerString} Lives: ${currentPlayerData.lives}`);
+			if (playerData.lives <= 0) {
+				playerData.isDead = true;
 			}
-			if (currentPlayerData.lives <= 0 && !currentPlayerData.isDead) {
-				currentPlayerData.isDead = true;
-				if (this.player1GameData.isDead && this.player2GameData.isDead) {
-					this.gameOver();
-				} else {
-					this.playerSwitch();
-				}
+			// if game is over, end it; otherwise, switch turns
+			if (this.player1GameData.isDead && this.player2GameData.isDead) {
+				this.gameOver();
+			} else {
+				this.playerSwitch();
 			}
 		}
+		this.updateDisplay();
 	},
 	gameOver() {
 		showModal($gameOverModal);
-		setTimeout(stopAnimatons, 2000);
+		
+		setTimeout(stopAnimations, 20);
 	}
 };
 
@@ -454,19 +438,29 @@ $endOfLevelNextLevelButton.on("click", (event) => {
 });
 $endOfTurnStartTurn.on("click", (event) => {
 	closeAllModals();
-	stopAnimatons();
+	setTimeout(stopAnimations, 20);
 
 	requestAnimationFrame(animateShips);
 	event.stopPropagation();
 	game.startTurn();
 });
 
-const showModal = (modal) => {
+const showModal = (modal, isPause, keepAnimations) => {
 	closeAllModals();
+	if (!keepAnimations) {
+		setTimeout(stopAnimations, 20);
+	}
 	modal.addClass("show-modal");
+	if (!isPause) {
+		document.removeEventListener("keydown", addKeys);
+		eventListenersAttached = false;
+	}
 };
 const closeAllModals = () => {
 	$(".show-modal").removeClass("show-modal");
+	if (!eventListenersAttached) {
+		document.addEventListener("keydown", addKeys);
+	}
 };
 
 $(window).on('beforeunload', () => { // restarts game when browser is refreshed
@@ -479,17 +473,16 @@ const returnToTitle = () => {
 	const currentURL = window.location.href;
 	const urlWithoutQueryParams = currentURL.split("?")[0];
 	const titleScreenURL = urlWithoutQueryParams.replace("game.html", "index.html");
-
-	window.location.replace(titleScreenURL);
-
+	
+	window.location = titleScreenURL;
+	
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	game.setDefault();
 }
 const setDefaultDisplay = () => {
 	const playerData = game.getPlayerData();
 	const playerString = game.getPlayerDisplayString();
-	const highScore = getLocalStorage("highscore") > 5000 ? getLocalStorage("highscore") : setLocalStorage("highscore", 5000);
-	$highScore.text(`High Score: ${highScore}`);
+
+	$highScore.text(`High Score: ${game.highScore}`);
 	$playerScore.text(`${playerString} Score: ${playerData.score}`);
 	$level.text(`Level: ${playerData.level}`);
 	$lives.text(`${playerString} Lives: ${playerData.lives}`);
@@ -511,5 +504,4 @@ const round = (value, precision) => {
 };
 
 setDefaultDisplay();
-initClones(game.initialClones);
-animateShips();
+game.startTurn();

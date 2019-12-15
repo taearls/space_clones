@@ -1,5 +1,7 @@
 body {
-	margin: 0;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
 	background-color: black;
 	box-sizing: border-box;
 }
@@ -13,7 +15,7 @@ body * {
 header {
     padding-left: 3vw;
     padding-right: 3vw;
-	margin-top: 3vh;
+	padding-top: 3vh;
 	margin-bottom: 0;
 	display: flex;
 	justify-content: space-between;
@@ -25,21 +27,18 @@ footer {
 
 /* GAME MESSSAGES */
 
-#lives {
+#lives, #level {
     position: absolute;
-    top: 93vh;
+    top: 91vh;
     max-height: 7vh;
-    left: 3vw;
     z-index: 1000;
+}
+#lives {
+    left: 3vw;
 }
 #level {
-    position: absolute;
-    top: 93vh;
-    max-height: 7vh;
     right: 3vw;
-    z-index: 1000;
 }
-
 
 /* MODALS */
 
@@ -63,8 +62,8 @@ button:hover {
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
     visibility: hidden;
-    transform: scale(1.1);
-    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+    /* transform: scale(1.1); */
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s;
 }
 .pause-content, button {
     font-size: 13px;

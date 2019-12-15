@@ -12,8 +12,8 @@ body * {
 header {
     padding-left: 3vw;
     padding-right: 3vw;
-    display: flex;
-    justify-content: space-between;
+    display: block;
+    text-align: center;
 }
 #game-title {
 	font-family: 'Press Start 2P', cursive;
@@ -29,7 +29,9 @@ footer {
     margin-left: auto;
     margin-right: auto;
     top: 90vh;
-    font-size: 14px;
+}
+#credit {
+    font-size: 20px;
 }
 
 /* GAME MENU */

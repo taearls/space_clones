@@ -11,11 +11,13 @@ const restartAnimation = () => {
   element.classList.add("run-animation");
 }
 
-const stopAnimatons = () => {
-  cloneFactory.clones = [];
-  mothershipFactory.motherships = [];
+const stopAnimations = () => {
+  isAnimated = false;
   cancelAnimationFrame(cancelMe);
 }
+
+let eventListenersAttached = false;
+let isAnimated = false;
 
 const parseLocalStorage = (key, defaultVal = 0) => {
   return parseInt(localStorage.getItem(key)) || defaultVal;
@@ -52,7 +54,7 @@ window.addEventListener("resize", function(event) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  initStars(200);
+  initStars(100);
   if (game.isPlayer1Turn) {
     player1Ship.initialize();
   } else {
@@ -61,7 +63,8 @@ window.addEventListener("resize", function(event) {
 });
 
 const laserSound = new Audio("audio/laser.wav");
-document.addEventListener("keydown", function addKeys(event) {
+function addKeys(event) {
+  eventListenersAttached = true;
   const key = event.keyCode;
 
   // PLAYER MOVEMENT
@@ -104,10 +107,13 @@ document.addEventListener("keydown", function addKeys(event) {
   } else if (key===27) {
     game.reset();
   } 
-  ctx.clearRect(0,0, canvas.width, canvas.height)
-});
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+}
+
+document.addEventListener("keydown", addKeys);
 
 const animateShips = () => {
+  isAnimated = true;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // background animation
@@ -117,16 +123,13 @@ const animateShips = () => {
     stars[i].move();
   }
   // player animation
-  let playerShip;
-  if (game.isPlayer1Turn) {
-    playerShip = player1Ship;
-  } else {
-    playerShip = player2Ship;
-  }
+  const playerShip = game.isPlayer1Turn ? player1Ship : player2Ship;
+  const playerData = game.getPlayerData();
+
   playerShip.draw();
   playerShip.move();
 
-  if (!game.bossLevel) {
+  if (!playerData.bossLevel) {
     for (let j = 0; j < cloneFactory.clones.length; j++) {
       cloneFactory.clones[j].draw();
       cloneFactory.clones[j].update(j);
@@ -147,7 +150,9 @@ const animateShips = () => {
 }
 
 const handleEnemyFiring = () => {
-  if (!game.bossLevel) { // if clone fires
+  const playerData = game.getPlayerData();
+
+  if (!playerData.bossLevel) { // if clone fires
     for (let j = 0; j < cloneFactory.clones.length; j++) {
       const cNumber = Math.floor(Math.random() * 300);
       if (cNumber === 26) {
@@ -206,6 +211,7 @@ const checkCloneCollidedWithPlayer = (playerShip) => {
 }
 
 const detectCollisions = () => {
+  const playerData = game.getPlayerData();
   const playerShip = game.isPlayer1Turn ? player1Ship : player2Ship;
   let xPlayer = playerShip.body.x;
   let yPlayer = playerShip.body.y;
@@ -227,7 +233,7 @@ const detectCollisions = () => {
       let widthPlayerLaser = playerLaser.width;
       let heightPlayerLaser = playerLaser.height;
 
-      if (!game.bossLevel) { // if level has clones
+      if (!playerData.bossLevel) { // if level has clones
         for (let j = 0; j < cloneFactory.clones.length; j++) {
           let cloneShip = cloneFactory.clones[j];
           let xClone = cloneShip.body.x;
@@ -285,7 +291,7 @@ const detectCollisions = () => {
         }
       }
     } else { // if player didn't fire laser
-      if (!game.bossLevel) { // if clone fired laser
+      if (!playerData.bossLevel) { // if clone fired laser
         let cloneLaser = laserFactory.lasers[i];
         let xCLaser = cloneLaser.x;
         let yCLaser = cloneLaser.y;

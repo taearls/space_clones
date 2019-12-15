@@ -240,9 +240,11 @@ class Lasers {
   }
   destroyTarget(targetedShip, laser) {
     const playerShip = game.isPlayer1Turn ? player1Ship : player2Ship;
+    const playerData = game.isPlayer1Turn ? game.player1GameData : game.player2GameData;
+    
     if (targetedShip == playerShip) {
       game.die(playerShip);
-    } else if (!game.bossLevel) {
+    } else if (!playerData.bossLevel) {
       game.die(targetedShip);
     } else {
       game.hitMothership();

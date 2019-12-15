@@ -14,4 +14,4 @@ const initPlayer2 = () => {
 initPlayer1();
 initPlayer2();
 
-initStars(200);
+initStars(100);

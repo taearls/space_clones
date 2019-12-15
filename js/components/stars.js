@@ -31,7 +31,6 @@ class Star {
 let stars = [];
 // generate 500 stars with function, push into star array
 function initStars(length) {
-  length = 200;
   stars = [];
   if (stars.length < length) {
     for (i = 0; i < length; i++) {
