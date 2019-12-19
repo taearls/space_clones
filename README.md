@@ -16,13 +16,3 @@ You can play [here.](https://tboneearls.github.io/space_clones/index.html)
 
 ### End of Level
 ![End of Level Screenshot](images/readme_imgs/gameplay_mothership_screenshot.png)
-
-## WIREFRAMES
-
-Don't judge me for my crappy hand drawings, lol. Like I said, this was my first project, so I didn't use modern prototyping tools. Keeping this for posterity.
-
-### Title Screen Wireframe
-![Title Screen Wireframe](images/readme_imgs/title_screen_wireframe.jpg)
-
-### Gameplay Wireframe
-![Gameplay Wireframe](images/readme_imgs/gameplay_wireframe.jpg)
