@@ -1,52 +1,10 @@
 # Space Clones
 
-Original browser game inspired largely by the classic arcade game Space Invaders. Control a ship as you fight a brigade of alien clones hellbent on destroying Earth.
+Original web browser game built with JavaScript and jQuery, inspired by the classic arcade game, Space Invaders. Control a ship as you fight a brigade of alien clones hellbent on destroying Earth.
 
-Play [here.](https://tboneearls.github.io/space_clones/index.html)
+This project holds a special place in my heart because it's my first real code project that originated in my Web Development Immersive at General Assembly.
 
----
-
-## TECH USED
-
--- To make this game, I used HTML, CSS, Javascript, jQuery, along with audio and images borrowed from opengameart.org.
-
-## PROBLEM I OVERCAME
-
--- The biggest issue I had by far was implementing a 2 Player mode. Setting up the basic logic wasn't terribly hard once I already had the logic written for 1 Player, but there were a lot of bugs that came out of it that I didn't expect. It took me quite a while to isolate the problems in my code and correct them.
-
-## USER STORY
-
--- This will be a two player game, so first the user will be presented with a title screen displaying a high score at the top, with the option to play in a 1 player mode or 2 player mode. The 2 player mode will have the two players taking turns.
-
--- The player will control their ship using the left and right arrows or AD for directions, and either clicking or hitting spacebar to fire their laser. The player will be locked in a horizontal plane at the bottom of the game screen.
-
--- The player will begin the game with 3 lives. One hit will result in player death. Once all lives are depleted, the game will be over, and a final score screen will be presented with newly introduced fire accuracy + number of enemies defeated stats as well.
-
--- User will be able to see if they have beaten the high score and how many enemies are remaining before the level's mothership while playing.
-
--- Like in Space Invaders, each level features an array of descending enemy ships which will move left to right as they descend. Each enemy will disintegrate with one hit. Once all enemies are defeated, a mothership will appear that takes more hits to defeat.
-
--- As the player progresses, each level increases the speed of the enemy ships, increasing the difficulty of the game.
-
--- Each defeated enemy ship will increment the player's score by a set value, with the mothership incrementing it by an increased amount.
-
-## FUTURE POSSIBILITIES
-
--- Create bonus stages which allow the players to gain extra points, but player will not be able to die during these.
-
--- Implement a life bar rather than a one hit death.
-
--- Allow player to upgrade shields/weapons.
-
--- Add a game demo if player leaves start menu open after a set interval of time.
-
--- Allow player to hold certain items and use them to their advantage at their discretion.
-
--- At higher levels, introduce meteors/comets/other space anomalies that will pose a threat to the player in addition to the enemy ships.
-
--- Create a final boss character that will result in a win for the player once defeated. The conflict between the final boss and the player is what drives the basic "plot" of the game.
-
----
+You can play [here.](https://tboneearls.github.io/space_clones/index.html)
 
 ## SCREENSHOTS
 
@@ -59,7 +17,9 @@ Play [here.](https://tboneearls.github.io/space_clones/index.html)
 ### End of Level
 ![End of Level Screenshot](images/readme_imgs/gameplay_mothership_screenshot.png)
 
-## WIREFRAMES (Hand-drawn)
+## WIREFRAMES
+
+Don't judge me for my crappy hand drawings, lol. Like I said, this was my first project, so I didn't use modern prototyping tools. Keeping this for posterity.
 
 ### Title Screen Wireframe
 ![Title Screen Wireframe](images/readme_imgs/title_screen_wireframe.jpg)
