@@ -59,7 +59,7 @@ const game = {
 	player1GameData: {
 		score: getLocalStorage('player1score') || 0,
 		lives: getLocalStorage('player1lives') || 3,
-		clones: getLocalStorage('player1clones') || this.initialClones,
+		clones: getLocalStorage('player1clones') || 10,
 		mothership: getLocalStorage('player1mothership') || 10,
 		level: getLocalStorage('player1level') || 1,
 		isDead: false,
@@ -71,7 +71,7 @@ const game = {
 	player2GameData: {
 		score: getLocalStorage('player2score') || 0,
 		lives: getLocalStorage('player2lives') || 3,
-		clones: getLocalStorage('player2clones') || this.initialClones,
+		clones: getLocalStorage('player2clones') || 10,
 		mothership: getLocalStorage('player2mothership') || 10,
 		level: getLocalStorage('player2level') || 1,
 		isDead: false,
@@ -218,6 +218,8 @@ const game = {
 	},
 	setPlayerClones() {
 		const playerData = this.getPlayerData();
+		console.log(this.initialClones);
+		console.log(Math.min(this.initialClones + (playerData.level - 1) * 2, this.maxClones));
 		playerData.clones = Math.min(this.initialClones + (playerData.level - 1) * 2, this.maxClones);
 	},
 	initClonesLevel() {
