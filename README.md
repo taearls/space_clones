@@ -4,7 +4,7 @@ Original web browser game built with JavaScript and jQuery, inspired by the clas
 
 This project holds a special place in my heart because it's my first real code project that originated in my Web Development Immersive at General Assembly.
 
-You can play [here.](https://tboneearls.github.io/space_clones/index.html)
+You can play [here.](https://space-clones.netlify.com)
 
 ## SCREENSHOTS
 
